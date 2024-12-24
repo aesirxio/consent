@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "listEmittedFiles": false,
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "types",
+    "module": "ESNext",
+    "target": "es2020",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "removeComments": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "ignoreDeprecations": "5.0",
+    "sourceMap": true,
+    "pretty": true,
+    "allowJs": true,
+    "jsx": "react",
+    "lib": ["es2020", "dom", "dom.iterable"],
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["./node_modules/**/*", "./dist/**/*"]
+}
