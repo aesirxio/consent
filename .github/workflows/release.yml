@@ -1,0 +1,31 @@
+name: 'release'
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: yarn install
+      - run: yarn run lint
+      - run: CI=false yarn run build
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          strategy: upgrade
+          ignore-scripts: false
+
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: 'dist/consent.js'
+          generateReleaseNotes: true

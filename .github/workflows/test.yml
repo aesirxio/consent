@@ -1,0 +1,27 @@
+name: Test
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      ENDPOINT_ANALYTICS_URL: ${{ secrets.ENDPOINT_ANALYTICS_URL }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run Prettier
+        run: yarn format:check
+
+      - name: Run Build
+        run: |
+          export NODE_OPTIONS="--max_old_space_size=4096"
+          CI=false yarn build
