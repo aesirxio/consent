@@ -3,14 +3,14 @@ import { cleanHostName, escapeRegex, getYoutubeID, randomString } from './utils'
 import React, { useEffect, useState } from 'react';
 
 import { createRoot } from 'react-dom/client';
-import { ConsentContext } from './utils/ConsentContextProvider';
+import ConsentContextProvider from './utils/ConsentContextProvider';
 import ConsentComponentCustom from './Components/ConsentCustom';
 import OptinConsent from './Components/OptInConsent';
 import { Buffer } from 'buffer';
 import { appLanguages } from './translations';
 import { AesirXI18nextProvider } from './utils/I18nextProvider';
 import { getConsentTemplate } from './utils/consent';
-import { startTracker, endTrackerVisibilityState } from 'aesirx-analytics';
+import { AnalyticsContextProvider } from 'aesirx-analytics';
 
 window.Buffer = Buffer;
 declare global {
@@ -22,7 +22,7 @@ declare global {
     blockJSDomains: any;
   }
 }
-const ConsentPopup = ({ visitor_uuid }: any) => {
+const ConsentPopup = () => {
   window.process = { env: '' };
   const [layout, setLayout] = useState(window['consentLayout'] ?? 'simple-consent-mode');
   const [gtagId, setGtagId] = useState(window['analyticsGtagId']);
@@ -42,26 +42,18 @@ const ConsentPopup = ({ visitor_uuid }: any) => {
     init();
   }, []);
   return (
-    <ConsentContext.Provider
-      value={{
-        visitor_uuid: visitor_uuid ?? sessionStorage.getItem('aesirx-analytics-uuid'),
-        setUUID: undefined,
-        ref: undefined,
-      }}
-    >
-      <AesirXI18nextProvider appLanguages={appLanguages}>
-        <ConsentComponentCustom
-          endpoint={window['aesirx1stparty'] ?? ''}
-          networkEnv={window['concordiumNetwork'] ?? ''}
-          aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
-          languageSwitcher={window['languageSwitcher'] ?? ''}
-          gtagId={gtagId}
-          gtmId={gtmId}
-          layout={layout}
-          customConsentText={customConsentText}
-        />
-      </AesirXI18nextProvider>
-    </ConsentContext.Provider>
+    <ConsentContextProvider>
+      <ConsentComponentCustom
+        endpoint={window['aesirx1stparty'] ?? ''}
+        networkEnv={window['concordiumNetwork'] ?? ''}
+        aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
+        languageSwitcher={window['languageSwitcher'] ?? ''}
+        gtagId={gtagId}
+        gtmId={gtmId}
+        layout={layout}
+        customConsentText={customConsentText}
+      />
+    </ConsentContextProvider>
   );
 };
 let rootElement: any = {};
@@ -76,11 +68,6 @@ const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
 const AesirConsent = () => {
   const update = async () => {
     if (document.readyState === 'complete') {
-      const responseStart = await startTracker(root);
-      if (responseStart) {
-        window['event_uuid'] = responseStart.event_uuid;
-        window['visitor_uuid'] = responseStart.visitor_uuid;
-      }
       const isOptInReplaceAnalytics = window['optInConsentData']
         ? JSON.parse(window?.optInConsentData)?.some((obj: any) =>
             Object.keys(obj).includes('replaceAnalyticsConsent')
@@ -89,8 +76,18 @@ const AesirConsent = () => {
       if (window['disableAnalyticsConsent'] !== 'true' || !isOptInReplaceAnalytics) {
         rootElement.render(
           <>
-            {!isOptInReplaceAnalytics && (
-              <ConsentPopup visitor_uuid={responseStart?.visitor_uuid} />
+            {!isOptInReplaceAnalytics ? (
+              <>
+                {window['aesirx-analytics-enable'] === 'true' ? (
+                  <AnalyticsContextProvider>
+                    <ConsentPopup />
+                  </AnalyticsContextProvider>
+                ) : (
+                  <ConsentPopup />
+                )}{' '}
+              </>
+            ) : (
+              <></>
             )}
             {window['optInConsentData'] && (
               <AesirXI18nextProvider appLanguages={appLanguages}>
@@ -103,8 +100,6 @@ const AesirConsent = () => {
     }
   };
   document.addEventListener('readystatechange', update, true);
-
-  endTrackerVisibilityState(root);
 
   update();
 };

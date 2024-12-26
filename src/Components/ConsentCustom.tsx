@@ -50,7 +50,7 @@ import { useTranslation } from 'react-i18next';
 import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
-import { trackEvent } from 'aesirx-analytics';
+import { trackEvent, AnalyticsContext, startTracker } from 'aesirx-analytics';
 import ConsentHeader from './ConsentHeader';
 declare global {
   interface Window {
@@ -199,6 +199,7 @@ const ConsentComponentCustomApp = (props: any) => {
   );
   const [upgradeLevel, setUpgradeLevel] = useState<any>(level === 4 || level === 3 ? level : 0);
   const consentContext = useContext(ConsentContext);
+  const analyticsContext = useContext(AnalyticsContext);
   const { t } = useTranslation();
   const gRPCClient = useGrpcClient(network);
   const revoke = sessionStorage.getItem('aesirx-analytics-revoke');
@@ -390,7 +391,7 @@ const ConsentComponentCustomApp = (props: any) => {
         }
       } else {
         setLoading('saving');
-        const consentList = await getConsents(endpoint, consentContext.visitor_uuid);
+        const consentList = await getConsents(endpoint, uuid);
         consents.forEach(async (consent) => {
           const existConsent = consentList.find((item: any) => item?.consent === consent);
           if (!existConsent) {
@@ -706,6 +707,14 @@ const ConsentComponentCustomApp = (props: any) => {
     ) {
       window.funcAfterConsent && window.funcAfterConsent();
     }
+    const init = async () => {
+      if (!analyticsContext?.setUUID && window['aesirx-analytics-enable'] !== 'true') {
+        const responseStart = await startTracker(endpoint, '', '', '', window['attributes']);
+        responseStart?.visitor_uuid && consentContext?.setUUID(responseStart.visitor_uuid);
+        window['visitor_uuid'] = responseStart?.visitor_uuid;
+      }
+    };
+    init();
   }, []);
 
   useEffect(() => {

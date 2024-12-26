@@ -1,5 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { ConsentContext } from '../utils/ConsentContextProvider';
+import { AnalyticsContext } from 'aesirx-analytics';
 import { getConsents } from '../utils/consent';
 import { toast } from 'react-toastify';
 import {
@@ -22,6 +23,8 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const [web3ID, setWeb3ID] = useState<boolean>();
 
   const consentContext = useContext(ConsentContext);
+  const analyticsContext = useContext(AnalyticsContext);
+  const isUsingAnalytics = analyticsContext?.setUUID ? true : false;
 
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
@@ -51,20 +54,28 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
     const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
     observerModal();
-
     if (
-      consentContext.visitor_uuid &&
-      (allow === null || consentContext.visitor_uuid !== currentUuid)
+      (isUsingAnalytics &&
+        analyticsContext.visitor_uuid &&
+        (allow === null || analyticsContext.visitor_uuid !== currentUuid)) ||
+      (!isUsingAnalytics &&
+        consentContext.visitor_uuid &&
+        (allow === null || consentContext.visitor_uuid !== currentUuid))
     ) {
       (async () => {
-        const consentList = await getConsents(endpoint, consentContext.visitor_uuid);
-
+        const consentList = await getConsents(
+          endpoint,
+          isUsingAnalytics ? analyticsContext.visitor_uuid : consentContext.visitor_uuid
+        );
         if (consentList?.length === 0) {
           setShow(true);
           sessionStorage.removeItem('aesirx-analytics-allow');
         } else {
           if (level > 1) {
-            sessionStorage.setItem('aesirx-analytics-uuid', consentContext.visitor_uuid);
+            sessionStorage.setItem(
+              'aesirx-analytics-uuid',
+              isUsingAnalytics ? analyticsContext.visitor_uuid : consentContext.visitor_uuid
+            );
             sessionStorage.setItem('aesirx-analytics-allow', '1');
             handleRevoke(true, '1');
           }
@@ -76,7 +87,10 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
               return;
             } else {
               setShow(false);
-              sessionStorage.setItem('aesirx-analytics-uuid', consentContext.visitor_uuid);
+              sessionStorage.setItem(
+                'aesirx-analytics-uuid',
+                isUsingAnalytics ? analyticsContext.visitor_uuid : consentContext.visitor_uuid
+              );
               sessionStorage.setItem('aesirx-analytics-allow', '1');
               if (consent) {
                 const revokeTier = !consent?.consent_uuid
@@ -97,7 +111,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
         }
       })();
     }
-  }, [consentContext.visitor_uuid]);
+  }, [analyticsContext.visitor_uuid, consentContext.visitor_uuid]);
 
   const { connection, setConnection, account } = useConnection(connectedAccounts, genesisHashes);
 
@@ -198,7 +212,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   };
 
   return [
-    consentContext.visitor_uuid,
+    isUsingAnalytics ? analyticsContext.visitor_uuid : consentContext.visitor_uuid,
     level,
     connection,
     account,

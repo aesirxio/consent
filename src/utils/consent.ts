@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-catch */
 import { stringMessage } from '@concordium/react-components';
 import axios from 'axios';
-import getFingerprint from '../lib/fingerprint';
+import { getFingerprint } from 'aesirx-analytics';
 import Bowser from 'bowser';
 const agreeConsents = async (
   endpoint: string,
