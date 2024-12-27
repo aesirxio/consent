@@ -22,6 +22,7 @@ declare global {
     blockJSDomains: any;
   }
 }
+window['aesirx-consent-enable'] = 'true';
 const ConsentPopup = () => {
   window.process = { env: '' };
   const [layout, setLayout] = useState(window['consentLayout'] ?? 'simple-consent-mode');
@@ -61,9 +62,6 @@ window.addEventListener('DOMContentLoaded', function () {
   const container = document.body?.appendChild(document.createElement('DIV'));
   rootElement = createRoot(container);
 });
-
-const hostUrl = window['aesirx1stparty'] ? window['aesirx1stparty'] : '';
-const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
 
 const AesirConsent = () => {
   const update = async () => {

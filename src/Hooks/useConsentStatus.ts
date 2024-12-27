@@ -25,7 +25,6 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const consentContext = useContext(ConsentContext);
   const analyticsContext = useContext(AnalyticsContext);
   const isUsingAnalytics = analyticsContext?.setUUID ? true : false;
-
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
 

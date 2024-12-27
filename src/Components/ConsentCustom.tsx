@@ -713,6 +713,13 @@ const ConsentComponentCustomApp = (props: any) => {
         responseStart?.visitor_uuid && consentContext?.setUUID(responseStart.visitor_uuid);
         window['visitor_uuid'] = responseStart?.visitor_uuid;
       }
+      if (analyticsContext?.setUUID && window['aesirx-analytics-enable'] === 'true') {
+        const responseStart = await startTracker(endpoint, '', '', '', window['attributes']);
+        responseStart?.visitor_uuid && analyticsContext?.setUUID(responseStart.visitor_uuid);
+        responseStart?.event_uuid && analyticsContext?.setEventID(responseStart.event_uuid);
+        window['visitor_uuid'] = responseStart?.visitor_uuid;
+        window['event_uuid'] = responseStart?.event_uuid;
+      }
     };
     init();
   }, []);
