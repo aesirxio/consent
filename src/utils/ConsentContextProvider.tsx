@@ -36,7 +36,7 @@ export const ConsentContext = React.createContext<ConsentContextType>({
 const ConsentContextProvider: React.FC<Props> = ({ children }) => {
   const [UUID, setUUID] = useState();
   const ref = useRef();
-  const [_, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
     const uuid: any = sessionStorage.getItem('aesirx-analytics-uuid');
