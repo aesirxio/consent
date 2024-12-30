@@ -58,21 +58,19 @@ const ConsentPopup = () => {
   );
 };
 let rootElement: any = {};
-window.addEventListener('DOMContentLoaded', function () {
-  const container = document.body?.appendChild(document.createElement('DIV'));
-  rootElement = createRoot(container);
-});
 
 const AesirConsent = () => {
   const update = async () => {
     if (document.readyState === 'complete') {
+      const container = document.body?.appendChild(document.createElement('DIV'));
+      rootElement = createRoot(container);
       const isOptInReplaceAnalytics = window['optInConsentData']
         ? JSON.parse(window?.optInConsentData)?.some((obj: any) =>
             Object.keys(obj).includes('replaceAnalyticsConsent')
           )
         : false;
       if (window['disableAnalyticsConsent'] !== 'true' || !isOptInReplaceAnalytics) {
-        rootElement.render(
+        rootElement?.render(
           <>
             {!isOptInReplaceAnalytics ? (
               <>

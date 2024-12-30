@@ -84,7 +84,7 @@ const AesirXI18nextProvider = ({
     i18n.addResourceBundle(key, 'translation', resource);
     listLanguages.push({ label: defaultLanguages[key].title, value: key });
   });
-
+  console.log('AesirXI18nextProvider rerender');
   return (
     <I18NextContext.Provider value={{ listLanguages }}>
       <I18nextProvider i18n={i18n}>{children}</I18nextProvider>

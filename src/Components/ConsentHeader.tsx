@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import bg from '../Assets/bg.png';
 import privacy from '../Assets/privacy.svg';
 import { useTranslation } from 'react-i18next';
 import { useI18nextContext } from '../utils/I18nextProvider';
 import Select, { StylesConfig } from 'react-select';
 import i18n from 'i18next';
+import { ConsentContext } from '../utils/ConsentContextProvider';
 
 const ConsentHeader = ({ isRejectedLayout, languageSwitcher }: any) => {
   const { t } = useTranslation();
@@ -12,6 +13,7 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher }: any) => {
   const currentLanguage = listLanguages.filter(
     (lang: any) => lang.value == i18n.language || i18n.language?.includes(lang.value)
   );
+  const consentContext = useContext(ConsentContext);
   const customStyles: StylesConfig = {
     menuList: (base) => ({
       ...base,
@@ -44,7 +46,10 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher }: any) => {
             options={listLanguages}
             className="shadow-none"
             onChange={(data: any) => {
+              console.log('i18n', i18n);
+              console.log('data.value', data.value);
               i18n.changeLanguage(data.value);
+              consentContext.forceUpdate('Language changed');
             }}
             defaultValue={
               currentLanguage?.length ? currentLanguage : [{ label: 'English', value: 'en' }]
