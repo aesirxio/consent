@@ -348,6 +348,7 @@ const ConsentComponentCustomApp = (props: any) => {
         }
         if (account) {
           // Concordium
+          setLoading('sign');
           const signature = await getSignature(
             endpoint,
             account,
