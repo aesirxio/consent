@@ -939,7 +939,7 @@ const ConsentComponentCustomApp = (props: any) => {
                   <div className="rounded-bottom position-relative overflow-hidden bg-white">
                     <div className="position-relative p-3">
                       <div className="d-flex align-items-center flex-wrap">
-                        <div className="d-flex align-items-center w-100 justify-content-end">
+                        <div className="d-flex align-items-center w-100 justify-content-end flex-wrap">
                           <a
                             className="manage-consent fs-14 btn btn-outline-success rounded-pill py-2 py-lg-3 d-flex align-items-center justify-content-center w-100 w-lg-35"
                             href="https://dapp.shield.aesirx.io/revoke-consent"
@@ -1228,7 +1228,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                   setUpgradeLayout(false);
                                   handleLevel(1);
                                 }}
-                                className="d-flex align-items-center justify-content-center fs-14 w-100 w-lg-30 me-3 mb-2 mb-lg-0 rounded-pill py-3"
+                                className="d-flex align-items-center justify-content-center fs-14 w-100 w-lg-30 me-3 mb-2 mb-lg-0 rounded-pill py-2"
                               >
                                 {(window as any)?.aesirx_analytics_translate?.txt_back ??
                                   t('txt_back')}
