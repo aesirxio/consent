@@ -162,7 +162,7 @@ const loadGtmScript = async (gtmId: any) => {
 };
 const getConsents = async (endpoint: string, uuid: string) => {
   try {
-    const response = (await axios.get(`${endpoint}/visitor/v1/${uuid}`))?.data?.visitor_consents;
+    const response = (await axios.get(`${endpoint}/visitor/v1/${uuid}?time=${Date.now()}`))?.data?.visitor_consents;
 
     return response;
   } catch (error) {
