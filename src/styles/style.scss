@@ -46,7 +46,7 @@ $dark: #222328;
   color: #5f5e70;
   font-size: 16px;
   --w3m-z-index: 1060;
-  z-index: 1050;
+  z-index: 100050;
   position: relative;
   --#{$prefix}modal-margin: 1.75rem;
   --#{$prefix}btn-padding-y: 9px;
@@ -61,6 +61,9 @@ $dark: #222328;
   }
   a {
     text-decoration: underline;
+  }
+  p {
+    padding-bottom: 0;
   }
   .fs-14 {
     font-size: 14px;
@@ -109,7 +112,7 @@ $dark: #222328;
     }
   }
   .toast {
-    --#{$prefix}toast-zindex: 1049;
+    --#{$prefix}toast-zindex: 100049;
     --#{$prefix}toast-font-size: 16px;
     border: 0;
     box-shadow: none;
@@ -168,6 +171,12 @@ $dark: #222328;
           background-color: $dark;
         }
       }
+      .tab_content {
+        @include media-breakpoint-down(lg) {
+          height: 250px;
+          overflow-y: auto;
+        }
+      }
       .status-tier {
         &.tier-1 {
           background-color: #f1c40f;
@@ -186,7 +195,7 @@ $dark: #222328;
   }
   .toast-container {
     box-sizing: border-box;
-    --#{$prefix}toast-zindex: 1049;
+    --#{$prefix}toast-zindex: 100049;
   }
   .status-tier-text {
     font-weight: 600;
@@ -225,7 +234,11 @@ $dark: #222328;
         cursor: pointer;
       }
       .manage-consent {
-        margin-right: 10px;
+        margin-bottom: 10px;
+        @include media-breakpoint-up(lg) {
+          margin-right: 10px;
+          margin-bottom: 0;
+        }
       }
     }
   }
@@ -255,6 +268,9 @@ $dark: #222328;
       align-items: center;
       justify-content: center;
       color: #fff;
+      @include media-breakpoint-down(lg) {
+        padding: 6px 10px;
+      }
       img {
         margin-right: 5px;
       }
@@ -361,10 +377,14 @@ $dark: #222328;
       width: 100%;
     }
     &.w-lg-30 {
-      width: 30% !important;
+      @include media-breakpoint-up(lg) {
+        width: 30% !important;
+      }
     }
     &.w-lg-35 {
-      width: 35% !important;
+      @include media-breakpoint-up(lg) {
+        width: 35% !important;
+      }
     }
     &.justify-content-between {
       justify-content: space-between;
@@ -514,7 +534,7 @@ body.modal-sso-open {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1055;
+    z-index: 100055;
     display: none;
     width: 100%;
     height: 100%;
@@ -523,6 +543,14 @@ body.modal-sso-open {
     outline: 0;
   }
 }
+body {
+  .aesirxsso {
+    &.modal {
+      z-index: 100055;
+    }
+  }
+}
+
 .modal-backdrop {
   --#{$prefix}backdrop-zindex: #{$zindex-modal-backdrop};
   --#{$prefix}backdrop-bg: #{$modal-backdrop-bg};

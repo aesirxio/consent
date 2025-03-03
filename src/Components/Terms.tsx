@@ -179,7 +179,7 @@ const TermsComponent = ({
                             </div>
                           </>
                         ) : (
-                          <>
+                          <div className="tab_content">
                             {customConsentText ? (
                               <>
                                 <div
@@ -311,7 +311,7 @@ const TermsComponent = ({
                                 </div>
                               </>
                             )}
-                          </>
+                          </div>
                         )}
                       </Tab>
                       <Tab
@@ -322,7 +322,7 @@ const TermsComponent = ({
                         }
                         className="px-2 px-lg-4"
                       >
-                        <div className={`about_section`}>
+                        <div className={`tab_content about_section`}>
                           <p className="mt-0 mb-1 mb-lg-2 text-black fw-semibold">
                             {(window as any)?.aesirx_analytics_translate?.txt_manage_your_consent ??
                               t('txt_manage_your_consent')}
@@ -533,7 +533,7 @@ const TermsComponent = ({
                         }
                         className="px-2 px-lg-4"
                       >
-                        <div className="mb-1 mb-lg-3">
+                        <div className="tab_content mb-1 mb-lg-3">
                           <p className="mb-1 mb-lg-2 text-black fw-semibold">
                             {(window as any)?.aesirx_analytics_translate
                               ?.txt_our_commitment_in_action ?? t('txt_our_commitment_in_action')}
