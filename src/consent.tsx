@@ -69,7 +69,7 @@ const AesirConsent = () => {
             Object.keys(obj).includes('replaceAnalyticsConsent')
           )
         : false;
-      if (window['disableAnalyticsConsent'] !== 'true' || !isOptInReplaceAnalytics) {
+      if (window['disableAnalyticsConsent'] !== 'true') {
         rootElement?.render(
           <>
             {!isOptInReplaceAnalytics ? (
