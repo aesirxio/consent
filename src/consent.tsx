@@ -114,8 +114,8 @@ const configBlockJS: ConfigBlockJS = {
       ? [
           ...window.blockJSDomains
             ?.filter((el: string) => el)
-            ?.map((domain: string) => {
-              return { re: domain, categories: ['analytics'] };
+            ?.map((item: any) => {
+              return { re: item?.domain, categories: [item?.category] };
             }),
         ]
       : []),

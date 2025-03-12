@@ -127,5 +127,7 @@
   "txt_payment_3": "If you do not consent to this data sharing, you will not be able to complete the payment.",
   "txt_payment_4": "For more information, please refer to our <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>privacy policy</a>.",
   "txt_consent_nanagement": "Consent Management",
-  "txt_details": "Details"
+  "txt_details": "Details",
+  "txt_customize": "Customize",
+  "txt_save": "Save"
 }
