@@ -17,7 +17,7 @@ export default defineConfig([
     esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'style' })],
     esbuildOptions(options) {
       if (env === 'production') {
-        options.drop = ['console'];
+        // options.drop = ['console'];
       }
     },
     outExtension() {
@@ -34,7 +34,7 @@ export default defineConfig([
     esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'style' })],
     esbuildOptions(options) {
       if (env === 'production') {
-        options.drop = ['console'];
+        // options.drop = ['console'];
       }
     },
     outExtension() {

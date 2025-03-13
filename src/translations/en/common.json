@@ -129,5 +129,17 @@
   "txt_consent_nanagement": "Consent Management",
   "txt_details": "Details",
   "txt_customize": "Customize",
-  "txt_save": "Save"
+  "txt_save": "Save",
+  "txt_always_active": "Always active",
+  "txt_domain_path_based": "Domain/Path-Based:",
+  "txt_essential_tracking": "Essential Tracking",
+  "txt_essential_tracking_desc": "Required for the website to function (e.g, session cookies, security tracking).",
+  "txt_functional_tracking": "Functional Tracking",
+  "txt_functional_tracking_desc": "User preferencese & site enhancements (e.g, language setting, live chat).",
+  "txt_analytics_tracking": "Analytics Tracking",
+  "txt_analytics_tracking_desc": "Visitor behavior monitoring (e.g, Google Analytics, Matomo).",
+  "txt_advertising_tracking": "Advertising Tracking",
+  "txt_advertising_tracking_desc": "Targeted advertising & remarketing (e.g, Facebook Pixel, Google Ads).",
+  "txt_custom_tracking": "Custom Tracking",
+  "txt_custom_tracking_desc": "Any additional third-party integrations (e.g, customer support tools, CDNS)."
 }

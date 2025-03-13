@@ -19,15 +19,28 @@ const escapeRegex = (literal: string) => {
   return literal.replace(/[.*+?^${}()[\]\\]/g, '\\$&');
 };
 
-const unBlockScripts = () => {
+const unBlockScripts = (disabledBlockDomains: any) => {
   window['configBlockJS']._backupNodes = window['configBlockJS']?._backupNodes.filter(
     ({ position, node, uniqueID }: any) => {
       try {
         if (node.nodeName.toLowerCase() === 'script') {
-          const scriptNode = document.createElement('script');
-          scriptNode.src = node.src;
-          scriptNode.type = 'text/javascript';
-          document[position].appendChild(scriptNode);
+          const arrayDisabledBlockDomains = window['disabledBlockJSDomains']?.length
+            ? window['disabledBlockJSDomains']
+            : disabledBlockDomains
+              ? JSON.parse(disabledBlockDomains)
+              : [];
+          const containsDomain = arrayDisabledBlockDomains?.length
+            ? arrayDisabledBlockDomains?.some((item: any) => {
+                const regex = new RegExp(item.domain.replace(/\//g, '\\/')); // Escape slashes in domain
+                return regex.test(node.src);
+              })
+            : false;
+          if (!containsDomain) {
+            const scriptNode = document.createElement('script');
+            scriptNode.src = node.src;
+            scriptNode.type = 'text/javascript';
+            document[position].appendChild(scriptNode);
+          }
         } else {
           const frame = document.getElementById(uniqueID);
           if (!frame) return false;
@@ -46,10 +59,4 @@ const unBlockScripts = () => {
     }
   );
 };
-export {
-  cleanHostName,
-  getYoutubeID,
-  randomString,
-  escapeRegex,
-  unBlockScripts,
-};
+export { cleanHostName, getYoutubeID, randomString, escapeRegex, unBlockScripts };

@@ -8,6 +8,7 @@ import {
   getWalletNonce,
   loadGtagScript,
   loadGtmScript,
+  postDisabledBlockDomains,
   revokeConsents,
   verifySignature,
 } from '../utils/consent';
@@ -52,6 +53,7 @@ import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
 import { trackEvent, AnalyticsContext, startTracker } from 'aesirx-analytics';
 import ConsentHeader from './ConsentHeader';
+import { CustomizeCategory } from './CustomizeCategory';
 declare global {
   interface Window {
     dataLayer: any;
@@ -70,6 +72,7 @@ const ConsentComponentCustom = ({
   layout,
   isOptInReplaceAnalytics,
   customConsentText,
+  disabledBlockDomains,
   languageSwitcher,
 }: any) => {
   return (
@@ -88,6 +91,7 @@ const ConsentComponentCustom = ({
                 gtmId={gtmId}
                 layout={layout}
                 customConsentText={customConsentText}
+                disabledBlockDomains={disabledBlockDomains}
                 languageSwitcher={languageSwitcher}
               />
             )}
@@ -127,6 +131,7 @@ const ConsentComponentCustomWrapper = (props: any) => {
           gtmId={props?.gtmId}
           layout={props?.layout}
           customConsentText={props?.customConsentText}
+          disabledBlockDomains={props?.disabledBlockDomains}
           languageSwitcher={props?.languageSwitcher}
           uuid={uuid}
           level={level}
@@ -154,6 +159,7 @@ const ConsentComponentCustomApp = (props: any) => {
     gtmId,
     layout,
     customConsentText,
+    disabledBlockDomains,
     languageSwitcher,
     activeConnectorType,
     activeConnector,
@@ -271,6 +277,7 @@ const ConsentComponentCustomApp = (props: any) => {
                 gtagId,
                 gtmId
               );
+              postDisabledBlockDomains(endpoint);
               sessionStorage.setItem('aesirx-analytics-uuid', uuid);
               sessionStorage.setItem('aesirx-analytics-allow', '1');
               sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
@@ -372,6 +379,7 @@ const ConsentComponentCustomApp = (props: any) => {
             gtagId,
             gtmId
           );
+          postDisabledBlockDomains(endpoint);
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
           setUpgradeLayout(false);
         } else if (connector) {
@@ -430,6 +438,7 @@ const ConsentComponentCustomApp = (props: any) => {
             );
           }
         });
+        postDisabledBlockDomains(endpoint);
       }
 
       if (flag && (account || level < 3)) {
@@ -498,6 +507,7 @@ const ConsentComponentCustomApp = (props: any) => {
           gtagId,
           gtmId
         );
+        postDisabledBlockDomains(endpoint);
         setShow(false);
         handleRevoke(true, level);
         setUpgradeLayout(false);
@@ -556,6 +566,7 @@ const ConsentComponentCustomApp = (props: any) => {
             gtagId,
             gtmId
           );
+          postDisabledBlockDomains(endpoint);
           setShow(false);
           handleRevoke(true, level);
           setUpgradeLayout(false);
@@ -1289,43 +1300,22 @@ const ConsentComponentCustomApp = (props: any) => {
                       </>
                     ) : (
                       <>
-                        <TermsComponent
-                          level={level}
-                          handleLevel={handleLevel}
-                          isCustom={true}
-                          layout={layout}
-                          isRejectedLayout={showRejectedConsent ? true : false}
-                          customConsentText={customConsentText}
-                          languageSwitcher={languageSwitcher}
-                          showCustomize={showCustomize}
-                          setShowCustomize={setShowCustomize}
-                        >
-                          {showCustomize ? (
-                            <>
-                              <div className="d-flex w-100 flex-wrap flex-lg-nowrap justify-content-between">
-                                <Button
-                                  variant="outline-success"
-                                  onClick={() => {
-                                    setShowCustomize(false);
-                                  }}
-                                  className="d-flex align-items-center justify-content-center fs-14 px-5 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
-                                >
-                                  {(window as any)?.aesirx_analytics_translate?.txt_back ??
-                                    t('txt_back')}
-                                </Button>
-                                <Button
-                                  variant="outline-success"
-                                  onClick={() => {
-                                    setShowCustomize(false);
-                                  }}
-                                  className="d-flex align-items-center justify-content-center fs-14 px-5 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
-                                >
-                                  {(window as any)?.aesirx_analytics_translate?.txt_save ??
-                                    t('txt_save')}
-                                </Button>
-                              </div>
-                            </>
-                          ) : (
+                        {showCustomize ? (
+                          <CustomizeCategory
+                            languageSwitcher={languageSwitcher}
+                            setShowCustomize={setShowCustomize}
+                            disabledBlockDomains={disabledBlockDomains}
+                          />
+                        ) : (
+                          <TermsComponent
+                            level={level}
+                            handleLevel={handleLevel}
+                            isCustom={true}
+                            layout={layout}
+                            customConsentText={customConsentText}
+                            isRejectedLayout={showRejectedConsent}
+                            languageSwitcher={languageSwitcher}
+                          >
                             <ConsentAction
                               level={level}
                               loading={loading}
@@ -1341,8 +1331,8 @@ const ConsentComponentCustomApp = (props: any) => {
                               setShowCustomize={setShowCustomize}
                               t={t}
                             />
-                          )}
-                        </TermsComponent>
+                          </TermsComponent>
+                        )}
                       </>
                     )}
                   </>
@@ -1426,7 +1416,7 @@ const ConsentAction = ({
             <Button
               variant="outline-success"
               onClick={handleNotAllow}
-              className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+              className="d-flex align-items-center justify-content-center fs-14 w-100 me-0 me-lg-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
             >
               {(window as any)?.aesirx_analytics_translate?.txt_reject_consent ??
                 t('txt_reject_consent')}
@@ -1435,10 +1425,9 @@ const ConsentAction = ({
               <Button
                 variant="outline-success"
                 onClick={() => {
-                  console.log('testene');
                   setShowCustomize(true);
                 }}
-                className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+                className="d-flex align-items-center justify-content-center fs-14 w-100 me-0 me-lg-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
               >
                 {(window as any)?.aesirx_analytics_translate?.txt_customize ?? t('txt_customize')}
               </Button>
@@ -1450,7 +1439,7 @@ const ConsentAction = ({
               <Button
                 variant="outline-success"
                 onClick={handleAgree}
-                className="w-100 me-3 mb-2 mb-lg-0 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
+                className="w-100 me-0 me-lg-3 mb-2 mb-lg-0 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
               >
                 {loadingCheckAccount ? (
                   <span
@@ -1474,7 +1463,7 @@ const ConsentAction = ({
                   onClick={() => {
                     setUpgradeLayout(true);
                   }}
-                  className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+                  className="d-flex align-items-center justify-content-center fs-14 w-100 px-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3 text-nowrap"
                 >
                   {(window as any)?.aesirx_analytics_translate?.txt_change_consent ??
                     t('txt_change_consent')}

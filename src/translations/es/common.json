@@ -127,5 +127,18 @@
   "txt_payment_3": "Si no consiente compartir estos datos, no podrá completar el pago.",
   "txt_payment_4": "Para más información, por favor consulte nuestra <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>política de privacidad</a>.",
   "txt_consent_nanagement": "Gestión del consentimiento",
-  "txt_details": "Detalles"
+  "txt_details": "Detalles",
+  "txt_save": "Guardar",
+  "txt_always_active": "Siempre activo",
+  "txt_domain_path_based": "Basado en dominio/ruta:",
+  "txt_essential_tracking": "Seguimiento esencial",
+  "txt_essential_tracking_desc": "Necesario para el funcionamiento del sitio web (p. ej., cookies de sesión, seguimiento de seguridad).",
+  "txt_functional_tracking": "Seguimiento funcional",
+  "txt_functional_tracking_desc": "Preferencias del usuario y mejoras del sitio (p. ej., configuración de idioma, chat en vivo).",
+  "txt_analytics_tracking": "Seguimiento analítico",
+  "txt_analytics_tracking_desc": "Monitoreo del comportamiento de los visitantes (p. ej., Google Analytics, Matomo).",
+  "txt_advertising_tracking": "Seguimiento publicitario",
+  "txt_advertising_tracking_desc": "Publicidad dirigida y remarketing (p. ej., píxel de Facebook, Google Ads).",
+  "txt_custom_tracking": "Seguimiento personalizado",
+  "txt_custom_tracking_desc": "Cualquier integración adicional de terceros (p. ej., herramientas de atención al cliente, CDNS)."
 }

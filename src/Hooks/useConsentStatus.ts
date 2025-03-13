@@ -188,7 +188,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
     setShowRevoke(status);
     if (level && level !== '0') {
       window.funcAfterConsent && window.funcAfterConsent();
-      window.configBlockJS && unBlockScripts();
+      window.configBlockJS && unBlockScripts((props as any)?.disabledBlockDomains);
       if (
         window['aesirx_analytics_degistered_scripts'] ||
         window['aesirx_analytics_deregistered_scripts_head'] ||

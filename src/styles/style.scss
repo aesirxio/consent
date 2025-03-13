@@ -550,6 +550,9 @@ $dark: #222328;
             width: 20px;
             height: 20px;
             margin-right: 22px;
+            @include media-breakpoint-down(lg) {
+              margin-right: 12px;
+            }
             .plus {
               display: none;
             }
@@ -562,13 +565,23 @@ $dark: #222328;
               display: none;
             }
           }
+          @include media-breakpoint-down(lg) {
+            padding: 8px 10px;
+          }
         }
       }
-
+      .subtitle-mobile {
+        margin-left: 42px;
+        padding-bottom: 10px;
+        padding-right: 10px;
+      }
       .accordion-body {
         margin-left: 60px;
         padding: 12px 18px 12px 0;
         border-top: 1px solid $border-color;
+        @include media-breakpoint-down(lg) {
+          margin-left: 42px;
+        }
       }
     }
     .form-switch {
@@ -678,6 +691,9 @@ body {
   .btn {
     text-transform: unset;
     white-space: normal;
+    &.text-nowrap {
+      white-space: nowrap;
+    }
   }
 }
 @import './color-mode.scss';
