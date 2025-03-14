@@ -1391,7 +1391,9 @@ const ConsentAction = ({
   t,
 }: any) => {
   const blockJSDomains = window.blockJSDomains ?? [];
-  const isCategory = blockJSDomains.some((item: any) => item.hasOwnProperty('category'));
+  const isCategory = blockJSDomains?.some((item: any) =>
+    Object.prototype.hasOwnProperty.call(item, 'category')
+  );
   return (
     <Form className="mb-0 w-100">
       <Form.Check

@@ -137,7 +137,7 @@ const CustomizeCategory = ({ languageSwitcher, setShowCustomize, disabledBlockDo
                           type="switch"
                           value={key}
                           checked={isCategoryChecked}
-                          onChange={(e) => {
+                          onChange={() => {
                             handleToggle(key);
                           }}
                         />
@@ -170,7 +170,7 @@ const CustomizeCategory = ({ languageSwitcher, setShowCustomize, disabledBlockDo
                                 type="checkbox"
                                 id={`domain-${key}-${index}`}
                                 checked={isDomainChecked}
-                                onChange={(e) => {
+                                onChange={() => {
                                   handleCheckCustomize(key, el);
                                 }}
                                 disabled={key === 'essential' ? true : false}
