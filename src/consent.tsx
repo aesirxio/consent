@@ -29,6 +29,9 @@ const ConsentPopup = () => {
   const [gtagId, setGtagId] = useState(window['analyticsGtagId']);
   const [gtmId, setGtmId] = useState(window['analyticsGtmId']);
   const [customConsentText, setCustomConsentText] = useState(window['analyticsConsentText']);
+  const [disabledBlockDomains, setDisabledBlockDomains] = useState(
+    window['disabledBlockJSDomains']
+  );
   useEffect(() => {
     const init = async () => {
       const data: any = await getConsentTemplate(
@@ -39,6 +42,9 @@ const ConsentPopup = () => {
       setGtagId(data?.data?.gtag_id ?? window['analyticsGtagId']);
       setGtmId(data?.data?.gtm_id ?? window['analyticsGtmId']);
       setCustomConsentText(data?.data?.consent_text ?? window['analyticsConsentText']);
+      setDisabledBlockDomains(
+        data?.data?.disabled_block_domains ?? window['disabledBlockJSDomains']
+      );
     };
     init();
   }, []);
@@ -53,6 +59,7 @@ const ConsentPopup = () => {
         gtmId={gtmId}
         layout={layout}
         customConsentText={customConsentText}
+        disabledBlockDomains={disabledBlockDomains}
       />
     </ConsentContextProvider>
   );
@@ -114,8 +121,8 @@ const configBlockJS: ConfigBlockJS = {
       ? [
           ...window.blockJSDomains
             ?.filter((el: string) => el)
-            ?.map((domain: string) => {
-              return { re: domain, categories: ['analytics'] };
+            ?.map((item: any) => {
+              return { re: item?.domain, categories: [item?.category] };
             }),
         ]
       : []),

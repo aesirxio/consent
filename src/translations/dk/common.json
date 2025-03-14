@@ -127,5 +127,20 @@
   "txt_payment_3": "Hvis du ikke giver samtykke til denne dataudveksling, vil du ikke kunne fuldføre betalingen.",
   "txt_payment_4": "For mere information, henvises til vores <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>privatlivspolitik.</a>.",
   "txt_consent_nanagement": "Samtykkestyring",
-  "txt_details": "Detaljer"
+  "txt_details": "Detaljer",
+  "txt_customize": "Tilpas",
+  "txt_save": "Gem",
+  "txt_always_active": "Altid aktiv",
+  "txt_domain_path_based": "Domæne/sti-baseret",
+  "txt_third_party_plugins": "Tredjeparts plugins",
+  "txt_essential_tracking": "Væsentlige sporing",
+  "txt_essential_tracking_desc": "Påkrævet for at hjemmesiden kan fungere (f.eks. sessionscookies, sikkerhedssporing).",
+  "txt_functional_tracking": "Funktionel sporing",
+  "txt_functional_tracking_desc": "Brugerpræferencer og webstedsforbedringer (f.eks. sprogindstilling, livechat).",
+  "txt_analytics_tracking": "Analytics-sporing",
+  "txt_analytics_tracking_desc": "Overvågning af besøgendes adfærd (f.eks. Google Analytics, Matomo).",
+  "txt_advertising_tracking": "Annoncesporing",
+  "txt_advertising_tracking_desc": "Målrettet annoncering og remarketing (f.eks. Facebook Pixel, Google Ads).",
+  "txt_custom_tracking": "Tilpasset sporing",
+  "txt_custom_tracking_desc": "Enhver yderligere tredjepartsintegration (f.eks. kundesupportværktøjer, CDNS)."
 }

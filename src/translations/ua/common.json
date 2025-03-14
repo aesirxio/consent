@@ -127,5 +127,20 @@
   "txt_payment_3": "Якщо ви не погоджуєтеся на передачу цих даних, ви не зможете завершити платіж.",
   "txt_payment_4": "Для отримання додаткової інформації, будь ласка, ознайомтеся з нашою <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>політикою конфіденційності</a>.",
   "txt_consent_nanagement": "Керування згодою",
-  "txt_details": "Деталі"
+  "txt_details": "Деталі",
+  "txt_save": "Зберегти",
+  "txt_customize": "Налаштувати",
+  "txt_always_active": "Завжди активний",
+  "txt_domain_path_based": "На основі домену/шляху",
+  "txt_third_party_plugins": "Сторонні плагіни",
+  "txt_essential_tracking": "Основне відстеження",
+  "txt_essential_tracking_desc": "Потрібно для роботи веб-сайту (наприклад, файли cookie сесії, відстеження безпеки).",
+  "txt_functional_tracking": "Функціональне відстеження",
+  "txt_functional_tracking_desc": "Налаштування користувача та вдосконалення сайту (наприклад, налаштування мови, чат).",
+  "txt_analytics_tracking": "Відстеження аналітики",
+  "txt_analytics_tracking_desc": "Моніторинг поведінки відвідувачів (наприклад, Google Analytics, Matomo).",
+  "txt_advertising_tracking": "Відстеження реклами",
+  "txt_advertising_tracking_desc": "Цільова реклама та ремаркетинг (наприклад, Facebook Pixel, Google Ads).",
+  "txt_custom_tracking": "Власне відстеження",
+  "txt_custom_tracking_desc": "Будь-які додаткові сторонні інтеграції (наприклад, засоби підтримки клієнтів, CDNS)."
 }

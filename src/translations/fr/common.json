@@ -127,5 +127,20 @@
   "txt_payment_3": "Si vous ne consentez pas à ce partage de données, vous ne pourrez pas finaliser le paiement.",
   "txt_payment_4": "Pour plus d'informations, veuillez consulter notre <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>politique de confidentialité</a>.",
   "txt_consent_nanagement": "Gestion du consentement",
-  "txt_details": "Détails"
+  "txt_details": "Détails",
+  "txt_save": "Enregistrer",
+  "txt_customize": "Personnaliser",
+  "txt_always_active": "Toujours actif",
+  "txt_domain_path_based": "Basé sur le domaine/chemin d'accès",
+  "txt_third_party_plugins": "Plugins tiers",
+  "txt_essential_tracking": "Suivi essentiel",
+  "txt_essential_tracking_desc": "Requis au fonctionnement du site web (par exemple, cookies de session, suivi de sécurité).",
+  "txt_functional_tracking": "Suivi fonctionnel",
+  "txt_functional_tracking_desc": "Préférences utilisateur et améliorations du site (par exemple, paramètre de langue, chat en direct).",
+  "txt_analytics_tracking": "Suivi analytique",
+  "txt_analytics_tracking_desc": "Surveillance du comportement des visiteurs (par exemple, Google Analytics, Matomo).",
+  "txt_advertising_tracking": "Suivi publicitaire",
+  "txt_advertising_tracking_desc": "Publicité ciblée et remarketing (par exemple, Pixel Facebook, Google Ads).",
+  "txt_custom_tracking": "Suivi personnalisé",
+  "txt_custom_tracking_desc": "Toute intégration tierce supplémentaire (par exemple, outils de support client, CDNS)."
 }

@@ -15,6 +15,7 @@ $border-radius: 0.5rem;
 $success: #1ab394;
 $spacer: 16px;
 $primary: #132342;
+$primary-light: #f1f8ff;
 $secondary: #627eea;
 $dark: #222328;
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
@@ -68,6 +69,9 @@ $dark: #222328;
   .fs-14 {
     font-size: 14px;
   }
+  .fs-12 {
+    font-size: 12px;
+  }
   .w-30 {
     width: 30%;
   }
@@ -80,6 +84,9 @@ $dark: #222328;
   }
   .text-primary {
     color: $primary;
+  }
+  .bg-primary-light {
+    background-color: $primary-light;
   }
   img {
     height: auto;
@@ -517,6 +524,79 @@ $dark: #222328;
       background-color: $success;
     }
   }
+  .accordion-customize {
+    .accordion-item {
+      background-color: rgba(#dcedff, 0.4);
+      border-radius: 10px;
+      margin-bottom: 4px;
+      color: rgba(#3c3c43, 0.6);
+      .accordion-header {
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+        .accordion-button {
+          font-size: 16px;
+          color: rgba(#3c3c43, 0.6);
+          background: transparent;
+          text-align: start;
+          font-weight: 400;
+          width: 100%;
+          padding: 12px 18px;
+          &:hover,
+          &:focus {
+            text-decoration: none;
+          }
+          .accordion-img {
+            width: 20px;
+            height: 20px;
+            margin-right: 22px;
+            @include media-breakpoint-down(lg) {
+              margin-right: 12px;
+            }
+            .plus {
+              display: none;
+            }
+          }
+          &.collapsed {
+            .plus {
+              display: block;
+            }
+            .minus {
+              display: none;
+            }
+          }
+          @include media-breakpoint-down(lg) {
+            padding: 8px 10px;
+          }
+        }
+      }
+      .subtitle-mobile {
+        margin-left: 42px;
+        padding-bottom: 10px;
+        padding-right: 10px;
+      }
+      .accordion-body {
+        margin-left: 60px;
+        padding: 12px 18px 12px 0;
+        border-top: 1px solid $border-color;
+        @include media-breakpoint-down(lg) {
+          margin-left: 42px;
+        }
+      }
+    }
+    .form-switch {
+      .form-check-input {
+        width: 50px;
+        height: 30px;
+      }
+    }
+    .form-check-inline,
+    .form-switch {
+      input[type='checkbox']:checked::before {
+        display: none;
+      }
+    }
+  }
 }
 body.modal-open,
 body.modal-sso-open {
@@ -611,6 +691,9 @@ body {
   .btn {
     text-transform: unset;
     white-space: normal;
+    &.text-nowrap {
+      white-space: nowrap;
+    }
   }
 }
 @import './color-mode.scss';

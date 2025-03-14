@@ -127,5 +127,20 @@
   "txt_payment_3": "Ako ne pristanete na ovo dijeljenje podataka, nećete moći dovršiti plaćanje.",
   "txt_payment_4": "Za više informacija, molimo pogledajte našu <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>politiku privatnosti</a>.",
   "txt_consent_nanagement": "Upravljanje pristankom",
-  "txt_details": "Detalji"
+  "txt_details": "Detalji",
+  "txt_save": "Spremi",
+  "txt_customize": "Prilagodi",
+  "txt_always_active": "Uvijek aktivan",
+  "txt_domain_path_based": "Na temelju domene/puta",
+  "txt_third_party_plugins": "Dodaci trećih strana",
+  "txt_essential_tracking": "Osnovno praćenje",
+  "txt_essential_tracking_desc": "Potrebno za rad web stranice (npr. kolačići sesije, sigurnosno praćenje).",
+  "txt_functional_tracking": "Funkcionalno praćenje",
+  "txt_functional_tracking_desc": "Korisničke postavke i poboljšanja web mjesta (npr. postavka jezika, chat uživo).",
+  "txt_analytics_tracking": "Praćenje analitike",
+  "txt_analytics_tracking_desc": "Praćenje ponašanja posjetitelja (npr. Google Analytics, Matomo).",
+  "txt_advertising_tracking": "Praćenje oglašavanja",
+  "txt_advertising_tracking_desc": "Ciljano oglašavanje i remarketing (npr. Facebook Pixel, Google Ads).",
+  "txt_custom_tracking": "Prilagođeno praćenje",
+  "txt_custom_tracking_desc": "Sve dodatne integracije trećih strana (npr. alati za korisničku podršku, CDNS)."
 }

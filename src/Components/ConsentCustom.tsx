@@ -8,6 +8,7 @@ import {
   getWalletNonce,
   loadGtagScript,
   loadGtmScript,
+  postDisabledBlockDomains,
   revokeConsents,
   verifySignature,
 } from '../utils/consent';
@@ -52,6 +53,7 @@ import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
 import { trackEvent, AnalyticsContext, startTracker } from 'aesirx-analytics';
 import ConsentHeader from './ConsentHeader';
+import { CustomizeCategory } from './CustomizeCategory';
 declare global {
   interface Window {
     dataLayer: any;
@@ -70,6 +72,7 @@ const ConsentComponentCustom = ({
   layout,
   isOptInReplaceAnalytics,
   customConsentText,
+  disabledBlockDomains,
   languageSwitcher,
 }: any) => {
   return (
@@ -88,6 +91,7 @@ const ConsentComponentCustom = ({
                 gtmId={gtmId}
                 layout={layout}
                 customConsentText={customConsentText}
+                disabledBlockDomains={disabledBlockDomains}
                 languageSwitcher={languageSwitcher}
               />
             )}
@@ -127,6 +131,7 @@ const ConsentComponentCustomWrapper = (props: any) => {
           gtmId={props?.gtmId}
           layout={props?.layout}
           customConsentText={props?.customConsentText}
+          disabledBlockDomains={props?.disabledBlockDomains}
           languageSwitcher={props?.languageSwitcher}
           uuid={uuid}
           level={level}
@@ -154,6 +159,7 @@ const ConsentComponentCustomApp = (props: any) => {
     gtmId,
     layout,
     customConsentText,
+    disabledBlockDomains,
     languageSwitcher,
     activeConnectorType,
     activeConnector,
@@ -192,6 +198,7 @@ const ConsentComponentCustomApp = (props: any) => {
   const [showExpandConsent, setShowExpandConsent] = useState(true);
   const [showRejectedConsent, setShowRejectedConsent] = useState(false);
   const [showExpandRevoke, setShowExpandRevoke] = useState(false);
+  const [showCustomize, setShowCustomize] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
   const [consentTier4, setConsentTier4] = useState<any>({});
   const [upgradeLayout, setUpgradeLayout] = useState<any>(
@@ -270,6 +277,7 @@ const ConsentComponentCustomApp = (props: any) => {
                 gtagId,
                 gtmId
               );
+              postDisabledBlockDomains(endpoint);
               sessionStorage.setItem('aesirx-analytics-uuid', uuid);
               sessionStorage.setItem('aesirx-analytics-allow', '1');
               sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
@@ -371,6 +379,7 @@ const ConsentComponentCustomApp = (props: any) => {
             gtagId,
             gtmId
           );
+          postDisabledBlockDomains(endpoint);
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
           setUpgradeLayout(false);
         } else if (connector) {
@@ -429,6 +438,7 @@ const ConsentComponentCustomApp = (props: any) => {
             );
           }
         });
+        postDisabledBlockDomains(endpoint);
       }
 
       if (flag && (account || level < 3)) {
@@ -497,6 +507,7 @@ const ConsentComponentCustomApp = (props: any) => {
           gtagId,
           gtmId
         );
+        postDisabledBlockDomains(endpoint);
         setShow(false);
         handleRevoke(true, level);
         setUpgradeLayout(false);
@@ -555,6 +566,7 @@ const ConsentComponentCustomApp = (props: any) => {
             gtagId,
             gtmId
           );
+          postDisabledBlockDomains(endpoint);
           setShow(false);
           handleRevoke(true, level);
           setUpgradeLayout(false);
@@ -1286,173 +1298,41 @@ const ConsentComponentCustomApp = (props: any) => {
                           </>
                         </div>
                       </>
-                    ) : showRejectedConsent ? (
-                      <>
-                        <TermsComponent
-                          level={level}
-                          handleLevel={handleLevel}
-                          isCustom={true}
-                          layout={layout}
-                          isRejectedLayout={true}
-                          languageSwitcher={languageSwitcher}
-                        >
-                          <Form className="mb-0 w-100">
-                            <Form.Check
-                              checked={consents.includes(1)}
-                              type="switch"
-                              label="Personal data share consent."
-                              value={1}
-                              onChange={handleChange}
-                              className="d-none"
-                            />
-                            <Form.Check
-                              checked={consents.includes(2)}
-                              type="switch"
-                              label="Personal data cross site share consent."
-                              value={2}
-                              onChange={handleChange}
-                              className="d-none"
-                            />
-                            <div className="d-flex w-100 flex-wrap flex-lg-nowrap">
-                              {loading === 'done' ? (
-                                <>
-                                  <Button
-                                    variant="outline-success"
-                                    onClick={handleNotAllow}
-                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
-                                  >
-                                    {(window as any)?.aesirx_analytics_translate
-                                      ?.txt_reject_consent ?? t('txt_reject_consent')}
-                                  </Button>
-
-                                  {level === 2 || (level === 4 && !account && !address) ? (
-                                    <></>
-                                  ) : (
-                                    <Button
-                                      variant="outline-success"
-                                      onClick={handleAgree}
-                                      className="w-100 me-3 mb-2 mb-lg-0 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
-                                    >
-                                      {loadingCheckAccount ? (
-                                        <span
-                                          className="spinner-border spinner-border-sm me-1"
-                                          role="status"
-                                          aria-hidden="true"
-                                        ></span>
-                                      ) : (
-                                        <></>
-                                      )}
-                                      {(window as any)?.aesirx_analytics_translate
-                                        ?.txt_yes_i_consent ?? t('txt_yes_i_consent')}
-                                    </Button>
-                                  )}
-                                  {layout === 'simple-consent-mode' ? (
-                                    <></>
-                                  ) : (
-                                    <>
-                                      <Button
-                                        variant="outline-success"
-                                        onClick={() => {
-                                          setUpgradeLayout(true);
-                                        }}
-                                        className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
-                                      >
-                                        {(window as any)?.aesirx_analytics_translate
-                                          ?.txt_change_consent ?? t('txt_change_consent')}
-                                      </Button>{' '}
-                                    </>
-                                  )}
-                                </>
-                              ) : (
-                                <></>
-                              )}
-                            </div>
-                          </Form>
-                        </TermsComponent>
-                      </>
                     ) : (
                       <>
-                        <TermsComponent
-                          level={level}
-                          handleLevel={handleLevel}
-                          isCustom={true}
-                          layout={layout}
-                          customConsentText={customConsentText}
-                          languageSwitcher={languageSwitcher}
-                        >
-                          <Form className="mb-0 w-100">
-                            <Form.Check
-                              checked={consents.includes(1)}
-                              type="switch"
-                              label="Personal data share consent."
-                              value={1}
-                              onChange={handleChange}
-                              className="d-none"
+                        {showCustomize ? (
+                          <CustomizeCategory
+                            languageSwitcher={languageSwitcher}
+                            setShowCustomize={setShowCustomize}
+                            disabledBlockDomains={disabledBlockDomains}
+                          />
+                        ) : (
+                          <TermsComponent
+                            level={level}
+                            handleLevel={handleLevel}
+                            isCustom={true}
+                            layout={layout}
+                            customConsentText={customConsentText}
+                            isRejectedLayout={showRejectedConsent}
+                            languageSwitcher={languageSwitcher}
+                          >
+                            <ConsentAction
+                              level={level}
+                              loading={loading}
+                              loadingCheckAccount={loadingCheckAccount}
+                              consents={consents}
+                              account={account}
+                              address={address}
+                              layout={layout}
+                              handleChange={handleChange}
+                              handleNotAllow={handleNotAllow}
+                              handleAgree={handleAgree}
+                              setUpgradeLayout={setUpgradeLayout}
+                              setShowCustomize={setShowCustomize}
+                              t={t}
                             />
-                            <Form.Check
-                              checked={consents.includes(2)}
-                              type="switch"
-                              label="Personal data cross site share consent."
-                              value={2}
-                              onChange={handleChange}
-                              className="d-none"
-                            />
-                            <div className="d-flex w-100 flex-wrap flex-lg-nowrap">
-                              {loading === 'done' ? (
-                                <>
-                                  <Button
-                                    variant="outline-success"
-                                    onClick={handleNotAllow}
-                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
-                                  >
-                                    {(window as any)?.aesirx_analytics_translate
-                                      ?.txt_reject_consent ?? t('txt_reject_consent')}
-                                  </Button>
-
-                                  {level === 2 || (level === 4 && !account && !address) ? (
-                                    <></>
-                                  ) : (
-                                    <Button
-                                      variant="outline-success"
-                                      onClick={handleAgree}
-                                      className="w-100 me-3 mb-2 mb-lg-0 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
-                                    >
-                                      {loadingCheckAccount ? (
-                                        <span
-                                          className="spinner-border spinner-border-sm me-1"
-                                          role="status"
-                                          aria-hidden="true"
-                                        ></span>
-                                      ) : (
-                                        <></>
-                                      )}
-                                      {(window as any)?.aesirx_analytics_translate
-                                        ?.txt_yes_i_consent ?? t('txt_yes_i_consent')}
-                                    </Button>
-                                  )}
-                                  {layout === 'simple-consent-mode' ? (
-                                    <></>
-                                  ) : (
-                                    <>
-                                      <Button
-                                        variant="outline-success"
-                                        onClick={() => {
-                                          setUpgradeLayout(true);
-                                        }}
-                                        className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
-                                      >
-                                        {(window as any)?.aesirx_analytics_translate
-                                          ?.txt_change_consent ?? t('txt_change_consent')}
-                                      </Button>{' '}
-                                    </>
-                                  )}
-                                </>
-                              ) : (
-                                <></>
-                              )}
-                            </div>
-                          </Form>
-                        </TermsComponent>
+                          </TermsComponent>
+                        )}
                       </>
                     )}
                   </>
@@ -1492,6 +1372,110 @@ const ConsentComponentCustomApp = (props: any) => {
         />
       )}
     </div>
+  );
+};
+
+const ConsentAction = ({
+  level,
+  loading,
+  loadingCheckAccount,
+  consents,
+  account,
+  address,
+  layout,
+  handleChange,
+  handleNotAllow,
+  handleAgree,
+  setUpgradeLayout,
+  setShowCustomize,
+  t,
+}: any) => {
+  const blockJSDomains = window.blockJSDomains ?? [];
+  const isCategory = blockJSDomains.some((item: any) => item.hasOwnProperty('category'));
+  return (
+    <Form className="mb-0 w-100">
+      <Form.Check
+        checked={consents.includes(1)}
+        type="switch"
+        label="Personal data share consent."
+        value={1}
+        onChange={handleChange}
+        className="d-none"
+      />
+      <Form.Check
+        checked={consents.includes(2)}
+        type="switch"
+        label="Personal data cross site share consent."
+        value={2}
+        onChange={handleChange}
+        className="d-none"
+      />
+      <div className="d-flex w-100 flex-wrap flex-lg-nowrap">
+        {loading === 'done' ? (
+          <>
+            <Button
+              variant="outline-success"
+              onClick={handleNotAllow}
+              className="d-flex align-items-center justify-content-center fs-14 w-100 me-0 me-lg-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+            >
+              {(window as any)?.aesirx_analytics_translate?.txt_reject_consent ??
+                t('txt_reject_consent')}
+            </Button>
+            {isCategory && (
+              <Button
+                variant="outline-success"
+                onClick={() => {
+                  setShowCustomize(true);
+                }}
+                className="d-flex align-items-center justify-content-center fs-14 w-100 me-0 me-lg-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+              >
+                {(window as any)?.aesirx_analytics_translate?.txt_customize ?? t('txt_customize')}
+              </Button>
+            )}
+
+            {level === 2 || (level === 4 && !account && !address) ? (
+              <></>
+            ) : (
+              <Button
+                variant="outline-success"
+                onClick={handleAgree}
+                className="w-100 me-0 me-lg-3 mb-2 mb-lg-0 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
+              >
+                {loadingCheckAccount ? (
+                  <span
+                    className="spinner-border spinner-border-sm me-1"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                ) : (
+                  <></>
+                )}
+                {(window as any)?.aesirx_analytics_translate?.txt_yes_i_consent ??
+                  t('txt_yes_i_consent')}
+              </Button>
+            )}
+            {layout === 'simple-consent-mode' ? (
+              <></>
+            ) : (
+              <>
+                <Button
+                  variant="outline-success"
+                  onClick={() => {
+                    setUpgradeLayout(true);
+                  }}
+                  className="d-flex align-items-center justify-content-center fs-14 w-100 px-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3 text-nowrap"
+                >
+                  {(window as any)?.aesirx_analytics_translate?.txt_change_consent ??
+                    t('txt_change_consent')}
+                </Button>{' '}
+              </>
+            )}
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
+    </Form>
   );
 };
 
