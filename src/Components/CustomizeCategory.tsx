@@ -61,128 +61,128 @@ const CustomizeCategory = ({ languageSwitcher, setShowCustomize, disabledBlockDo
       <div className={`pb-1 pb-lg-3 pt-0 bg-white`}>
         <Accordion className="p-2 p-lg-4 accordion-customize" alwaysOpen>
           {Object.keys(groupByCategory).length > 0 &&
-            Object.keys(groupByCategory)?.map((key, index) => {
-              let title = '';
-              let subTitle = '';
-              switch (key) {
-                case 'essential':
-                  title =
-                    (window as any)?.aesirx_analytics_translate?.txt_essential_tracking ??
-                    t('txt_essential_tracking');
-                  subTitle =
-                    (window as any)?.aesirx_analytics_translate?.txt_essential_tracking_desc ??
-                    t('txt_essential_tracking_desc');
-                  break;
-                case 'functional':
-                  title =
-                    (window as any)?.aesirx_analytics_translate?.txt_functional_tracking ??
-                    t('txt_functional_tracking');
-                  subTitle =
-                    (window as any)?.aesirx_analytics_translate?.txt_functional_tracking_desc ??
-                    t('txt_functional_tracking_desc');
-                  break;
-                case 'analytics':
-                  title =
-                    (window as any)?.aesirx_analytics_translate?.txt_analytics_tracking ??
-                    t('txt_analytics_tracking');
-                  subTitle =
-                    (window as any)?.aesirx_analytics_translate?.txt_analytics_tracking_desc ??
-                    t('txt_analytics_tracking_desc');
-                  break;
-                case 'advertising':
-                  title =
-                    (window as any)?.aesirx_analytics_translate?.txt_advertising_tracking ??
-                    t('txt_advertising_tracking');
-                  subTitle =
-                    (window as any)?.aesirx_analytics_translate?.txt_advertising_tracking_desc ??
-                    t('txt_advertising_tracking_desc');
-                  break;
-                default:
-                  title =
-                    (window as any)?.aesirx_analytics_translate?.txt_custom_tracking ??
-                    t('txt_custom_tracking');
-                  subTitle =
-                    (window as any)?.aesirx_analytics_translate?.txt_custom_tracking_desc ??
-                    t('txt_custom_tracking_desc');
-              }
-              const allCategoryItems = blockJSDomains.filter((item) => item.category === key);
-              const isCategoryChecked = !allCategoryItems.every((item) =>
-                disabledItems.some((disabled) => disabled.domain === item.domain)
-              );
-              return (
-                <Accordion.Item eventKey={index?.toString()} key={index}>
-                  <div className="d-flex align-items-center justify-content-between">
-                    <Accordion.Header>
-                      <div className="d-flex align-items-center">
-                        <div className="accordion-img">
-                          <img className="plus" src={plus} width={20} height={20} alt="plus" />
-                          <img className="minus" src={minus} width={20} height={20} alt="minus" />
-                        </div>
-                        <div className="accordion-title">
-                          <div className="fw-medium text-black">{title}</div>
-                          <p className="mb-0 fs-14 d-none d-lg-block">{subTitle}</p>
-                        </div>
-                      </div>
-                    </Accordion.Header>
-                    {key === 'essential' ? (
-                      <div className="text-success fs-14 fw-medium pe-2 pe-lg-3 text-nowrap">
-                        {(window as any)?.aesirx_analytics_translate?.txt_always_active ??
-                          t('txt_always_active')}
-                      </div>
-                    ) : (
-                      <Form.Check
-                        className="ms-auto me-0 pe-3"
-                        type="switch"
-                        value={key}
-                        checked={isCategoryChecked}
-                        onChange={(e) => {
-                          handleToggle(key);
-                        }}
-                      />
-                    )}
-                  </div>
-                  <p className="mb-0 fs-14 subtitle-mobile d-lg-none">{subTitle}</p>
-                  <Accordion.Body>
-                    {groupByCategory[key]?.length ? (
-                      <div className="fw-semibold">
-                        {(window as any)?.aesirx_analytics_translate?.txt_domain_path_based ??
-                          t('txt_domain_path_based')}
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                    {groupByCategory[key]?.map((el: any, index: number) => {
-                      const isDomainChecked = !disabledItems.some(
-                        (item) => item.domain === el.domain
-                      );
-                      return (
-                        <label
-                          className="fs-12 d-flex align-items-center justify-content-between mb-0"
-                          key={index}
-                          htmlFor="inline-checkbox1"
-                        >
-                          {/* <div>{el?.name}</div> */}
-                          <div>{el?.domain}</div>
-                          <div>
-                            <Form.Check
-                              inline
-                              name={`domain-${key}-${index}`}
-                              type="checkbox"
-                              id={`domain-${key}-${index}`}
-                              checked={isDomainChecked}
-                              onChange={(e) => {
-                                handleCheckCustomize(key, el);
-                              }}
-                              disabled={key === 'essential' ? true : false}
-                            />
+            ['essential', 'functional', 'analytics', 'advertising', 'custom']
+              .filter((key) => groupByCategory[key])
+              ?.map((key, index) => {
+                let title = '';
+                let subTitle = '';
+                switch (key) {
+                  case 'essential':
+                    title =
+                      (window as any)?.aesirx_analytics_translate?.txt_essential_tracking ??
+                      t('txt_essential_tracking');
+                    subTitle =
+                      (window as any)?.aesirx_analytics_translate?.txt_essential_tracking_desc ??
+                      t('txt_essential_tracking_desc');
+                    break;
+                  case 'functional':
+                    title =
+                      (window as any)?.aesirx_analytics_translate?.txt_functional_tracking ??
+                      t('txt_functional_tracking');
+                    subTitle =
+                      (window as any)?.aesirx_analytics_translate?.txt_functional_tracking_desc ??
+                      t('txt_functional_tracking_desc');
+                    break;
+                  case 'analytics':
+                    title =
+                      (window as any)?.aesirx_analytics_translate?.txt_analytics_tracking ??
+                      t('txt_analytics_tracking');
+                    subTitle =
+                      (window as any)?.aesirx_analytics_translate?.txt_analytics_tracking_desc ??
+                      t('txt_analytics_tracking_desc');
+                    break;
+                  case 'advertising':
+                    title =
+                      (window as any)?.aesirx_analytics_translate?.txt_advertising_tracking ??
+                      t('txt_advertising_tracking');
+                    subTitle =
+                      (window as any)?.aesirx_analytics_translate?.txt_advertising_tracking_desc ??
+                      t('txt_advertising_tracking_desc');
+                    break;
+                  default:
+                    title =
+                      (window as any)?.aesirx_analytics_translate?.txt_custom_tracking ??
+                      t('txt_custom_tracking');
+                    subTitle =
+                      (window as any)?.aesirx_analytics_translate?.txt_custom_tracking_desc ??
+                      t('txt_custom_tracking_desc');
+                }
+                const allCategoryItems = blockJSDomains.filter((item) => item.category === key);
+                const isCategoryChecked = !allCategoryItems.every((item) =>
+                  disabledItems.some((disabled) => disabled.domain === item.domain)
+                );
+                return (
+                  <Accordion.Item eventKey={index?.toString()} key={index}>
+                    <div className="d-flex align-items-center justify-content-between">
+                      <Accordion.Header>
+                        <div className="d-flex align-items-center">
+                          <div className="accordion-img">
+                            <img className="plus" src={plus} width={20} height={20} alt="plus" />
+                            <img className="minus" src={minus} width={20} height={20} alt="minus" />
                           </div>
-                        </label>
-                      );
-                    })}
-                  </Accordion.Body>
-                </Accordion.Item>
-              );
-            })}
+                          <div className="accordion-title">
+                            <div className="fw-medium text-black">{title}</div>
+                            <p className="mb-0 fs-14 d-none d-lg-block">{subTitle}</p>
+                          </div>
+                        </div>
+                      </Accordion.Header>
+                      {key === 'essential' ? (
+                        <div className="text-success fs-14 fw-medium pe-2 pe-lg-3 text-nowrap">
+                          {(window as any)?.aesirx_analytics_translate?.txt_always_active ??
+                            t('txt_always_active')}
+                        </div>
+                      ) : (
+                        <Form.Check
+                          className="ms-auto me-0 pe-3"
+                          type="switch"
+                          value={key}
+                          checked={isCategoryChecked}
+                          onChange={(e) => {
+                            handleToggle(key);
+                          }}
+                        />
+                      )}
+                    </div>
+                    <p className="mb-0 fs-14 subtitle-mobile d-lg-none">{subTitle}</p>
+                    <Accordion.Body>
+                      {groupByCategory[key]?.map((el: any, index: number) => {
+                        const isDomainChecked = !disabledItems.some(
+                          (item) => item.domain === el.domain
+                        );
+                        return (
+                          <label
+                            className="fs-12 d-flex align-items-center justify-content-between mb-0"
+                            key={index}
+                            htmlFor="inline-checkbox1"
+                          >
+                            <div>
+                              {el?.name ? el?.name : el?.domain} -{' '}
+                              {el?.name
+                                ? ((window as any)?.aesirx_analytics_translate
+                                    ?.txt_third_party_plugins ?? t('txt_third_party_plugins'))
+                                : ((window as any)?.aesirx_analytics_translate
+                                    ?.txt_domain_path_based ?? t('txt_domain_path_based'))}
+                            </div>
+                            <div>
+                              <Form.Check
+                                inline
+                                name={`domain-${key}-${index}`}
+                                type="checkbox"
+                                id={`domain-${key}-${index}`}
+                                checked={isDomainChecked}
+                                onChange={(e) => {
+                                  handleCheckCustomize(key, el);
+                                }}
+                                disabled={key === 'essential' ? true : false}
+                              />
+                            </div>
+                          </label>
+                        );
+                      })}
+                    </Accordion.Body>
+                  </Accordion.Item>
+                );
+              })}
         </Accordion>
       </div>
       <div className="rounded-bottom position-relative overflow-hidden text-white bg-white">
