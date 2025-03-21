@@ -582,14 +582,14 @@ const ConsentComponentCustomApp = (props: any) => {
     }
   };
 
-  const handleNotAllow = async () => {
+  const handleNotAllow = async (isGPC = false) => {
     sessionStorage.setItem('aesirx-analytics-uuid', uuid);
     setShowExpandConsent(false);
     setShowBackdrop(false);
     const hostUrl = endpoint ? endpoint : '';
     const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
     await trackEvent(root, '', {
-      event_name: 'Reject consent',
+      event_name: isGPC ? 'Reject consent GPC' : 'Reject consent',
       event_type: 'reject-consent',
     });
     sessionStorage.setItem('aesirx-analytics-rejected', 'true');
@@ -737,6 +737,10 @@ const ConsentComponentCustomApp = (props: any) => {
         responseStart?.event_uuid && analyticsContext?.setEventID(responseStart.event_uuid);
         window['visitor_uuid'] = responseStart?.visitor_uuid;
         window['event_uuid'] = responseStart?.event_uuid;
+      }
+
+      if ((navigator as any).globalPrivacyControl && window['disableGPCsupport'] !== 'true') {
+        handleNotAllow(true);
       }
     };
     init();

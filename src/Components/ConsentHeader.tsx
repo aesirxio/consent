@@ -46,8 +46,6 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher }: any) => {
             options={listLanguages}
             className="shadow-none"
             onChange={(data: any) => {
-              console.log('i18n', i18n);
-              console.log('data.value', data.value);
               i18n.changeLanguage(data.value);
               consentContext.forceUpdate('Language changed');
             }}
