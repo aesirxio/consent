@@ -69,6 +69,12 @@ let rootElement: any = {};
 const AesirConsent = () => {
   const update = async () => {
     if (document.readyState === 'complete') {
+      if ((navigator as any)?.globalPrivacyControl && window['disableGPCsupport'] !== 'true') {
+        (window as any)?.__uspapi &&
+          (window as any)?.__uspapi('setGPCSignal', 1, function (result) {
+            console.log('GPC signal registered in IAB USP API:', result);
+          });
+      }
       const container = document.body?.appendChild(document.createElement('DIV'));
       rootElement = createRoot(container);
       const isOptInReplaceAnalytics = window['optInConsentData']
