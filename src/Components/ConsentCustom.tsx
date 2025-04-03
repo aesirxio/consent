@@ -54,6 +54,7 @@ import { getWeb3ID } from '../utils/Concordium';
 import { trackEvent, AnalyticsContext, startTracker } from 'aesirx-analytics';
 import ConsentHeader from './ConsentHeader';
 import { CustomizeCategory } from './CustomizeCategory';
+import { useWeb3Modal } from '@web3modal/react';
 declare global {
   interface Window {
     dataLayer: any;
@@ -72,6 +73,8 @@ const ConsentComponentCustom = ({
   layout,
   isOptInReplaceAnalytics,
   customConsentText,
+  customDetailText,
+  customRejectText,
   disabledBlockDomains,
   languageSwitcher,
 }: any) => {
@@ -91,6 +94,8 @@ const ConsentComponentCustom = ({
                 gtmId={gtmId}
                 layout={layout}
                 customConsentText={customConsentText}
+                customDetailText={customDetailText}
+                customRejectText={customRejectText}
                 disabledBlockDomains={disabledBlockDomains}
                 languageSwitcher={languageSwitcher}
               />
@@ -117,9 +122,10 @@ const ConsentComponentCustomWrapper = (props: any) => {
     showRevoke,
     handleRevoke,
   ] = useConsentStatus(props?.endpoint, props?.layout, props);
+  const { isOpen } = useWeb3Modal();
 
   return (
-    <div className="aesirxconsent">
+    <div className={`aesirxconsent ${isOpen ? 'web3modal-open' : ''}`}>
       <SSOEthereumProvider layout={props?.layout} level={level}>
         <ConsentComponentCustomApp
           {...props}
@@ -131,6 +137,8 @@ const ConsentComponentCustomWrapper = (props: any) => {
           gtmId={props?.gtmId}
           layout={props?.layout}
           customConsentText={props?.customConsentText}
+          customDetailText={props?.customDetailText}
+          customRejectText={props?.customRejectText}
           disabledBlockDomains={props?.disabledBlockDomains}
           languageSwitcher={props?.languageSwitcher}
           uuid={uuid}
@@ -159,6 +167,8 @@ const ConsentComponentCustomApp = (props: any) => {
     gtmId,
     layout,
     customConsentText,
+    customDetailText,
+    customRejectText,
     disabledBlockDomains,
     languageSwitcher,
     activeConnectorType,
@@ -1317,6 +1327,8 @@ const ConsentComponentCustomApp = (props: any) => {
                             isCustom={true}
                             layout={layout}
                             customConsentText={customConsentText}
+                            customDetailText={customDetailText}
+                            customRejectText={customRejectText}
                             isRejectedLayout={showRejectedConsent}
                             languageSwitcher={languageSwitcher}
                           >

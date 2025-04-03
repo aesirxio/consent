@@ -29,6 +29,8 @@ const ConsentPopup = () => {
   const [gtagId, setGtagId] = useState(window['analyticsGtagId']);
   const [gtmId, setGtmId] = useState(window['analyticsGtmId']);
   const [customConsentText, setCustomConsentText] = useState(window['analyticsConsentText']);
+  const [customDetailText, setCustomDetailText] = useState(window['analyticsDetailText']);
+  const [customRejectText, setCustomRejectText] = useState(window['analyticsRejectText']);
   const [disabledBlockDomains, setDisabledBlockDomains] = useState(
     window['disabledBlockJSDomains']
   );
@@ -42,6 +44,8 @@ const ConsentPopup = () => {
       setGtagId(data?.data?.gtag_id ?? window['analyticsGtagId']);
       setGtmId(data?.data?.gtm_id ?? window['analyticsGtmId']);
       setCustomConsentText(data?.data?.consent_text ?? window['analyticsConsentText']);
+      setCustomDetailText(data?.data?.detail_text ?? window['analyticsDetailText']);
+      setCustomRejectText(data?.data?.reject_text ?? window['analyticsRejectText']);
       setDisabledBlockDomains(
         data?.data?.disabled_block_domains ?? window['disabledBlockJSDomains']
       );
@@ -59,6 +63,8 @@ const ConsentPopup = () => {
         gtmId={gtmId}
         layout={layout}
         customConsentText={customConsentText}
+        customDetailText={customDetailText}
+        customRejectText={customRejectText}
         disabledBlockDomains={disabledBlockDomains}
       />
     </ConsentContextProvider>
