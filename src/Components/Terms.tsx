@@ -72,6 +72,8 @@ const TermsComponent = ({
   layout,
   isRejectedLayout,
   customConsentText,
+  customDetailText,
+  customRejectText,
   languageSwitcher,
 }: any) => {
   const { t } = useTranslation();
@@ -113,72 +115,85 @@ const TermsComponent = ({
                         >
                           {isRejectedLayout ? (
                             <>
-                              <p className="mt-0 pt-4 mb-2">
-                                {(window as any)?.aesirx_analytics_translate?.txt_you_have_chosen ??
-                                  t('txt_you_have_chosen')}
-                              </p>
-                              <p className="mt-2 mb-3">
-                                {(window as any)?.aesirx_analytics_translate?.txt_only_anonymized ??
-                                  t('txt_only_anonymized')}
-                              </p>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img
-                                    src={check_circle}
-                                    width={'14px'}
-                                    height={'15px'}
-                                    alt="Check Icon"
+                              {customRejectText ? (
+                                <>
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: customRejectText,
+                                    }}
                                   />
-                                </span>
-                                <div className="ms-10px">
-                                  {(window as any)?.aesirx_analytics_translate
-                                    ?.txt_consent_allow_data ? (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: (window as any)?.aesirx_analytics_translate
-                                          ?.txt_consent_allow_data,
-                                      }}
-                                    />
-                                  ) : (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: t('txt_consent_allow_data', {
-                                          interpolation: { escapeValue: false },
-                                        }),
-                                      }}
-                                    />
-                                  )}
-                                </div>
-                              </div>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img
-                                    src={check_circle}
-                                    width={'14px'}
-                                    height={'15px'}
-                                    alt="Check Icon"
-                                  />
-                                </span>
-                                <div className="ms-10px">
-                                  {(window as any)?.aesirx_analytics_translate
-                                    ?.txt_decentralized_consent_allow_data ? (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: (window as any)?.aesirx_analytics_translate
-                                          ?.txt_decentralized_consent_allow_data,
-                                      }}
-                                    />
-                                  ) : (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: t('txt_decentralized_consent_allow_data', {
-                                          interpolation: { escapeValue: false },
-                                        }),
-                                      }}
-                                    />
-                                  )}
-                                </div>
-                              </div>
+                                </>
+                              ) : (
+                                <>
+                                  {' '}
+                                  <p className="mt-0 pt-4 mb-2">
+                                    {(window as any)?.aesirx_analytics_translate
+                                      ?.txt_you_have_chosen ?? t('txt_you_have_chosen')}
+                                  </p>
+                                  <p className="mt-2 mb-3">
+                                    {(window as any)?.aesirx_analytics_translate
+                                      ?.txt_only_anonymized ?? t('txt_only_anonymized')}
+                                  </p>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img
+                                        src={check_circle}
+                                        width={'14px'}
+                                        height={'15px'}
+                                        alt="Check Icon"
+                                      />
+                                    </span>
+                                    <div className="ms-10px">
+                                      {(window as any)?.aesirx_analytics_translate
+                                        ?.txt_consent_allow_data ? (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: (window as any)?.aesirx_analytics_translate
+                                              ?.txt_consent_allow_data,
+                                          }}
+                                        />
+                                      ) : (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: t('txt_consent_allow_data', {
+                                              interpolation: { escapeValue: false },
+                                            }),
+                                          }}
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img
+                                        src={check_circle}
+                                        width={'14px'}
+                                        height={'15px'}
+                                        alt="Check Icon"
+                                      />
+                                    </span>
+                                    <div className="ms-10px">
+                                      {(window as any)?.aesirx_analytics_translate
+                                        ?.txt_decentralized_consent_allow_data ? (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: (window as any)?.aesirx_analytics_translate
+                                              ?.txt_decentralized_consent_allow_data,
+                                          }}
+                                        />
+                                      ) : (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: t('txt_decentralized_consent_allow_data', {
+                                              interpolation: { escapeValue: false },
+                                            }),
+                                          }}
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                </>
+                              )}
                             </>
                           ) : (
                             <div className="tab_content">
@@ -325,208 +340,221 @@ const TermsComponent = ({
                           className="px-2 px-lg-4"
                         >
                           <div className={`tab_content about_section`}>
-                            <p className="mt-0 mb-1 mb-lg-2 text-black fw-semibold">
-                              {(window as any)?.aesirx_analytics_translate
-                                ?.txt_manage_your_consent ?? t('txt_manage_your_consent')}
-                            </p>
-                            <p className="mt-0 mb-1 mb-lg-3">
-                              {layout === 'simple-consent-mode'
-                                ? ((window as any)?.aesirx_analytics_translate
-                                    ?.txt_choose_how_we_use_simple ??
-                                  t('txt_choose_how_we_use_simple'))
-                                : ((window as any)?.aesirx_analytics_translate
-                                    ?.txt_choose_how_we_use ?? t('txt_choose_how_we_use'))}
-                            </p>
-                            <div className="mb-1 mb-lg-3">
-                              <p className="mb-1 mb-lg-2 text-black fw-semibold">
-                                {(window as any)?.aesirx_analytics_translate?.txt_benefit ??
-                                  t('txt_benefit')}
-                              </p>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img
-                                    src={check_circle}
-                                    width={'14px'}
-                                    height={'15px'}
-                                    alt="Check Icon"
-                                  />
-                                </span>
-                                <div className="ms-10px">
+                            {customDetailText ? (
+                              <>
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: customDetailText,
+                                  }}
+                                />
+                              </>
+                            ) : (
+                              <>
+                                <p className="mt-0 mb-1 mb-lg-2 text-black fw-semibold">
                                   {(window as any)?.aesirx_analytics_translate
-                                    ?.txt_control_your_data ? (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: (window as any)?.aesirx_analytics_translate
-                                          ?.txt_control_your_data,
-                                      }}
-                                    />
-                                  ) : (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: t('txt_control_your_data', {
-                                          interpolation: { escapeValue: false },
-                                        }),
-                                      }}
-                                    />
-                                  )}
-                                </div>
-                              </div>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img
-                                    src={check_circle}
-                                    width={'14px'}
-                                    height={'15px'}
-                                    alt="Check Icon"
-                                  />
-                                </span>
-                                <div className="ms-10px">
-                                  {(window as any)?.aesirx_analytics_translate?.txt_earn_rewards ? (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: (window as any)?.aesirx_analytics_translate
-                                          ?.txt_earn_rewards,
-                                      }}
-                                    />
-                                  ) : (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: t('txt_earn_rewards', {
-                                          interpolation: { escapeValue: false },
-                                        }),
-                                      }}
-                                    />
-                                  )}
-                                </div>
-                              </div>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img
-                                    src={check_circle}
-                                    width={'14px'}
-                                    height={'15px'}
-                                    alt="Check Icon"
-                                  />
-                                </span>
-                                <div className="ms-10px">
-                                  {(window as any)?.aesirx_analytics_translate
-                                    ?.txt_transparent_data ? (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: (window as any)?.aesirx_analytics_translate
-                                          ?.txt_transparent_data,
-                                      }}
-                                    />
-                                  ) : (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: t('txt_transparent_data', {
-                                          interpolation: { escapeValue: false },
-                                        }),
-                                      }}
-                                    />
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="mb-1 mb-lg-3">
-                              <p className="mb-1 mb-lg-2 text-black fw-semibold">
-                                {(window as any)?.aesirx_analytics_translate
-                                  ?.txt_understanding_your_privacy ??
-                                  t('txt_understanding_your_privacy')}
-                              </p>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img
-                                    src={check_circle}
-                                    width={'14px'}
-                                    height={'15px'}
-                                    alt="Check Icon"
-                                  />
-                                </span>
-                                <div className="ms-10px">
-                                  {(window as any)?.aesirx_analytics_translate
-                                    ?.txt_reject_no_data ? (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: (window as any)?.aesirx_analytics_translate
-                                          ?.txt_reject_no_data,
-                                      }}
-                                    />
-                                  ) : (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: t('txt_reject_no_data', {
-                                          interpolation: { escapeValue: false },
-                                        }),
-                                      }}
-                                    />
-                                  )}
-                                </div>
-                              </div>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img
-                                    src={check_circle}
-                                    width={'14px'}
-                                    height={'15px'}
-                                    alt="Check Icon"
-                                  />
-                                </span>
-                                <div className="ms-10px">
-                                  {(window as any)?.aesirx_analytics_translate
-                                    ?.txt_consent_first_third_party ? (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: (window as any)?.aesirx_analytics_translate
-                                          ?.txt_consent_first_third_party,
-                                      }}
-                                    />
-                                  ) : (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: t('txt_consent_first_third_party', {
-                                          interpolation: { escapeValue: false },
-                                        }),
-                                      }}
-                                    />
-                                  )}
-                                </div>
-                              </div>
-                              {layout === 'simple-consent-mode' ? (
-                                <></>
-                              ) : (
-                                <div className="d-flex align-items-start check-line">
-                                  <span>
-                                    <img
-                                      src={check_circle}
-                                      width={'14px'}
-                                      height={'15px'}
-                                      alt="Check Icon"
-                                    />
-                                  </span>
-                                  <div className="ms-10px">
-                                    {(window as any)?.aesirx_analytics_translate
-                                      ?.txt_decentralizered_consent_choose ? (
-                                      <div
-                                        dangerouslySetInnerHTML={{
-                                          __html: (window as any)?.aesirx_analytics_translate
-                                            ?.txt_decentralizered_consent_choose,
-                                        }}
+                                    ?.txt_manage_your_consent ?? t('txt_manage_your_consent')}
+                                </p>
+                                <p className="mt-0 mb-1 mb-lg-3">
+                                  {layout === 'simple-consent-mode'
+                                    ? ((window as any)?.aesirx_analytics_translate
+                                        ?.txt_choose_how_we_use_simple ??
+                                      t('txt_choose_how_we_use_simple'))
+                                    : ((window as any)?.aesirx_analytics_translate
+                                        ?.txt_choose_how_we_use ?? t('txt_choose_how_we_use'))}
+                                </p>
+                                <div className="mb-1 mb-lg-3">
+                                  <p className="mb-1 mb-lg-2 text-black fw-semibold">
+                                    {(window as any)?.aesirx_analytics_translate?.txt_benefit ??
+                                      t('txt_benefit')}
+                                  </p>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img
+                                        src={check_circle}
+                                        width={'14px'}
+                                        height={'15px'}
+                                        alt="Check Icon"
                                       />
-                                    ) : (
-                                      <div
-                                        dangerouslySetInnerHTML={{
-                                          __html: t('txt_decentralizered_consent_choose', {
-                                            interpolation: { escapeValue: false },
-                                          }),
-                                        }}
+                                    </span>
+                                    <div className="ms-10px">
+                                      {(window as any)?.aesirx_analytics_translate
+                                        ?.txt_control_your_data ? (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: (window as any)?.aesirx_analytics_translate
+                                              ?.txt_control_your_data,
+                                          }}
+                                        />
+                                      ) : (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: t('txt_control_your_data', {
+                                              interpolation: { escapeValue: false },
+                                            }),
+                                          }}
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img
+                                        src={check_circle}
+                                        width={'14px'}
+                                        height={'15px'}
+                                        alt="Check Icon"
                                       />
-                                    )}
+                                    </span>
+                                    <div className="ms-10px">
+                                      {(window as any)?.aesirx_analytics_translate
+                                        ?.txt_earn_rewards ? (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: (window as any)?.aesirx_analytics_translate
+                                              ?.txt_earn_rewards,
+                                          }}
+                                        />
+                                      ) : (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: t('txt_earn_rewards', {
+                                              interpolation: { escapeValue: false },
+                                            }),
+                                          }}
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img
+                                        src={check_circle}
+                                        width={'14px'}
+                                        height={'15px'}
+                                        alt="Check Icon"
+                                      />
+                                    </span>
+                                    <div className="ms-10px">
+                                      {(window as any)?.aesirx_analytics_translate
+                                        ?.txt_transparent_data ? (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: (window as any)?.aesirx_analytics_translate
+                                              ?.txt_transparent_data,
+                                          }}
+                                        />
+                                      ) : (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: t('txt_transparent_data', {
+                                              interpolation: { escapeValue: false },
+                                            }),
+                                          }}
+                                        />
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
-                              )}
-                            </div>
+                                <div className="mb-1 mb-lg-3">
+                                  <p className="mb-1 mb-lg-2 text-black fw-semibold">
+                                    {(window as any)?.aesirx_analytics_translate
+                                      ?.txt_understanding_your_privacy ??
+                                      t('txt_understanding_your_privacy')}
+                                  </p>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img
+                                        src={check_circle}
+                                        width={'14px'}
+                                        height={'15px'}
+                                        alt="Check Icon"
+                                      />
+                                    </span>
+                                    <div className="ms-10px">
+                                      {(window as any)?.aesirx_analytics_translate
+                                        ?.txt_reject_no_data ? (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: (window as any)?.aesirx_analytics_translate
+                                              ?.txt_reject_no_data,
+                                          }}
+                                        />
+                                      ) : (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: t('txt_reject_no_data', {
+                                              interpolation: { escapeValue: false },
+                                            }),
+                                          }}
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img
+                                        src={check_circle}
+                                        width={'14px'}
+                                        height={'15px'}
+                                        alt="Check Icon"
+                                      />
+                                    </span>
+                                    <div className="ms-10px">
+                                      {(window as any)?.aesirx_analytics_translate
+                                        ?.txt_consent_first_third_party ? (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: (window as any)?.aesirx_analytics_translate
+                                              ?.txt_consent_first_third_party,
+                                          }}
+                                        />
+                                      ) : (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: t('txt_consent_first_third_party', {
+                                              interpolation: { escapeValue: false },
+                                            }),
+                                          }}
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                  {layout === 'simple-consent-mode' ? (
+                                    <></>
+                                  ) : (
+                                    <div className="d-flex align-items-start check-line">
+                                      <span>
+                                        <img
+                                          src={check_circle}
+                                          width={'14px'}
+                                          height={'15px'}
+                                          alt="Check Icon"
+                                        />
+                                      </span>
+                                      <div className="ms-10px">
+                                        {(window as any)?.aesirx_analytics_translate
+                                          ?.txt_decentralizered_consent_choose ? (
+                                          <div
+                                            dangerouslySetInnerHTML={{
+                                              __html: (window as any)?.aesirx_analytics_translate
+                                                ?.txt_decentralizered_consent_choose,
+                                            }}
+                                          />
+                                        ) : (
+                                          <div
+                                            dangerouslySetInnerHTML={{
+                                              __html: t('txt_decentralizered_consent_choose', {
+                                                interpolation: { escapeValue: false },
+                                              }),
+                                            }}
+                                          />
+                                        )}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              </>
+                            )}
                           </div>
                         </Tab>
                         {/* <Tab

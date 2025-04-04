@@ -27,6 +27,9 @@ $dark: #222328;
 @import 'bootstrap/scss/maps';
 @import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/root';
+body wcm-modal {
+  --wcm-z-index: 100060;
+}
 .aesirxconsent {
   // 6. Optionally include any other parts as needed
   @import 'bootstrap/scss/utilities';
@@ -46,7 +49,7 @@ $dark: #222328;
   @import 'bootstrap/scss/utilities/api';
   color: #5f5e70;
   font-size: 16px;
-  --w3m-z-index: 1060;
+  --w3m-z-index: 100060;
   z-index: 100050;
   position: relative;
   --#{$prefix}modal-margin: 1.75rem;
@@ -60,11 +63,15 @@ $dark: #222328;
   &-modal .modal-dialog {
     max-width: 500px;
   }
+  &.web3modal-open {
+    z-index: 100056;
+  }
   a {
     text-decoration: underline;
   }
   p {
     padding-bottom: 0;
+    margin-bottom: 0;
   }
   .fs-14 {
     font-size: 14px;
@@ -626,7 +633,7 @@ body.modal-sso-open {
 body {
   .aesirxsso {
     &.modal {
-      z-index: 100055;
+      z-index: 100057;
     }
   }
 }
