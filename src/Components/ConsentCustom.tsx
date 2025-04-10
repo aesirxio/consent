@@ -417,7 +417,7 @@ const ConsentComponentCustomApp = (props: any) => {
           if (!existConsent) {
             await agreeConsents(
               endpoint,
-              1,
+              disabledBlockDomains ? 5 : 1,
               uuid,
               consent,
               null,
@@ -435,7 +435,7 @@ const ConsentComponentCustomApp = (props: any) => {
           ) {
             await agreeConsents(
               endpoint,
-              1,
+              disabledBlockDomains ? 5 : 1,
               uuid,
               consent,
               null,
@@ -688,7 +688,15 @@ const ConsentComponentCustomApp = (props: any) => {
           sessionStorage.removeItem('aesirx-analytics-allow');
         }
       } else {
-        await revokeConsents(endpoint, levelRevoke, uuid, null, null, null, jwt);
+        await revokeConsents(
+          endpoint,
+          disabledBlockDomains ? '5' : levelRevoke,
+          uuid,
+          null,
+          null,
+          null,
+          jwt
+        );
         handleRevoke(false);
         setShowExpandConsent(false);
         setShow(true);

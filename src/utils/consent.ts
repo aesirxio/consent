@@ -98,6 +98,9 @@ const agreeConsents = async (
           }
         );
         break;
+      case 5:
+        await axios.post(`${url}/${consent}`, { ...dataPayload });
+        break;
 
       default:
         break;
@@ -262,6 +265,14 @@ const revokeConsents = async (
             },
           }
         );
+        break;
+      case '5':
+        await axios.put(`${url}`, null, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + jwt,
+          },
+        });
         break;
 
       default:
