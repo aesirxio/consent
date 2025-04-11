@@ -417,7 +417,7 @@ const ConsentComponentCustomApp = (props: any) => {
           if (!existConsent) {
             await agreeConsents(
               endpoint,
-              1,
+              disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length ? 5 : 1,
               uuid,
               consent,
               null,
@@ -435,7 +435,7 @@ const ConsentComponentCustomApp = (props: any) => {
           ) {
             await agreeConsents(
               endpoint,
-              1,
+              disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length ? 5 : 1,
               uuid,
               consent,
               null,
@@ -688,7 +688,17 @@ const ConsentComponentCustomApp = (props: any) => {
           sessionStorage.removeItem('aesirx-analytics-allow');
         }
       } else {
-        await revokeConsents(endpoint, levelRevoke, uuid, null, null, null, jwt);
+        await revokeConsents(
+          endpoint,
+          disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length
+            ? '5'
+            : levelRevoke,
+          uuid,
+          null,
+          null,
+          null,
+          jwt
+        );
         handleRevoke(false);
         setShowExpandConsent(false);
         setShow(true);
@@ -1341,7 +1351,7 @@ const ConsentComponentCustomApp = (props: any) => {
                               address={address}
                               layout={layout}
                               handleChange={handleChange}
-                              handleNotAllow={handleNotAllow}
+                              handleNotAllow={() => handleNotAllow(false)}
                               handleAgree={handleAgree}
                               setUpgradeLayout={setUpgradeLayout}
                               setShowCustomize={setShowCustomize}
@@ -1433,7 +1443,9 @@ const ConsentAction = ({
           <>
             <Button
               variant="outline-success"
-              onClick={handleNotAllow}
+              onClick={() => {
+                handleNotAllow(false);
+              }}
               className="d-flex align-items-center justify-content-center fs-14 w-100 me-0 me-lg-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
             >
               {(window as any)?.aesirx_analytics_translate?.txt_reject_consent ??
