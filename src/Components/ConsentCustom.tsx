@@ -204,6 +204,7 @@ const ConsentComponentCustomApp = (props: any) => {
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [revokeConsentOption, setRevokeConsentOption] = useState<string>('consent');
   const [loading, setLoading] = useState('done');
+  const [loadingRevoke, setLoadingRevoke] = useState(false);
   const [loadingCheckAccount, setLoadingCheckAccount] = useState(false);
   const [showExpandConsent, setShowExpandConsent] = useState(true);
   const [showRejectedConsent, setShowRejectedConsent] = useState(false);
@@ -312,7 +313,8 @@ const ConsentComponentCustomApp = (props: any) => {
     }
   };
 
-  const handleAgree = async () => {
+  const handleAgree = async (visitor_uuid?: string) => {
+    const uuidConsent = visitor_uuid ?? uuid;
     try {
       let flag = true;
       // Wallets
@@ -379,7 +381,7 @@ const ConsentComponentCustomApp = (props: any) => {
           await agreeConsents(
             endpoint,
             level,
-            uuid,
+            uuidConsent,
             consents,
             account,
             signature,
@@ -411,14 +413,18 @@ const ConsentComponentCustomApp = (props: any) => {
         }
       } else {
         setLoading('saving');
-        const consentList = await getConsents(endpoint, uuid);
+        const consentList = await getConsents(endpoint, uuidConsent);
         consents.forEach(async (consent) => {
           const existConsent = consentList.find((item: any) => item?.consent === consent);
           if (!existConsent) {
             await agreeConsents(
               endpoint,
-              disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length ? 5 : 1,
-              uuid,
+              window['aesirxOptOutMode'] === 'true'
+                ? 6
+                : disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length
+                  ? 5
+                  : 1,
+              uuidConsent,
               consent,
               null,
               null,
@@ -435,8 +441,12 @@ const ConsentComponentCustomApp = (props: any) => {
           ) {
             await agreeConsents(
               endpoint,
-              disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length ? 5 : 1,
-              uuid,
+              window['aesirxOptOutMode'] === 'true'
+                ? 6
+                : disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length
+                  ? 5
+                  : 1,
+              uuidConsent,
               consent,
               null,
               null,
@@ -452,7 +462,7 @@ const ConsentComponentCustomApp = (props: any) => {
       }
 
       if (flag && (account || level < 3)) {
-        sessionStorage.setItem('aesirx-analytics-uuid', uuid);
+        sessionStorage.setItem('aesirx-analytics-uuid', uuidConsent);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
 
         setShow(false);
@@ -735,7 +745,8 @@ const ConsentComponentCustomApp = (props: any) => {
   }, [activeConnectorError]);
 
   useEffect(() => {
-    if (sessionStorage.getItem('aesirx-analytics-rejected') === 'true') {
+    const isRejected = sessionStorage.getItem('aesirx-analytics-rejected') === 'true';
+    if (isRejected) {
       setShowBackdrop(false);
       setShowExpandConsent(false);
     }
@@ -746,20 +757,41 @@ const ConsentComponentCustomApp = (props: any) => {
       window.funcAfterConsent && window.funcAfterConsent();
     }
     const init = async () => {
-      if (!analyticsContext?.setUUID && window['aesirx-analytics-enable'] !== 'true') {
-        const responseStart = await startTracker(endpoint, '', '', '', window['attributes']);
-        responseStart?.visitor_uuid && consentContext?.setUUID(responseStart.visitor_uuid);
-        window['visitor_uuid'] = responseStart?.visitor_uuid;
-      }
-      if (analyticsContext?.setUUID && window['aesirx-analytics-enable'] === 'true') {
-        const responseStart = await startTracker(endpoint, '', '', '', window['attributes']);
-        responseStart?.visitor_uuid && analyticsContext?.setUUID(responseStart.visitor_uuid);
-        responseStart?.event_uuid && analyticsContext?.setEventID(responseStart.event_uuid);
-        window['visitor_uuid'] = responseStart?.visitor_uuid;
-        window['event_uuid'] = responseStart?.event_uuid;
+      const isAnalyticsEnabled = window['aesirx-analytics-enable'] === 'true';
+      const isOptOutMode = window['aesirxOptOutMode'] === 'true';
+      const disableGPC = window['disableGPCsupport'] === 'true';
+      const hasGlobalPrivacyControl = (navigator as any).globalPrivacyControl;
+      const shouldStartTracking =
+        (!analyticsContext?.setUUID && !isAnalyticsEnabled) ||
+        (analyticsContext?.setUUID && isAnalyticsEnabled);
+      const isConsented =
+        showRevoke ||
+        (sessionStorage.getItem('aesirx-analytics-revoke') &&
+          sessionStorage.getItem('aesirx-analytics-revoke') !== '0');
+
+      if (shouldStartTracking) {
+        const response = await startTracker(endpoint, '', '', '', window['attributes']);
+
+        if (response?.visitor_uuid) {
+          window['visitor_uuid'] = response.visitor_uuid;
+
+          if (!isAnalyticsEnabled) {
+            consentContext?.setUUID?.(response.visitor_uuid);
+          } else {
+            analyticsContext?.setUUID?.(response.visitor_uuid);
+            if (response.event_uuid) {
+              analyticsContext?.setEventID?.(response.event_uuid);
+              window['event_uuid'] = response.event_uuid;
+            }
+          }
+
+          if (isOptOutMode && !isConsented && !isRejected) {
+            handleAgree(response.visitor_uuid);
+          }
+        }
       }
 
-      if ((navigator as any).globalPrivacyControl && window['disableGPCsupport'] !== 'true') {
+      if (hasGlobalPrivacyControl && !disableGPC) {
         handleNotAllow(true);
       }
     };
@@ -910,131 +942,184 @@ const ConsentComponentCustomApp = (props: any) => {
 
               {showExpandRevoke && (
                 <>
-                  <ConsentHeader languageSwitcher={languageSwitcher} />
-                  <div
-                    className="minimize-revoke"
-                    onClick={() => {
-                      setShowExpandRevoke(false);
-                    }}
-                  >
-                    <img src={no} alt="No Icon" />
-                  </div>
-                  <div className="p-3 bg-white">
-                    {paymentRevoke
-                      ? ((window as any)?.aesirx_analytics_translate
-                          ?.txt_you_can_revoke_on_the_site ?? t('txt_you_can_revoke_on_the_site'))
-                      : ((window as any)?.aesirx_analytics_translate?.txt_you_can_revoke ??
-                        t('txt_you_can_revoke'))}
-                  </div>
-                  <Form className="mb-0 w-100 bg-white px-3">
-                    <Form.Check
-                      id={`option-revoke-consent`}
-                      checked={revokeConsentOption === 'consent'}
-                      type="checkbox"
-                      label={
-                        (window as any)?.aesirx_analytics_translate
-                          ?.txt_revoke_consent_for_the_site ?? t('txt_revoke_consent_for_the_site')
-                      }
-                      value={'consent'}
-                      onChange={({ target: { value } }) => {
-                        setRevokeConsentOption(value);
-                      }}
+                  {showCustomize ? (
+                    <CustomizeCategory
+                      languageSwitcher={languageSwitcher}
+                      setShowCustomize={setShowCustomize}
+                      disabledBlockDomains={disabledBlockDomains}
+                      handleRevokeBtn={handleRevokeBtn}
+                      showRevoke={showRevoke}
+                      endpoint={endpoint}
                     />
-                    {optInRevokes?.map((item, key) => {
-                      return (
+                  ) : (
+                    <>
+                      <ConsentHeader languageSwitcher={languageSwitcher} />
+                      <div
+                        className="minimize-revoke"
+                        onClick={() => {
+                          setShowExpandRevoke(false);
+                        }}
+                      >
+                        <img src={no} alt="No Icon" />
+                      </div>
+                      <div className="p-3 bg-white">
+                        {window['aesirxOptOutMode'] === 'true'
+                          ? ((window as any)?.aesirx_analytics_translate?.txt_tracking_default ??
+                            t('txt_tracking_default'))
+                          : paymentRevoke
+                            ? ((window as any)?.aesirx_analytics_translate
+                                ?.txt_you_can_revoke_on_the_site ??
+                              t('txt_you_can_revoke_on_the_site'))
+                            : ((window as any)?.aesirx_analytics_translate?.txt_you_can_revoke ??
+                              t('txt_you_can_revoke'))}
+                      </div>
+                      <Form
+                        className={`mb-0 w-100 bg-white px-3 ${window['aesirxOptOutMode'] === 'true' ? 'd-none' : ''}`}
+                      >
                         <Form.Check
-                          key={key}
-                          id={`option-revoke-${item}`}
-                          checked={revokeConsentOption === item}
+                          id={`option-revoke-consent`}
+                          checked={revokeConsentOption === 'consent'}
                           type="checkbox"
                           label={
-                            item === 'aesirx-analytics-optin-default'
-                              ? ((window as any)?.aesirx_analytics_translate?.txt_revoke_opt_in ??
-                                t('txt_revoke_opt_in'))
-                              : item === 'aesirx-analytics-optin-payment'
-                                ? ((window as any)?.aesirx_analytics_translate
-                                    ?.txt_revoke_opt_in_payment ?? t('txt_revoke_opt_in_payment'))
-                                : item === 'aesirx-analytics-optin-advisor'
-                                  ? ((window as any)?.aesirx_analytics_translate
-                                      ?.txt_revoke_opt_in_advisor ?? t('txt_revoke_opt_in_advisor'))
-                                  : ((window as any)?.aesirx_analytics_translate
-                                      ?.txt_revoke_opt_in ??
-                                    t('txt_revoke_opt_in') +
-                                      ' ' +
-                                      item?.replace('aesirx-analytics-optin-', ''))
+                            (window as any)?.aesirx_analytics_translate
+                              ?.txt_revoke_consent_for_the_site ??
+                            t('txt_revoke_consent_for_the_site')
                           }
-                          value={item}
+                          value={'consent'}
                           onChange={({ target: { value } }) => {
                             setRevokeConsentOption(value);
                           }}
                         />
-                      );
-                    })}
-                  </Form>
-
-                  <div className="rounded-bottom position-relative overflow-hidden bg-white">
-                    <div className="position-relative p-3">
-                      <div className="d-flex align-items-center flex-wrap">
-                        <div className="d-flex align-items-center w-100 justify-content-end flex-wrap">
-                          <a
-                            className="manage-consent fs-14 btn btn-outline-success rounded-pill py-2 py-lg-3 d-flex align-items-center justify-content-center w-100 w-lg-35"
-                            href="https://dapp.shield.aesirx.io/revoke-consent"
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            {(window as any)?.aesirx_analytics_translate?.txt_manage_consent ??
-                              t('txt_manage_consent')}
-                          </a>
-                          {loading === 'done' ? (
-                            <Button
-                              variant="outline-success"
-                              onClick={async () => {
-                                if (revokeConsentOption === 'consent') {
-                                  await handleRevokeBtn();
-                                  const levelRevoke =
-                                    sessionStorage.getItem('aesirx-analytics-revoke') &&
-                                    parseInt(sessionStorage.getItem('aesirx-analytics-revoke'));
-                                  if (levelRevoke <= 1 && window['aesirx1stparty']) {
-                                    setTimeout(() => {
-                                      window.location.reload();
-                                    }, 1000);
-                                  }
-                                } else {
-                                  sessionStorage.removeItem(revokeConsentOption);
-                                  setShowExpandRevoke(false);
-                                  setRevokeConsentOption('consent');
-                                  setTimeout(() => {
-                                    window.location.reload();
-                                  }, 1000);
-                                }
-                              }}
-                              className={
-                                'd-flex align-items-center justify-content-center w-100 w-lg-35 revoke-btn fs-14 rounded-pill py-2 py-lg-3'
+                        {optInRevokes?.map((item, key) => {
+                          return (
+                            <Form.Check
+                              key={key}
+                              id={`option-revoke-${item}`}
+                              checked={revokeConsentOption === item}
+                              type="checkbox"
+                              label={
+                                item === 'aesirx-analytics-optin-default'
+                                  ? ((window as any)?.aesirx_analytics_translate
+                                      ?.txt_revoke_opt_in ?? t('txt_revoke_opt_in'))
+                                  : item === 'aesirx-analytics-optin-payment'
+                                    ? ((window as any)?.aesirx_analytics_translate
+                                        ?.txt_revoke_opt_in_payment ??
+                                      t('txt_revoke_opt_in_payment'))
+                                    : item === 'aesirx-analytics-optin-advisor'
+                                      ? ((window as any)?.aesirx_analytics_translate
+                                          ?.txt_revoke_opt_in_advisor ??
+                                        t('txt_revoke_opt_in_advisor'))
+                                      : ((window as any)?.aesirx_analytics_translate
+                                          ?.txt_revoke_opt_in ??
+                                        t('txt_revoke_opt_in') +
+                                          ' ' +
+                                          item?.replace('aesirx-analytics-optin-', ''))
                               }
-                            >
-                              {(window as any)?.aesirx_analytics_translate?.txt_revoke_consent ??
-                                t('txt_revoke_consent')}
-                            </Button>
-                          ) : (
-                            <></>
-                          )}
-                          {(sessionStorage.getItem('aesirx-analytics-revoke') === '4' ||
-                            sessionStorage.getItem('aesirx-analytics-revoke') === '2') && (
-                            <div>
-                              <Suspense fallback={<div>Loading...</div>}>
-                                <SSOButton
-                                  className="d-none revokeLogin"
-                                  text={<>Login Revoke</>}
-                                  ssoState={'noscopes'}
-                                  onGetData={onGetData}
-                                />
-                              </Suspense>
+                              value={item}
+                              onChange={({ target: { value } }) => {
+                                setRevokeConsentOption(value);
+                              }}
+                            />
+                          );
+                        })}
+                      </Form>
+
+                      <div className="rounded-bottom position-relative overflow-hidden bg-white">
+                        <div className="position-relative p-3">
+                          <div className="d-flex align-items-center flex-wrap">
+                            <div className="d-flex align-items-center w-100 justify-content-end flex-wrap">
+                              {window['aesirxOptOutMode'] === 'true' ? (
+                                <Button
+                                  variant="outline-success"
+                                  onClick={() => {
+                                    setShowCustomize(true);
+                                  }}
+                                  className="d-flex align-items-center justify-content-center fs-14 w-100 w-lg-35 me-0 me-lg-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+                                >
+                                  {(window as any)?.aesirx_analytics_translate?.txt_customize ??
+                                    t('txt_customize')}
+                                </Button>
+                              ) : (
+                                <a
+                                  className="manage-consent fs-14 btn btn-outline-success rounded-pill py-2 py-lg-3 d-flex align-items-center justify-content-center w-100 w-lg-35"
+                                  href="https://dapp.shield.aesirx.io/revoke-consent"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  {(window as any)?.aesirx_analytics_translate
+                                    ?.txt_manage_consent ?? t('txt_manage_consent')}
+                                </a>
+                              )}
+                              {loading === 'done' ? (
+                                <Button
+                                  variant="outline-success"
+                                  onClick={async () => {
+                                    setLoadingRevoke(true);
+                                    if (window['aesirxOptOutMode'] === 'true') {
+                                      sessionStorage.setItem('aesirx-analytics-rejected', 'true');
+                                    }
+                                    if (revokeConsentOption === 'consent') {
+                                      await handleRevokeBtn();
+                                      const levelRevoke =
+                                        sessionStorage.getItem('aesirx-analytics-revoke') &&
+                                        parseInt(sessionStorage.getItem('aesirx-analytics-revoke'));
+                                      if (levelRevoke <= 1 && window['aesirx1stparty']) {
+                                        setTimeout(() => {
+                                          window.location.reload();
+                                        }, 1000);
+                                      }
+                                    } else {
+                                      sessionStorage.removeItem(revokeConsentOption);
+                                      setShowExpandRevoke(false);
+                                      setRevokeConsentOption('consent');
+                                      setTimeout(() => {
+                                        window.location.reload();
+                                      }, 1000);
+                                    }
+                                    setLoadingRevoke(false);
+                                  }}
+                                  className={
+                                    'd-flex align-items-center justify-content-center w-100 w-lg-35 revoke-btn fs-14 rounded-pill py-2 py-lg-3'
+                                  }
+                                  disabled={loadingRevoke}
+                                >
+                                  {loadingRevoke ? (
+                                    <span
+                                      className="spinner-border spinner-border-sm me-1"
+                                      role="status"
+                                      aria-hidden="true"
+                                    ></span>
+                                  ) : (
+                                    <></>
+                                  )}
+                                  {window['aesirxOptOutMode'] === 'true'
+                                    ? ((window as any)?.aesirx_analytics_translate
+                                        ?.txt_opt_out_tracking ?? t('txt_opt_out_tracking'))
+                                    : ((window as any)?.aesirx_analytics_translate
+                                        ?.txt_revoke_consent ?? t('txt_revoke_consent'))}
+                                </Button>
+                              ) : (
+                                <></>
+                              )}
+                              {(sessionStorage.getItem('aesirx-analytics-revoke') === '4' ||
+                                sessionStorage.getItem('aesirx-analytics-revoke') === '2') && (
+                                <div>
+                                  <Suspense fallback={<div>Loading...</div>}>
+                                    <SSOButton
+                                      className="d-none revokeLogin"
+                                      text={<>Login Revoke</>}
+                                      ssoState={'noscopes'}
+                                      onGetData={onGetData}
+                                    />
+                                  </Suspense>
+                                </div>
+                              )}
                             </div>
-                          )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    </>
+                  )}
                 </>
               )}
             </div>
@@ -1068,7 +1153,9 @@ const ConsentComponentCustomApp = (props: any) => {
                       setShowExpandConsent(true);
                       const rejectConsent = sessionStorage.getItem('aesirx-analytics-rejected');
                       rejectConsent && setShowRejectedConsent(true);
-                      sessionStorage.removeItem('aesirx-analytics-rejected');
+                      if (window['aesirxOptOutMode'] !== 'true') {
+                        sessionStorage.removeItem('aesirx-analytics-rejected');
+                      }
                     }}
                   >
                     <img src={privacy} alt="SoP Icon" />
@@ -1302,7 +1389,9 @@ const ConsentComponentCustomApp = (props: any) => {
                               ) : (
                                 <Button
                                   variant="success"
-                                  onClick={handleAgree}
+                                  onClick={() => {
+                                    handleAgree();
+                                  }}
                                   className="w-100 me-3 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3 w-100 w-lg-30 fs-14 text-white"
                                 >
                                   {loadingCheckAccount ? (
@@ -1468,7 +1557,9 @@ const ConsentAction = ({
             ) : (
               <Button
                 variant="outline-success"
-                onClick={handleAgree}
+                onClick={() => {
+                  handleAgree();
+                }}
                 className="w-100 me-0 me-lg-3 mb-2 mb-lg-0 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
               >
                 {loadingCheckAccount ? (

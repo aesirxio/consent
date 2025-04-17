@@ -142,5 +142,9 @@
   "txt_advertising_tracking": "Advertising Tracking",
   "txt_advertising_tracking_desc": "Targeted advertising & remarketing (e.g, Facebook Pixel, Google Ads).",
   "txt_custom_tracking": "Custom Tracking",
-  "txt_custom_tracking_desc": "Any additional third-party integrations (e.g, customer support tools, CDNS)."
+  "txt_custom_tracking_desc": "Any additional third-party integrations (e.g, customer support tools, CDNS).",
+  "txt_opt_out_tracking": "Opt-Out of tracking",
+  "txt_tracking_default": "This website uses tracking by default. You may opt out at any time.",
+  "txt_do_not_sell": "Do Not Sell or Share My Personal Information (CCPA)",
+  "txt_disables_third_party": "Disables third-party data sharing for California users."
 }

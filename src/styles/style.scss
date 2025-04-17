@@ -31,6 +31,16 @@ body wcm-modal {
   --wcm-z-index: 100060;
 }
 .aesirxconsent {
+  color: #5f5e70;
+  font-size: 16px;
+  --w3m-z-index: 100060;
+  z-index: 100050;
+  position: relative;
+  --#{$prefix}modal-margin: 1.75rem;
+  --#{$prefix}btn-padding-y: 9px;
+  --#{$prefix}btn-padding-x: 20px;
+  line-height: 24px;
+  box-sizing: border-box;
   // 6. Optionally include any other parts as needed
   @import 'bootstrap/scss/utilities';
   @import 'bootstrap/scss/modal';
@@ -47,16 +57,6 @@ body wcm-modal {
   @import 'bootstrap/scss/forms';
   // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
   @import 'bootstrap/scss/utilities/api';
-  color: #5f5e70;
-  font-size: 16px;
-  --w3m-z-index: 100060;
-  z-index: 100050;
-  position: relative;
-  --#{$prefix}modal-margin: 1.75rem;
-  --#{$prefix}btn-padding-y: 9px;
-  --#{$prefix}btn-padding-x: 20px;
-  line-height: 24px;
-  box-sizing: border-box;
   * {
     box-sizing: border-box;
   }
