@@ -66,15 +66,15 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
           endpoint,
           isUsingAnalytics ? analyticsContext.visitor_uuid : consentContext.visitor_uuid
         );
+        sessionStorage.setItem(
+          'aesirx-analytics-uuid',
+          isUsingAnalytics ? analyticsContext.visitor_uuid : consentContext.visitor_uuid
+        );
         if (consentList?.length === 0) {
           setShow(true);
           sessionStorage.removeItem('aesirx-analytics-allow');
         } else {
           if (level > 1) {
-            sessionStorage.setItem(
-              'aesirx-analytics-uuid',
-              isUsingAnalytics ? analyticsContext.visitor_uuid : consentContext.visitor_uuid
-            );
             sessionStorage.setItem('aesirx-analytics-allow', '1');
             handleRevoke(true, '1');
           }
