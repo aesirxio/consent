@@ -142,5 +142,9 @@
   "txt_advertising_tracking": "Praćenje oglašavanja",
   "txt_advertising_tracking_desc": "Ciljano oglašavanje i remarketing (npr. Facebook Pixel, Google Ads).",
   "txt_custom_tracking": "Prilagođeno praćenje",
-  "txt_custom_tracking_desc": "Sve dodatne integracije trećih strana (npr. alati za korisničku podršku, CDNS)."
+  "txt_custom_tracking_desc": "Sve dodatne integracije trećih strana (npr. alati za korisničku podršku, CDNS).",
+  "txt_opt_out_tracking": "Isključivanje praćenja",
+  "txt_tracking_default": "Ova web stranica koristi praćenje prema zadanim postavkama. Možete se isključiti u bilo kojem trenutku.",
+  "txt_do_not_sell": "Nemoj prodavati niti dijeliti moje osobne podatke (CCPA)",
+  "txt_disables_third_party": "Onemogućuje dijeljenje podataka trećih strana za korisnike u Kaliforniji."
 }

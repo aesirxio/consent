@@ -142,5 +142,9 @@
   "txt_advertising_tracking": "Suivi publicitaire",
   "txt_advertising_tracking_desc": "Publicité ciblée et remarketing (par exemple, Pixel Facebook, Google Ads).",
   "txt_custom_tracking": "Suivi personnalisé",
-  "txt_custom_tracking_desc": "Toute intégration tierce supplémentaire (par exemple, outils de support client, CDNS)."
+  "txt_custom_tracking_desc": "Toute intégration tierce supplémentaire (par exemple, outils de support client, CDNS).",
+  "txt_opt_out_tracking": "Désactiver le suivi",
+  "txt_tracking_default": "Ce site web utilise le suivi par défaut. Vous pouvez vous désinscrire à tout moment.",
+  "txt_do_not_sell": "Ne pas vendre ni partager mes informations personnelles (CCPA)",
+  "txt_disables_third_party": "Désactive le partage de données avec des tiers pour les utilisateurs californiens."
 }

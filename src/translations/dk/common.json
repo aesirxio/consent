@@ -142,5 +142,9 @@
   "txt_advertising_tracking": "Annoncesporing",
   "txt_advertising_tracking_desc": "Målrettet annoncering og remarketing (f.eks. Facebook Pixel, Google Ads).",
   "txt_custom_tracking": "Tilpasset sporing",
-  "txt_custom_tracking_desc": "Enhver yderligere tredjepartsintegration (f.eks. kundesupportværktøjer, CDNS)."
+  "txt_custom_tracking_desc": "Enhver yderligere tredjepartsintegration (f.eks. kundesupportværktøjer, CDNS).",
+  "txt_opt_out_tracking": "Fravælg sporing",
+  "txt_tracking_default": "Denne hjemmeside bruger sporing som standard. Du kan til enhver tid framelde dig.",
+  "txt_do_not_sell": "Sælg eller del ikke mine personlige oplysninger (CCPA)",
+  "txt_disables_third_party": "Deaktiverer tredjeparts datadeling for brugere i Californien."
 }

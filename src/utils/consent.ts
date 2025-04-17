@@ -102,6 +102,10 @@ const agreeConsents = async (
         await axios.post(`${url}/${consent}`, { ...dataPayload });
         break;
 
+      case 6:
+        await axios.post(`${url}/${consent}`, { ...dataPayload });
+        break;
+
       default:
         break;
     }
@@ -275,6 +279,15 @@ const revokeConsents = async (
         });
         break;
 
+      case '6':
+        await axios.put(`${url}`, null, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + jwt,
+          },
+        });
+        break;
+
       default:
         break;
     }
@@ -400,9 +413,9 @@ const getConsentTemplate = async (endpoint: any, domain: any) => {
 const postDisabledBlockDomains = async (endpoint: any) => {
   try {
     window['disabledBlockJSDomains'] &&
-      axios.post(`${endpoint}/disabled-block-domains`, {
+      (await axios.post(`${endpoint}/disabled-block-domains`, {
         disabled_block_domains: window['disabledBlockJSDomains'],
-      });
+      }));
   } catch (error) {
     console.log('error', error);
   }
