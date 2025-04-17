@@ -313,8 +313,7 @@ const ConsentComponentCustomApp = (props: any) => {
     }
   };
 
-  const handleAgree = async (visitor_uuid?: string) => {
-    const uuidConsent = visitor_uuid ?? uuid;
+  const handleAgree = async () => {
     try {
       let flag = true;
       // Wallets
@@ -381,7 +380,7 @@ const ConsentComponentCustomApp = (props: any) => {
           await agreeConsents(
             endpoint,
             level,
-            uuidConsent,
+            uuid,
             consents,
             account,
             signature,
@@ -413,7 +412,7 @@ const ConsentComponentCustomApp = (props: any) => {
         }
       } else {
         setLoading('saving');
-        const consentList = await getConsents(endpoint, uuidConsent);
+        const consentList = await getConsents(endpoint, uuid);
         consents.forEach(async (consent) => {
           const existConsent = consentList.find((item: any) => item?.consent === consent);
           if (!existConsent) {
@@ -424,7 +423,7 @@ const ConsentComponentCustomApp = (props: any) => {
                 : disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length
                   ? 5
                   : 1,
-              uuidConsent,
+              uuid,
               consent,
               null,
               null,
@@ -446,7 +445,7 @@ const ConsentComponentCustomApp = (props: any) => {
                 : disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length
                   ? 5
                   : 1,
-              uuidConsent,
+              uuid,
               consent,
               null,
               null,
@@ -462,7 +461,7 @@ const ConsentComponentCustomApp = (props: any) => {
       }
 
       if (flag && (account || level < 3)) {
-        sessionStorage.setItem('aesirx-analytics-uuid', uuidConsent);
+        sessionStorage.setItem('aesirx-analytics-uuid', uuid);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
 
         setShow(false);
@@ -760,16 +759,11 @@ const ConsentComponentCustomApp = (props: any) => {
     }
     const init = async () => {
       const isAnalyticsEnabled = window['aesirx-analytics-enable'] === 'true';
-      const isOptOutMode = window['aesirxOptOutMode'] === 'true';
       const disableGPC = window['disableGPCsupport'] === 'true';
       const hasGlobalPrivacyControl = (navigator as any).globalPrivacyControl;
       const shouldStartTracking =
         (!analyticsContext?.setUUID && !isAnalyticsEnabled) ||
         (analyticsContext?.setUUID && isAnalyticsEnabled);
-      const isConsented =
-        showRevoke ||
-        (sessionStorage.getItem('aesirx-analytics-revoke') &&
-          sessionStorage.getItem('aesirx-analytics-revoke') !== '0');
 
       if (shouldStartTracking) {
         const response = await startTracker(endpoint, '', '', '', window['attributes']);
@@ -786,10 +780,6 @@ const ConsentComponentCustomApp = (props: any) => {
               window['event_uuid'] = response.event_uuid;
             }
           }
-
-          if (isOptOutMode && !isConsented && !isRejected) {
-            handleAgree(response.visitor_uuid);
-          }
         }
       }
 
@@ -799,6 +789,21 @@ const ConsentComponentCustomApp = (props: any) => {
     };
     init();
   }, []);
+
+  useEffect(() => {
+    const isOptOutMode = window['aesirxOptOutMode'] === 'true';
+    const isRejected = sessionStorage.getItem('aesirx-analytics-rejected') === 'true';
+    const isConsented =
+      showRevoke ||
+      (sessionStorage.getItem('aesirx-analytics-revoke') &&
+        sessionStorage.getItem('aesirx-analytics-revoke') !== '0');
+    const uuid = sessionStorage.getItem('aesirx-analytics-uuid');
+    if (uuid) {
+      if (isOptOutMode && !isConsented && !isRejected) {
+        handleAgree();
+      }
+    }
+  }, [showRevoke, show]);
 
   useEffect(() => {
     (gtagId || gtmId) && loadConsentDefault(gtagId, gtmId);
