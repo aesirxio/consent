@@ -314,7 +314,6 @@ const ConsentComponentCustomApp = (props: any) => {
   };
 
   const handleAgree = async () => {
-    const uuidConsent = uuid;
     try {
       let flag = true;
       // Wallets
@@ -381,7 +380,7 @@ const ConsentComponentCustomApp = (props: any) => {
           await agreeConsents(
             endpoint,
             level,
-            uuidConsent,
+            uuid,
             consents,
             account,
             signature,
@@ -413,7 +412,7 @@ const ConsentComponentCustomApp = (props: any) => {
         }
       } else {
         setLoading('saving');
-        const consentList = await getConsents(endpoint, uuidConsent);
+        const consentList = await getConsents(endpoint, uuid);
         consents.forEach(async (consent) => {
           const existConsent = consentList.find((item: any) => item?.consent === consent);
           if (!existConsent) {
@@ -424,7 +423,7 @@ const ConsentComponentCustomApp = (props: any) => {
                 : disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length
                   ? 5
                   : 1,
-              uuidConsent,
+              uuid,
               consent,
               null,
               null,
@@ -446,7 +445,7 @@ const ConsentComponentCustomApp = (props: any) => {
                 : disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length
                   ? 5
                   : 1,
-              uuidConsent,
+              uuid,
               consent,
               null,
               null,
@@ -462,7 +461,7 @@ const ConsentComponentCustomApp = (props: any) => {
       }
 
       if (flag && (account || level < 3)) {
-        sessionStorage.setItem('aesirx-analytics-uuid', uuidConsent);
+        sessionStorage.setItem('aesirx-analytics-uuid', uuid);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
 
         setShow(false);
