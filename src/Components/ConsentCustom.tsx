@@ -700,9 +700,11 @@ const ConsentComponentCustomApp = (props: any) => {
       } else {
         await revokeConsents(
           endpoint,
-          disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length
-            ? '5'
-            : levelRevoke,
+          window['aesirxOptOutMode'] === 'true'
+            ? '6'
+            : disabledBlockDomains?.length || window['disabledBlockJSDomains']?.length
+              ? '5'
+              : levelRevoke,
           uuid,
           null,
           null,

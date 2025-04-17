@@ -142,5 +142,9 @@
   "txt_advertising_tracking": "Advertentietracking",
   "txt_advertising_tracking_desc": "Gerichte advertenties en remarketing (bijv. Facebook Pixel, Google Ads).",
   "txt_custom_tracking": "Aangepaste tracking",
-  "txt_custom_tracking_desc": "Alle aanvullende integraties van derden (bijv. tools voor klantenondersteuning, CDNS)."
+  "txt_custom_tracking_desc": "Alle aanvullende integraties van derden (bijv. tools voor klantenondersteuning, CDNS).",
+  "txt_opt_out_tracking": "Tracking uitschakelen",
+  "txt_tracking_default": "Deze website maakt standaard gebruik van tracking. U kunt zich op elk moment afmelden.",
+  "txt_do_not_sell": "Mijn persoonsgegevens niet verkopen of delen (CCPA)",
+  "txt_disables_third_party": "Hiermee schakelt u het delen van gegevens door derden uit voor gebruikers in Californië."
 }
