@@ -5,12 +5,28 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import common_dk from '../translations/dk/common.json';
 import common_en from '../translations/en/common.json';
 import common_es from '../translations/es/common.json';
-import common_hr from '../translations/hr/common.json';
 import common_th from '../translations/th/common.json';
-import common_ua from '../translations/ua/common.json';
 import common_vn from '../translations/vi/common.json';
 import common_fr from '../translations/fr/common.json';
 import common_nl from '../translations/nl/common.json';
+import common_ar from '../translations/ar/common.json';
+import common_cs from '../translations/cs/common.json';
+import common_de from '../translations/de/common.json';
+import common_el from '../translations/el/common.json';
+import common_fi from '../translations/fi/common.json';
+import common_he from '../translations/he/common.json';
+import common_hu from '../translations/hu/common.json';
+import common_id from '../translations/id/common.json';
+import common_it from '../translations/it/common.json';
+import common_ja from '../translations/ja/common.json';
+import common_ko from '../translations/ko/common.json';
+import common_ms from '../translations/ms/common.json';
+import common_no from '../translations/no/common.json';
+import common_pl from '../translations/pl/common.json';
+import common_pt from '../translations/pt/common.json';
+import common_ro from '../translations/ro/common.json';
+import common_se from '../translations/se/common.json';
+import common_tr from '../translations/tr/common.json';
 
 const defaultLanguages: any = {
   en: {
@@ -22,32 +38,96 @@ const defaultLanguages: any = {
     translation: common_dk,
   },
   vi: {
-    title: 'Tiếng Việt',
+    title: 'Vietnamese',
     translation: common_vn,
   },
   th: {
-    title: 'ภาษาไทย',
+    title: 'Thai',
     translation: common_th,
   },
-  hr: {
-    title: 'Hrvatski',
-    translation: common_hr,
-  },
-  uk: {
-    title: 'Yкраїнська',
-    translation: common_ua,
-  },
   es: {
-    title: 'Español',
+    title: 'Spanish',
     translation: common_es,
   },
   fr: {
-    title: 'Français',
+    title: 'French',
     translation: common_fr,
   },
   nl: {
-    title: 'Nederlands',
+    title: 'Dutch',
     translation: common_nl,
+  },
+  ar: {
+    title: 'Arabic',
+    translation: common_ar,
+  },
+  cs: {
+    title: 'Czech',
+    translation: common_cs,
+  },
+  de: {
+    title: 'German',
+    translation: common_de,
+  },
+  el: {
+    title: 'Greek',
+    translation: common_el,
+  },
+  fi: {
+    title: 'Finnish',
+    translation: common_fi,
+  },
+  he: {
+    title: 'Hebrew',
+    translation: common_he,
+  },
+  hu: {
+    title: 'Hungarian',
+    translation: common_hu,
+  },
+  id: {
+    title: 'Indonesian',
+    translation: common_id,
+  },
+  it: {
+    title: 'Italian',
+    translation: common_it,
+  },
+  ja: {
+    title: 'Japanese',
+    translation: common_ja,
+  },
+  ko: {
+    title: 'Korean',
+    translation: common_ko,
+  },
+  ms: {
+    title: 'Malay',
+    translation: common_ms,
+  },
+  no: {
+    title: 'Norwegian',
+    translation: common_no,
+  },
+  pl: {
+    title: 'Polish',
+    translation: common_pl,
+  },
+  pt: {
+    title: 'Portuguese',
+    translation: common_pt,
+  },
+  ro: {
+    title: 'Romanian',
+    translation: common_ro,
+  },
+  se: {
+    title: 'Swedish',
+    translation: common_se,
+  },
+  tr: {
+    title: 'Turkish',
+    translation: common_tr,
   },
 };
 
@@ -82,8 +162,13 @@ const AesirXI18nextProvider = ({
 
   Object.entries(appLanguages).forEach(([key, resource]) => {
     i18n.addResourceBundle(key, 'translation', resource);
-    listLanguages.push({ label: defaultLanguages[key].title, value: key });
   });
+  const sortedLanguages = Object.keys(defaultLanguages).map((key) => ({
+    label: defaultLanguages[key].title,
+    value: key,
+  }));
+  listLanguages.push(...sortedLanguages);
+
   return (
     <I18NextContext.Provider value={{ listLanguages }}>
       <I18nextProvider i18n={i18n}>{children}</I18nextProvider>

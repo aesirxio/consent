@@ -477,6 +477,18 @@ body wcm-modal {
   }
   .header-consent-bg {
     background-color: #f8f9fd;
+    &.da,
+    &.vi,
+    &.nl,
+    &.de,
+    &.el,
+    &.it,
+    &.ro {
+      font-size: 14px;
+    }
+    &.es {
+      font-size: 13px;
+    }
   }
   &.opt-in-consent {
     &.show {

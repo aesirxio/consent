@@ -8,6 +8,7 @@ import { postDisabledBlockDomains } from '../utils/consent';
 
 const CustomizeCategory = ({
   languageSwitcher,
+  modeSwitcher,
   setShowCustomize,
   disabledBlockDomains,
   handleRevokeBtn,
@@ -72,7 +73,7 @@ const CustomizeCategory = ({
 
   return (
     <Fragment>
-      <ConsentHeader languageSwitcher={languageSwitcher} />
+      <ConsentHeader languageSwitcher={languageSwitcher} modeSwitcher={modeSwitcher} />
       <div className={`pb-1 pb-lg-3 pt-0 bg-white`}>
         <Accordion className="p-2 p-lg-4 accordion-customize" alwaysOpen>
           {Object.keys(groupByCategory).length > 0 &&
