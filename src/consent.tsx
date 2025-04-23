@@ -59,6 +59,7 @@ const ConsentPopup = () => {
         networkEnv={window['concordiumNetwork'] ?? ''}
         aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
         languageSwitcher={window['languageSwitcher'] ?? ''}
+        modeSwitcher={window['modeSwitcher'] ?? ''}
         gtagId={gtagId}
         gtmId={gtmId}
         layout={layout}

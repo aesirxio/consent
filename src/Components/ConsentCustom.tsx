@@ -77,6 +77,7 @@ const ConsentComponentCustom = ({
   customRejectText,
   disabledBlockDomains,
   languageSwitcher,
+  modeSwitcher,
 }: any) => {
   return (
     <>
@@ -98,6 +99,7 @@ const ConsentComponentCustom = ({
                 customRejectText={customRejectText}
                 disabledBlockDomains={disabledBlockDomains}
                 languageSwitcher={languageSwitcher}
+                modeSwitcher={modeSwitcher}
               />
             )}
           </WithWalletConnector>
@@ -141,6 +143,7 @@ const ConsentComponentCustomWrapper = (props: any) => {
           customRejectText={props?.customRejectText}
           disabledBlockDomains={props?.disabledBlockDomains}
           languageSwitcher={props?.languageSwitcher}
+          modeSwitcher={props?.modeSwitcher}
           uuid={uuid}
           level={level}
           connection={connection}
@@ -171,6 +174,7 @@ const ConsentComponentCustomApp = (props: any) => {
     customRejectText,
     disabledBlockDomains,
     languageSwitcher,
+    modeSwitcher,
     activeConnectorType,
     activeConnector,
     activeConnectorError,
@@ -803,7 +807,7 @@ const ConsentComponentCustomApp = (props: any) => {
         handleAgree();
       }
     }
-  }, [showRevoke, show]);
+  }, [showRevoke, show, consentContext]);
 
   useEffect(() => {
     (gtagId || gtmId) && loadConsentDefault(gtagId, gtmId);
@@ -952,6 +956,7 @@ const ConsentComponentCustomApp = (props: any) => {
                   {showCustomize ? (
                     <CustomizeCategory
                       languageSwitcher={languageSwitcher}
+                      modeSwitcher={modeSwitcher}
                       setShowCustomize={setShowCustomize}
                       disabledBlockDomains={disabledBlockDomains}
                       handleRevokeBtn={handleRevokeBtn}
@@ -960,7 +965,10 @@ const ConsentComponentCustomApp = (props: any) => {
                     />
                   ) : (
                     <>
-                      <ConsentHeader languageSwitcher={languageSwitcher} />
+                      <ConsentHeader
+                        languageSwitcher={languageSwitcher}
+                        modeSwitcher={modeSwitcher}
+                      />
                       <div
                         className="minimize-revoke"
                         onClick={() => {
@@ -1423,6 +1431,7 @@ const ConsentComponentCustomApp = (props: any) => {
                         {showCustomize ? (
                           <CustomizeCategory
                             languageSwitcher={languageSwitcher}
+                            modeSwitcher={modeSwitcher}
                             setShowCustomize={setShowCustomize}
                             disabledBlockDomains={disabledBlockDomains}
                           />
@@ -1437,6 +1446,7 @@ const ConsentComponentCustomApp = (props: any) => {
                             customRejectText={customRejectText}
                             isRejectedLayout={showRejectedConsent}
                             languageSwitcher={languageSwitcher}
+                            modeSwitcher={modeSwitcher}
                           >
                             <ConsentAction
                               level={level}
