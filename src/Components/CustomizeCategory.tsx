@@ -17,7 +17,7 @@ const CustomizeCategory = ({
 }: any) => {
   const { t } = useTranslation();
 
-  const blockJSDomains = window.blockJSDomains ?? [];
+  const blockJSDomains = window.aesirxBlockJSDomains ?? [];
 
   const groupByCategory = blockJSDomains?.reduce((acc: any, item: any) => {
     if (!acc[item.category]) {
