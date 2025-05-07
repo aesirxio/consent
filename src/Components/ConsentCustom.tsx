@@ -1361,6 +1361,7 @@ const ConsentComponentCustomApp = (props: any) => {
                             </Form>
                             <div className="d-flex w-100 flex-wrap flex-lg-nowrap justify-content-between mt-4">
                               <Button
+                                id="back-button"
                                 variant="outline-success"
                                 onClick={() => {
                                   setUpgradeLayout(false);
@@ -1522,7 +1523,7 @@ const ConsentAction = ({
   setShowCustomize,
   t,
 }: any) => {
-  const blockJSDomains = window.blockJSDomains ?? [];
+  const blockJSDomains = window.aesirxBlockJSDomains ?? [];
   const isCategory = blockJSDomains?.some((item: any) =>
     Object.prototype.hasOwnProperty.call(item, 'category')
   );
@@ -1548,6 +1549,7 @@ const ConsentAction = ({
         {loading === 'done' ? (
           <>
             <Button
+              id="reject-button"
               variant="outline-success"
               onClick={() => {
                 handleNotAllow(false);
@@ -1559,6 +1561,7 @@ const ConsentAction = ({
             </Button>
             {isCategory && (
               <Button
+                id="customize-button"
                 variant="outline-success"
                 onClick={() => {
                   setShowCustomize(true);
@@ -1573,6 +1576,7 @@ const ConsentAction = ({
               <></>
             ) : (
               <Button
+                id="consent-button"
                 variant="outline-success"
                 onClick={() => {
                   handleAgree();
@@ -1597,6 +1601,7 @@ const ConsentAction = ({
             ) : (
               <>
                 <Button
+                  id="decentralize-consent-button"
                   variant="outline-success"
                   onClick={() => {
                     setUpgradeLayout(true);

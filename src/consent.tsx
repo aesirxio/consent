@@ -19,7 +19,7 @@ declare global {
     funcAfterConsent: any;
     funcAfterReject: any;
     configBlockJS: any;
-    blockJSDomains: any;
+    aesirxBlockJSDomains: any;
   }
 }
 window['aesirx-consent-enable'] = 'true';
@@ -130,9 +130,9 @@ interface ConfigBlockJS {
 }
 const configBlockJS: ConfigBlockJS = {
   _providersToBlock: [
-    ...(window.blockJSDomains?.length
+    ...(window.aesirxBlockJSDomains?.length
       ? [
-          ...window.blockJSDomains
+          ...window.aesirxBlockJSDomains
             ?.filter((el: string) => el)
             ?.map((item: any) => {
               return { re: item?.domain, categories: [item?.category] };
