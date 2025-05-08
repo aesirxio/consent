@@ -483,10 +483,17 @@ body wcm-modal {
     &.de,
     &.el,
     &.it,
-    &.ro {
+    &.ro,
+    &.hi,
+    &.hr,
+    &.sk {
       font-size: 14px;
     }
-    &.es {
+    &.es,
+    &.sr,
+    &.tl,
+    &.uk,
+    &.bg {
       font-size: 13px;
     }
   }

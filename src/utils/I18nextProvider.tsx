@@ -27,6 +27,14 @@ import common_pt from '../translations/pt/common.json';
 import common_ro from '../translations/ro/common.json';
 import common_se from '../translations/se/common.json';
 import common_tr from '../translations/tr/common.json';
+import common_bg from '../translations/bg/common.json';
+import common_sk from '../translations/sk/common.json';
+import common_ua from '../translations/ua/common.json';
+import common_hr from '../translations/hr/common.json';
+import common_hi from '../translations/hi/common.json';
+import common_zh from '../translations/zh/common.json';
+import common_sr from '../translations/sr/common.json';
+import common_tl from '../translations/tl/common.json';
 
 const defaultLanguages: any = {
   en: {
@@ -128,6 +136,38 @@ const defaultLanguages: any = {
   tr: {
     title: 'Turkish',
     translation: common_tr,
+  },
+  bg: {
+    title: 'Bulgarian',
+    translation: common_bg,
+  },
+  sk: {
+    title: 'Slovak',
+    translation: common_sk,
+  },
+  uk: {
+    title: 'Ukrainian',
+    translation: common_ua,
+  },
+  hr: {
+    title: 'Croatian',
+    translation: common_hr,
+  },
+  hi: {
+    title: 'Hindi',
+    translation: common_hi,
+  },
+  zh: {
+    title: 'Chinese (Hong Kong)',
+    translation: common_zh,
+  },
+  sr: {
+    title: 'Serbian',
+    translation: common_sr,
+  },
+  tl: {
+    title: 'Tagalog',
+    translation: common_tl,
   },
 };
 
