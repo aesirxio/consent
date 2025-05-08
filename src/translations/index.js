@@ -23,6 +23,14 @@ import common_th from './th/common.json';
 import common_vn from './vi/common.json';
 import common_fr from './fr/common.json';
 import common_nl from './nl/common.json';
+import common_bg from './bg/common.json';
+import common_sk from './sk/common.json';
+import common_ua from './ua/common.json';
+import common_hr from './hr/common.json';
+import common_hi from './hi/common.json';
+import common_zh from './zh/common.json';
+import common_sr from './sr/common.json';
+import common_tl from './tl/common.json';
 
 const appLanguages = {
   ar: common_ar,
@@ -50,6 +58,14 @@ const appLanguages = {
   ro: common_ro,
   se: common_se,
   tr: common_tr,
+  bg: common_bg,
+  sk: common_sk,
+  uk: common_ua,
+  hr: common_hr,
+  hi: common_hi,
+  zh: common_zh,
+  sr: common_sr,
+  tl: common_tl,
 };
 
 export { appLanguages };
