@@ -40,6 +40,8 @@ const agreeConsents = async (
   const lang = window.navigator['userLanguage'] || window.navigator.language;
   const device = browser?.platform?.model ?? browser?.platform?.type;
   const ip = '';
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone?.toLowerCase();
+  const userOverrideLanguage = localStorage.getItem('user_override_language');
 
   const dataPayload = {
     fingerprint: fingerprint,
@@ -57,6 +59,8 @@ const agreeConsents = async (
     browser_version: browser_version,
     lang: lang,
     device: device?.includes('iPhone') ? 'mobile' : device?.includes('iPad') ? 'tablet' : device,
+    timezone: userTimeZone,
+    ...(userOverrideLanguage ? { override_language: userOverrideLanguage } : {}),
   };
   try {
     switch (level) {
@@ -411,10 +415,21 @@ const getConsentTemplate = async (endpoint: any, domain: any) => {
 };
 
 const postDisabledBlockDomains = async (endpoint: any) => {
+  const domains = window.aesirxBlockJSDomains || [];
+  const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
+  const listCategory = domains?.reduce((acc: [string], { category }: { category: string }) => {
+    if (!acc.includes(category)) {
+      acc.push(category);
+    }
+    return acc;
+  }, []);
+
   try {
-    window['disabledBlockJSDomains'] &&
+    window['aesirxBlockJSDomains'] &&
       (await axios.post(`${endpoint}/disabled-block-domains`, {
-        disabled_block_domains: window['disabledBlockJSDomains'],
+        disabled_block_domains: window['disabledBlockJSDomains'] ?? '',
+        list_category: listCategory,
+        uuid: currentUuid,
       }));
   } catch (error) {
     console.log('error', error);

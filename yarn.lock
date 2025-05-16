@@ -3411,10 +3411,10 @@ aes-js@^3.1.2:
   resolved "https://registry.yarnpkg.com/aes-js/-/aes-js-3.1.2.tgz#db9aabde85d5caabbfc0d4f2a4446960f627146a"
   integrity sha512-e5pEa2kBnBOgR4Y/p20pskXI74UEz7de8ZGVo58asOtvSVG5YAbJeELPZxOmt+Bnz3rX753YKhfIn4X4l1PPRQ==
 
-aesirx-analytics@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/aesirx-analytics/-/aesirx-analytics-2.4.0.tgz#f22bf891676ca68958790b9efe0674629779e6ff"
-  integrity sha512-d9afFk64MHUw68f/g+dQcMpZHNmE1KE89L63/FdCLYrMTLNFRIqiMoFPT5xj8RVdua8ZlblwMwR0mCdytFFvAA==
+aesirx-analytics@^2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/aesirx-analytics/-/aesirx-analytics-2.4.3.tgz#74aee1b728da596cd26f6b5301a35bddb94423ad"
+  integrity sha512-AgSFGkVaY6AzJt2j+92tx7J5dGWXh2r5tkA6GwdmmvsmATpKM3lpZeqwuq49+s2pOl70Re/mg1T+hCrJBVA/FQ==
   dependencies:
     bootstrap "^5.3.2"
     bowser "^2.11.0"
