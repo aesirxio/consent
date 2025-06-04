@@ -28,6 +28,9 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
 
+  const params = new URLSearchParams(window.location.search);
+  const isConsentParams = params.get('consent') === 'yes';
+
   const observerModal = () => {
     const callback = (mutationList: any) => {
       for (const mutation of mutationList) {
@@ -71,7 +74,12 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
           isUsingAnalytics ? analyticsContext.visitor_uuid : consentContext.visitor_uuid
         );
         if (consentList?.length === 0) {
-          setShow(true);
+          if (isConsentParams) {
+            setShow(false);
+            handleRevoke(true, '0');
+          } else {
+            setShow(true);
+          }
           sessionStorage.removeItem('aesirx-analytics-allow');
         } else {
           if (level > 1) {
@@ -81,7 +89,12 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
 
           consentList.forEach((consent: any) => {
             if (consent.expiration && new Date(consent.expiration) < new Date()) {
-              setShow(true);
+              if (isConsentParams) {
+                setShow(false);
+                handleRevoke(true, '0');
+              } else {
+                setShow(true);
+              }
               sessionStorage.removeItem('aesirx-analytics-allow');
               return;
             } else {
