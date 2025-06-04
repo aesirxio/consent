@@ -206,7 +206,9 @@ const shouldBlockProvider = (formattedRE: string) => {
   const provider = configBlockJS._providersToBlock.find(({ re }: any) =>
     new RegExp(escapeRegex(re)).test(formattedRE)
   );
-  if (sessionStorage.getItem('aesirx-analytics-allow')) return false;
+  const params = new URLSearchParams(window.location.search);
+  const consentParams = params.get('consent');
+  if (sessionStorage.getItem('aesirx-analytics-allow') || consentParams === 'yes') return false;
   return provider && true;
 };
 
