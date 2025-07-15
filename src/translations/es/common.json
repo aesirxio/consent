@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Desactivar el seguimiento",
   "txt_tracking_default": "Este sitio web utiliza el seguimiento por defecto. Puede desactivarlo en cualquier momento.",
   "txt_do_not_sell": "No vender ni compartir mi información personal (CCPA)",
-  "txt_disables_third_party": "Desactiva el intercambio de datos con terceros para los usuarios de California."
+  "txt_disables_third_party": "Desactiva el intercambio de datos con terceros para los usuarios de California.",
+  "txt_cookie_declaration": "Declaración de cookies"
 }

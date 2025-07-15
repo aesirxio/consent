@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Valitse pois seurannasta",
   "txt_tracking_default": "Tämä verkkosivusto käyttää seurantaa oletusarvoisesti. Voit valita pois seurannan milloin tahansa.",
   "txt_do_not_sell": "Älä myy tai jaa henkilötietojani (CCPA)",
-  "txt_disables_third_party": "Estää kolmannen osapuolen tiedonsiirron Kalifornian käyttäjille."
+  "txt_disables_third_party": "Estää kolmannen osapuolen tiedonsiirron Kalifornian käyttäjille.",
+  "txt_cookie_declaration": "Evästekäytäntö"
 }

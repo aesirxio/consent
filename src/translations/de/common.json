@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Vom Tracking abmelden",
   "txt_tracking_default": "Diese Website verwendet standardmäßig Tracking. Sie können sich jederzeit abmelden.",
   "txt_do_not_sell": "Meine persönlichen Daten nicht verkaufen oder weitergeben (CCPA)",
-  "txt_disables_third_party": "Deaktiviert die Weitergabe von Drittanbieter-Daten für kalifornische Nutzer."
+  "txt_disables_third_party": "Deaktiviert die Weitergabe von Drittanbieter-Daten für kalifornische Nutzer.",
+  "txt_cookie_declaration": "Cookie-Erklärung"
 }

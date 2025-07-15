@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Từ chối theo dõi",
   "txt_tracking_default": "Trang web này sử dụng theo dõi theo mặc định. Bạn có thể từ chối bất kỳ lúc nào.",
   "txt_do_not_sell": "Không bán hoặc chia sẻ thông tin cá nhân của tôi (CCPA)",
-  "txt_disables_third_party": "Vô hiệu hóa việc chia sẻ dữ liệu của bên thứ ba cho người dùng California."
+  "txt_disables_third_party": "Vô hiệu hóa việc chia sẻ dữ liệu của bên thứ ba cho người dùng California.",
+  "txt_cookie_declaration": "Tuyên bố cookie"
 }

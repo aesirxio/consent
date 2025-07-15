@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "トラッキングの拒否",
   "txt_tracking_default": "このサイトではデフォルトでトラッキングが有効です。いつでもトラッキングを拒否できます。",
   "txt_do_not_sell": "個人情報を販売または共有しない（CCPA）",
-  "txt_disables_third_party": "カリフォルニア州のユーザー向けにサードパーティとのデータ共有を無効にします。"
+  "txt_disables_third_party": "カリフォルニア州のユーザー向けにサードパーティとのデータ共有を無効にします。",
+  "txt_cookie_declaration": "Cookie宣言"
 }

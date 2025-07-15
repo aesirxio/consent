@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Jangan lacak",
   "txt_tracking_default": "Situs ini secara default melacak pengguna. Anda dapat memilih untuk tidak dilacak kapan saja.",
   "txt_do_not_sell": "Jangan jual atau bagikan data pribadi saya (CCPA)",
-  "txt_disables_third_party": "Menonaktifkan pengiriman data pihak ketiga untuk pengguna di California."
+  "txt_disables_third_party": "Menonaktifkan pengiriman data pihak ketiga untuk pengguna di California.",
+  "txt_cookie_declaration": "Deklarasi Cookie"
 }
