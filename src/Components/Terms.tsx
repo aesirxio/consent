@@ -3,7 +3,7 @@ import bg from '../Assets/bg.png';
 import privacy from '../Assets/privacy.svg';
 import check_circle from '../Assets/check_circle.svg';
 import { useTranslation } from 'react-i18next';
-import { Nav, Tab, Tabs } from 'react-bootstrap';
+import { Nav, Tab } from 'react-bootstrap';
 import ConsentHeader from './ConsentHeader';
 
 const TermsComponent = ({
