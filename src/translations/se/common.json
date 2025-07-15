@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Välj bort spårning",
   "txt_tracking_default": "Spårning är aktiverad som standard på denna webbplats. Du kan stänga av spårning när som helst.",
   "txt_do_not_sell": "Vi säljer eller delar inte personuppgifter (CCPA)",
-  "txt_disables_third_party": "För användare i Kalifornien stänger vi av datadelning med tredje part."
+  "txt_disables_third_party": "För användare i Kalifornien stänger vi av datadelning med tredje part.",
+  "txt_cookie_declaration": "Cookiedeklaration"
 }

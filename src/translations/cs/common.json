@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Nepřijmout sledování",
   "txt_tracking_default": "Web vás automaticky sleduje. Můžete si zvolit, že nebudete sledováni kdykoli.",
   "txt_do_not_sell": "Neprodávejte ani nesdílejte mé osobní údaje (CCPA)",
-  "txt_disables_third_party": "Zakáže odesílání údajů třetím stranám pro uživatele v Kalifornii."
+  "txt_disables_third_party": "Zakáže odesílání údajů třetím stranám pro uživatele v Kalifornii.",
+  "txt_cookie_declaration": "Prohlášení o souborech cookie"
 }

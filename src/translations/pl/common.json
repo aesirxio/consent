@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Rezygnacja ze śledzenia",
   "txt_tracking_default": "Śledzenie na tej stronie jest aktywowane domyślnie. Możesz wyłączyć śledzenie w każdej chwili.",
   "txt_do_not_sell": "Nie sprzedajemy ani nie udostępniamy danych osobowych (CCPA)",
-  "txt_disables_third_party": "Dla użytkowników z Kalifornii wyłączamy udostępnianie danych osobom trzecim."
+  "txt_disables_third_party": "Dla użytkowników z Kalifornii wyłączamy udostępnianie danych osobom trzecim.",
+  "txt_cookie_declaration": "Deklaracja plików cookie"
 }

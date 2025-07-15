@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Mag-opt Out sa pagsubaybay",
   "txt_tracking_default": "Gumagamit ang website na ito ng pagsubaybay bilang default. Maaari kang mag-opt out anumang oras.",
   "txt_do_not_sell": "Huwag Ibenta o Ibahagi ang Aking Personal na Impormasyon (CCPA)",
-  "txt_disables_third_party": "Di-pinagana ang pagbabahagi ng data ng third-party para sa mga gumagamit sa California."
+  "txt_disables_third_party": "Di-pinagana ang pagbabahagi ng data ng third-party para sa mga gumagamit sa California.",
+  "txt_cookie_declaration": "Deklarasyon ng Cookie"
 }

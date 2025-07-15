@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Isključi praćenje",
   "txt_tracking_default": "Ova web stranica koristi praćenje prema zadanim postavkama. Možete se isključiti u bilo kojem trenutku.",
   "txt_do_not_sell": "Nemojte prodavati niti dijeliti moje osobne podatke (CCPA)",
-  "txt_disables_third_party": "Onemogućuje dijeljenje podataka trećih strana za korisnike iz Kalifornije."
+  "txt_disables_third_party": "Onemogućuje dijeljenje podataka trećih strana za korisnike iz Kalifornije.",
+  "txt_cookie_declaration": "Deklaracija o kolačićima"
 }

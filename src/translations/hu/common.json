@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Ne kövessenek",
   "txt_tracking_default": "Ez az oldal alapértelmezés szerint nyomon követi a felhasználókat. Bármikor választhatsz, hogy nem akarsz követve lenni.",
   "txt_do_not_sell": "Ne add el vagy oszd meg a személyes adataimat (CCPA)",
-  "txt_disables_third_party": "Letiltja az adatok harmadik félre történő továbbítását kaliforniai felhasználók számára."
+  "txt_disables_third_party": "Letiltja az adatok harmadik félre történő továbbítását kaliforniai felhasználók számára.",
+  "txt_cookie_declaration": "Süti nyilatkozat"
 }

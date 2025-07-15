@@ -97,5 +97,6 @@
   "txt_opt_out_tracking": "Alege să nu fii urmărit",
   "txt_tracking_default": "Acest site folosește urmărirea în mod implicit. Poți opta pentru a nu fi urmărit oricând.",
   "txt_do_not_sell": "Nu vinde sau distribui datele mele personale (CCPA)",
-  "txt_disables_third_party": "Dezactivează transferul de date către terți pentru utilizatorii din California."
+  "txt_disables_third_party": "Dezactivează transferul de date către terți pentru utilizatorii din California.",
+  "txt_cookie_declaration": "Declarație privind cookie-urile"
 }

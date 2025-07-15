@@ -73,6 +73,7 @@ const ConsentComponentCustom = ({
   layout,
   isOptInReplaceAnalytics,
   customConsentText,
+  customCookieText,
   customDetailText,
   customRejectText,
   disabledBlockDomains,
@@ -95,6 +96,7 @@ const ConsentComponentCustom = ({
                 gtmId={gtmId}
                 layout={layout}
                 customConsentText={customConsentText}
+                customCookieText={customCookieText}
                 customDetailText={customDetailText}
                 customRejectText={customRejectText}
                 disabledBlockDomains={disabledBlockDomains}
@@ -139,6 +141,7 @@ const ConsentComponentCustomWrapper = (props: any) => {
           gtmId={props?.gtmId}
           layout={props?.layout}
           customConsentText={props?.customConsentText}
+          customCookieText={props?.customCookieText}
           customDetailText={props?.customDetailText}
           customRejectText={props?.customRejectText}
           disabledBlockDomains={props?.disabledBlockDomains}
@@ -170,6 +173,7 @@ const ConsentComponentCustomApp = (props: any) => {
     gtmId,
     layout,
     customConsentText,
+    customCookieText,
     customDetailText,
     customRejectText,
     disabledBlockDomains,
@@ -1443,6 +1447,7 @@ const ConsentComponentCustomApp = (props: any) => {
                             isCustom={true}
                             layout={layout}
                             customConsentText={customConsentText}
+                            customCookieText={customCookieText}
                             customDetailText={customDetailText}
                             customRejectText={customRejectText}
                             isRejectedLayout={showRejectedConsent}
