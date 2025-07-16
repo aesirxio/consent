@@ -293,7 +293,7 @@ const TermsComponent = ({
                     </Tab.Pane>
                     {customCookieText ? (
                       <Tab.Pane eventKey="cookie-declaration" className={'px-2 px-lg-4'}>
-                        <div className="tab_content mb-1 mb-lg-3 cookie_declaration_section">
+                        <div className="tab_content mb-1 mb-lg-3 pe-2 pe-lg-3 cookie_declaration_section">
                           <div
                             dangerouslySetInnerHTML={{
                               __html: customCookieText,
