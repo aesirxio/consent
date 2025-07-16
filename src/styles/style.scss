@@ -186,8 +186,38 @@ body wcm-modal {
         hr {
           margin: 10px 0;
         }
+        figure.table {
+          width: 100%;
+          overflow: auto;
+          table {
+            width: 100%;
+          }
+        }
         table {
           margin: 0;
+          font-size: 16px;
+          @include media-breakpoint-down(lg) {
+            font-size: 13px;
+          }
+        }
+        p {
+          margin-bottom: 5px;
+        }
+        h1 {
+          font-size: $h1-font-size;
+          margin: 0 0 15px 0;
+        }
+        h2 {
+          font-size: $h2-font-size;
+          margin: 0 0 15px 0;
+        }
+        h3 {
+          font-size: $h3-font-size;
+          margin: 0 0 10px 0;
+        }
+        h4 {
+          font-size: $h4-font-size;
+          margin: 0 0 10px 0;
         }
       }
       .tab_content {
