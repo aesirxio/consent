@@ -98,5 +98,6 @@
   "txt_tracking_default": "Bu sitede izleme varsayılan olarak aktiftir. İzlemeyi istediğiniz zaman kapatabilirsiniz.",
   "txt_do_not_sell": "Kişisel bilgilerinizi satmıyoruz veya üçüncü taraflarla paylaşmıyoruz (CCPA)",
   "txt_disables_third_party": "Kaliforniya kullanıcıları için üçüncü taraflarla veri paylaşımını devre dışı bırakıyoruz.",
-  "txt_cookie_declaration": "Çerez Beyanı"
+  "txt_cookie_declaration": "Çerez Beyanı",
+  "txt_verifying_age_country": "Yaşınız ve ülkeniz doğrulanıyor..."
 }

@@ -98,5 +98,6 @@
   "txt_tracking_default": "Laman web ini secara automatik mengesan anda. Anda boleh memilih untuk tidak dipantau pada bila-bila masa.",
   "txt_do_not_sell": "Jangan jual atau kongsi data peribadi saya (CCPA)",
   "txt_disables_third_party": "Melumpuhkan penghantaran data kepada pihak ketiga untuk pengguna di California.",
-  "txt_cookie_declaration": "Pengisytiharan Kuki"
+  "txt_cookie_declaration": "Pengisytiharan Kuki",
+  "txt_verifying_age_country": "Mengesahkan umur dan negara anda..."
 }

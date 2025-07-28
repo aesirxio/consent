@@ -17,7 +17,7 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../styles/style.scss';
 import { TermsComponent } from './Terms';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 import no from '../Assets/no.svg';
 import bg from '../Assets/bg.png';
@@ -50,7 +50,7 @@ import { ConsentContext } from '../utils/ConsentContextProvider';
 import { useTranslation } from 'react-i18next';
 import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
-import { getWeb3ID } from '../utils/Concordium';
+import { getWeb3ID, handleProof } from '../utils/Concordium';
 import { trackEvent, AnalyticsContext, startTracker } from 'aesirx-analytics';
 import ConsentHeader from './ConsentHeader';
 import { CustomizeCategory } from './CustomizeCategory';
@@ -224,6 +224,8 @@ const ConsentComponentCustomApp = (props: any) => {
     level === 3 || level === 4 ? true : false
   );
   const [upgradeLevel, setUpgradeLevel] = useState<any>(level === 4 || level === 3 ? level : 0);
+  const [proof, setProof] = useState(false);
+
   const consentContext = useContext(ConsentContext);
   const analyticsContext = useContext(AnalyticsContext);
   const { t } = useTranslation();
@@ -330,6 +332,14 @@ const ConsentComponentCustomApp = (props: any) => {
         if (level === 4) {
           try {
             setLoadingCheckAccount(true);
+            if (account && !proof && isDesktop && (window['ageCheck'] || window['countryCheck'])) {
+              const response = await handleProof(account, null, setProof);
+              if (!response) {
+                setLoadingCheckAccount(false);
+                toast.error('Failed to verify age and country!');
+                return false;
+              }
+            }
             const nonceLogin = await getWalletNonce(
               aesirXEndpoint,
               account ? 'concordium' : 'metamask',
@@ -419,6 +429,14 @@ const ConsentComponentCustomApp = (props: any) => {
           flag = false;
         }
       } else {
+        if (account && !proof && isDesktop && (window['ageCheck'] || window['countryCheck'])) {
+          const response = await handleProof(account, null, setProof);
+          if (!response) {
+            setLoading('done');
+            toast.error('Failed to verify age and country!');
+            return false;
+          }
+        }
         setLoading('saving');
         const consentList = await getConsents(endpoint, uuid);
         consents.forEach(async (consent) => {
@@ -515,6 +533,13 @@ const ConsentComponentCustomApp = (props: any) => {
       if (response?.loginType === 'concordium') {
         // Concordium
         sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
+
+        if (account && !proof && isDesktop && (window['ageCheck'] || window['countryCheck'])) {
+          const response = await handleProof(account, null, setProof);
+          if (!response) {
+            return false;
+          }
+        }
         const signature = await getSignature(
           endpoint,
           account,
@@ -1409,6 +1434,7 @@ const ConsentComponentCustomApp = (props: any) => {
                               ) : (
                                 <Button
                                   variant="success"
+                                  disabled={loadingCheckAccount}
                                   onClick={() => {
                                     handleAgree();
                                   }}
@@ -1457,6 +1483,7 @@ const ConsentComponentCustomApp = (props: any) => {
                             <ConsentAction
                               level={level}
                               loading={loading}
+                              setLoading={setLoading}
                               loadingCheckAccount={loadingCheckAccount}
                               consents={consents}
                               account={account}
@@ -1467,6 +1494,10 @@ const ConsentComponentCustomApp = (props: any) => {
                               handleAgree={handleAgree}
                               setUpgradeLayout={setUpgradeLayout}
                               setShowCustomize={setShowCustomize}
+                              setActiveConnectorType={setActiveConnectorType}
+                              activeConnectorError={activeConnectorError}
+                              show={show}
+                              proof={proof}
                               t={t}
                             />
                           </TermsComponent>
@@ -1509,6 +1540,18 @@ const ConsentComponentCustomApp = (props: any) => {
           activeConnector={activeConnector}
         />
       )}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };
@@ -1516,6 +1559,7 @@ const ConsentComponentCustomApp = (props: any) => {
 const ConsentAction = ({
   level,
   loading,
+  setLoading,
   loadingCheckAccount,
   consents,
   account,
@@ -1526,12 +1570,28 @@ const ConsentAction = ({
   handleAgree,
   setUpgradeLayout,
   setShowCustomize,
+  setActiveConnectorType,
+  activeConnectorError,
+  show,
+  proof,
   t,
 }: any) => {
   const blockJSDomains = window.aesirxBlockJSDomains ?? [];
   const isCategory = blockJSDomains?.some((item: any) =>
     Object.prototype.hasOwnProperty.call(item, 'category')
   );
+  useEffect(() => {
+    const initProof = async () => {
+      if (account && !proof && level === 1 && show && loading === 'verifying_age_country') {
+        handleAgree();
+      } else {
+        if (activeConnectorError) {
+          handleAgree();
+        }
+      }
+    };
+    window['aesirx1stparty'] && window['concordium'] && initProof();
+  }, [account, proof, activeConnectorError, loading]);
   return (
     <Form className="mb-0 w-100">
       <Form.Check
@@ -1580,26 +1640,38 @@ const ConsentAction = ({
             {level === 2 || (level === 4 && !account && !address) ? (
               <></>
             ) : (
-              <Button
-                id="consent-button"
-                variant="outline-success"
-                onClick={() => {
-                  handleAgree();
-                }}
-                className="w-100 me-0 me-lg-3 mb-2 mb-lg-0 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
-              >
-                {loadingCheckAccount ? (
-                  <span
-                    className="spinner-border spinner-border-sm me-1"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                ) : (
-                  <></>
-                )}
-                {(window as any)?.aesirx_analytics_translate?.txt_yes_i_consent ??
-                  t('txt_yes_i_consent')}
-              </Button>
+              <>
+                <Button
+                  id="consent-button"
+                  variant="outline-success"
+                  disabled={loadingCheckAccount}
+                  onClick={() => {
+                    if (
+                      isDesktop &&
+                      window['concordium'] &&
+                      (window['ageCheck'] || window['countryCheck'])
+                    ) {
+                      setLoading('verifying_age_country');
+                      setActiveConnectorType(BROWSER_WALLET);
+                    } else {
+                      handleAgree();
+                    }
+                  }}
+                  className="w-100 me-0 me-lg-3 mb-2 mb-lg-0 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
+                >
+                  {loadingCheckAccount ? (
+                    <span
+                      className="spinner-border spinner-border-sm me-1"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  ) : (
+                    <></>
+                  )}
+                  {(window as any)?.aesirx_analytics_translate?.txt_yes_i_consent ??
+                    t('txt_yes_i_consent')}
+                </Button>
+              </>
             )}
             {layout === 'simple-consent-mode' ? (
               <></>
