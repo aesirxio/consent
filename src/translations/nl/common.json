@@ -98,5 +98,6 @@
   "txt_tracking_default": "Deze website maakt standaard gebruik van tracking. U kunt zich op elk moment afmelden.",
   "txt_do_not_sell": "Mijn persoonsgegevens niet verkopen of delen (CCPA)",
   "txt_disables_third_party": "Hiermee schakelt u het delen van gegevens door derden uit voor gebruikers in Californië.",
-  "txt_cookie_declaration": "Cookieverklaring"
+  "txt_cookie_declaration": "Cookieverklaring",
+  "txt_verifying_age_country": "Uw leeftijd en land worden geverifieerd..."
 }

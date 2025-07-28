@@ -98,5 +98,6 @@
   "txt_tracking_default": "Denne hjemmeside bruger sporing som standard. Du kan til enhver tid framelde dig.",
   "txt_do_not_sell": "Sælg eller del ikke mine personlige oplysninger (CCPA)",
   "txt_disables_third_party": "Deaktiverer tredjeparts datadeling for brugere i Californien.",
-  "txt_cookie_declaration": "Cookie-erklæring"
+  "txt_cookie_declaration": "Cookie-erklæring",
+  "txt_verifying_age_country": "Bekræfter din alder og dit land..."
 }

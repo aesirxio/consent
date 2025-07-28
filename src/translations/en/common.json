@@ -98,5 +98,6 @@
   "txt_tracking_default": "This website uses tracking by default. You may opt out at any time.",
   "txt_do_not_sell": "Do Not Sell or Share My Personal Information (CCPA)",
   "txt_disables_third_party": "Disables third-party data sharing for California users.",
-  "txt_cookie_declaration": "Cookie Declaration"
+  "txt_cookie_declaration": "Cookie Declaration",
+  "txt_verifying_age_country": "Verifying your age and country..."
 }

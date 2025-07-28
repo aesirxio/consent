@@ -98,5 +98,6 @@
   "txt_tracking_default": "O rastreamento neste site é ativado por padrão. Você pode desativar o rastreamento a qualquer momento.",
   "txt_do_not_sell": "Não vendemos nem compartilhamos dados pessoais (CCPA)",
   "txt_disables_third_party": "Para usuários da Califórnia, desativamos o compartilhamento de dados com terceiros.",
-  "txt_cookie_declaration": "Declaração de Cookie"
+  "txt_cookie_declaration": "Declaração de Cookie",
+  "txt_verifying_age_country": "Verificando sua idade e país..."
 }

@@ -98,5 +98,6 @@
   "txt_tracking_default": "Dette nettstedet har sporing aktivert som standard. Du kan velge bort sporing når som helst.",
   "txt_do_not_sell": "Selger eller deler ikke personopplysninger (CCPA)",
   "txt_disables_third_party": "For brukere i California, deaktiverer vi datadeling med tredjeparter.",
-  "txt_cookie_declaration": "Informasjonskapseldeklarasjon"
+  "txt_cookie_declaration": "Informasjonskapseldeklarasjon",
+  "txt_verifying_age_country": "Verifiserer alder og land..."
 }

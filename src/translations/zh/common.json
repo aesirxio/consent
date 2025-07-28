@@ -98,5 +98,6 @@
   "txt_tracking_default": "本網站預設使用追蹤功能。您可以隨時選擇退出。",
   "txt_do_not_sell": "請勿出售或分享我的個人資訊 (CCPA)",
   "txt_disables_third_party": "為加州用戶停用第三方數據共享。",
-  "txt_cookie_declaration": "Cookie 聲明"
+  "txt_cookie_declaration": "Cookie 聲明",
+  "txt_verifying_age_country": "正在驗證您的年齡和國家..."
 }

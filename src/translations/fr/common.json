@@ -98,5 +98,6 @@
   "txt_tracking_default": "Ce site web utilise le suivi par défaut. Vous pouvez vous désinscrire à tout moment.",
   "txt_do_not_sell": "Ne pas vendre ni partager mes informations personnelles (CCPA)",
   "txt_disables_third_party": "Désactive le partage de données avec des tiers pour les utilisateurs californiens.",
-  "txt_cookie_declaration": "Déclaration de cookie"
+  "txt_cookie_declaration": "Déclaration de cookie",
+  "txt_verifying_age_country": "Vérification de votre âge et de votre pays..."
 }
