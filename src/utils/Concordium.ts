@@ -12,7 +12,6 @@ import {
 import { NFT_SMARTCONTRACT, NFT_SMARTCONTRACT_TESTNET } from './config';
 import axios from 'axios';
 import { detectConcordiumProvider } from '@concordium/browser-wallet-api-helpers';
-import { toast } from 'react-toastify';
 
 const invokeSmartContract = async (
   account: any,
