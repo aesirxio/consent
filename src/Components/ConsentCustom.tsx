@@ -55,6 +55,7 @@ import { trackEvent, AnalyticsContext, startTracker } from 'aesirx-analytics';
 import ConsentHeader from './ConsentHeader';
 import { CustomizeCategory } from './CustomizeCategory';
 import { useWeb3Modal } from '@web3modal/react';
+import { ConsentVerify } from './ConsentVerify';
 declare global {
   interface Window {
     dataLayer: any;
@@ -225,6 +226,7 @@ const ConsentComponentCustomApp = (props: any) => {
   );
   const [upgradeLevel, setUpgradeLevel] = useState<any>(level === 4 || level === 3 ? level : 0);
   const [proof, setProof] = useState(false);
+  const [showVerify, setShowVerify] = useState<boolean>(false);
 
   const consentContext = useContext(ConsentContext);
   const analyticsContext = useContext(AnalyticsContext);
@@ -774,7 +776,9 @@ const ConsentComponentCustomApp = (props: any) => {
 
   useEffect(() => {
     if (activeConnectorError) {
-      toast.error(activeConnectorError);
+      if (!toast.isActive('extension_not_detected')) {
+        toast.error(activeConnectorError);
+      }
     }
   }, [activeConnectorError]);
 
@@ -1434,13 +1438,23 @@ const ConsentComponentCustomApp = (props: any) => {
                               ) : (
                                 <Button
                                   variant="success"
-                                  disabled={loadingCheckAccount}
+                                  disabled={
+                                    loadingCheckAccount ||
+                                    loading === 'sign' ||
+                                    loading === 'saving'
+                                  }
                                   onClick={() => {
-                                    handleAgree();
+                                    if (window['ageCheck'] || window['countryCheck']) {
+                                      setShowVerify(true);
+                                    } else {
+                                      handleAgree();
+                                    }
                                   }}
                                   className="w-100 me-3 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3 w-100 w-lg-30 fs-14 text-white"
                                 >
-                                  {loadingCheckAccount ? (
+                                  {loadingCheckAccount ||
+                                  loading === 'sign' ||
+                                  loading === 'saving' ? (
                                     <span
                                       className="spinner-border spinner-border-sm me-1"
                                       role="status"
@@ -1483,7 +1497,6 @@ const ConsentComponentCustomApp = (props: any) => {
                             <ConsentAction
                               level={level}
                               loading={loading}
-                              setLoading={setLoading}
                               loadingCheckAccount={loadingCheckAccount}
                               consents={consents}
                               account={account}
@@ -1494,10 +1507,7 @@ const ConsentComponentCustomApp = (props: any) => {
                               handleAgree={handleAgree}
                               setUpgradeLayout={setUpgradeLayout}
                               setShowCustomize={setShowCustomize}
-                              setActiveConnectorType={setActiveConnectorType}
-                              activeConnectorError={activeConnectorError}
-                              show={show}
-                              proof={proof}
+                              setShowVerify={setShowVerify}
                               t={t}
                             />
                           </TermsComponent>
@@ -1552,6 +1562,20 @@ const ConsentComponentCustomApp = (props: any) => {
         pauseOnHover
         theme="light"
       />
+      {(window['ageCheck'] || window['countryCheck']) && (
+        <ConsentVerify
+          show={showVerify}
+          setShow={setShowVerify}
+          setLoading={setLoading}
+          setActiveConnectorType={setActiveConnectorType}
+          handleAgree={handleAgree}
+          account={account}
+          proof={proof}
+          level={level}
+          loading={loading}
+          activeConnectorError={activeConnectorError}
+        />
+      )}
     </div>
   );
 };
@@ -1559,7 +1583,6 @@ const ConsentComponentCustomApp = (props: any) => {
 const ConsentAction = ({
   level,
   loading,
-  setLoading,
   loadingCheckAccount,
   consents,
   account,
@@ -1570,28 +1593,13 @@ const ConsentAction = ({
   handleAgree,
   setUpgradeLayout,
   setShowCustomize,
-  setActiveConnectorType,
-  activeConnectorError,
-  show,
-  proof,
+  setShowVerify,
   t,
 }: any) => {
   const blockJSDomains = window.aesirxBlockJSDomains ?? [];
   const isCategory = blockJSDomains?.some((item: any) =>
     Object.prototype.hasOwnProperty.call(item, 'category')
   );
-  useEffect(() => {
-    const initProof = async () => {
-      if (account && !proof && level === 1 && show && loading === 'verifying_age_country') {
-        handleAgree();
-      } else {
-        if (activeConnectorError) {
-          handleAgree();
-        }
-      }
-    };
-    window['aesirx1stparty'] && window['concordium'] && initProof();
-  }, [account, proof, activeConnectorError, loading]);
   return (
     <Form className="mb-0 w-100">
       <Form.Check
@@ -1646,13 +1654,8 @@ const ConsentAction = ({
                   variant="outline-success"
                   disabled={loadingCheckAccount}
                   onClick={() => {
-                    if (
-                      isDesktop &&
-                      window['concordium'] &&
-                      (window['ageCheck'] || window['countryCheck'])
-                    ) {
-                      setLoading('verifying_age_country');
-                      setActiveConnectorType(BROWSER_WALLET);
+                    if (window['ageCheck'] || window['countryCheck']) {
+                      setShowVerify(true);
                     } else {
                       handleAgree();
                     }
