@@ -769,4 +769,22 @@ body {
     }
   }
 }
+.consent-verify-backdrop {
+  &.modal-backdrop {
+    z-index: 100054;
+  }
+}
+.consent-verify-modal {
+  .consent-verify-wallet {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    label {
+      margin-bottom: 0;
+    }
+  }
+}
 @import './color-mode.scss';

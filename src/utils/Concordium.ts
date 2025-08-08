@@ -153,4 +153,4 @@ const verifyProof = async (challenge: any, proof: any) => {
   }
 };
 
-export { invokeSmartContract, getWeb3ID, handleProof };
+export { invokeSmartContract, getWeb3ID, handleProof, getStatement };
