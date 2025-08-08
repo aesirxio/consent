@@ -17,7 +17,7 @@ async function requestDigitalCreds(
     dcql_query
   );
   try {
-    var credentialResponse: any = await navigator.credentials.get({
+    const credentialResponse: any = await navigator.credentials.get({
       digital: {
         requests: [
           {
@@ -77,7 +77,7 @@ async function getRequest(
   vct_values = null,
   dcql_query = null
 ) {
-  var params = { protocol: requestedProtocol, doctype: doctype, attrs: requestedMdocAttributes };
+  const params = { protocol: requestedProtocol, doctype: doctype, attrs: requestedMdocAttributes };
   if (transactionData != null) {
     params['transaction_data'] = transactionData;
   }
@@ -91,7 +91,7 @@ async function getRequest(
     params['dcql_query'] = dcql_query;
   }
 
-  var request = await callServer('getRequest', params);
+  const request = await callServer('getRequest', params);
 
   return request;
 }

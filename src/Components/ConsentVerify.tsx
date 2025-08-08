@@ -4,7 +4,6 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { BROWSER_WALLET } from '../Hooks/config';
 import concordium_logo from '../Assets/concordium_logo.png';
 import google_wallet from '../Assets/google_wallet.png';
-import apple_wallet from '../Assets/apple_wallet.png';
 import { toast } from 'react-toastify';
 import { requestDigitalCreds } from '../utils/walletVerify';
 import { getStatement } from '../utils/Concordium';
