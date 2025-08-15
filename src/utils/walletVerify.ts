@@ -27,7 +27,7 @@ async function requestDigitalCreds(
         ],
       },
     } as any);
-    if (credentialResponse.constructor.name == 'DigitalCredential') {
+    if (credentialResponse?.constructor.name == 'DigitalCredential') {
       const data = credentialResponse.data;
       const protocol = credentialResponse.protocol;
       const responseForServer = {
@@ -38,7 +38,7 @@ async function requestDigitalCreds(
       };
       const serverResponse = await callServer('validateResponse', responseForServer);
       return serverResponse;
-    } else if (credentialResponse.constructor.name == 'IdentityCredential') {
+    } else if (credentialResponse?.constructor.name == 'IdentityCredential') {
       const data = credentialResponse.token;
       const protocol = requestedProtocol;
       const responseForServer = {
