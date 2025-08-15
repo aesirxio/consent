@@ -63,6 +63,16 @@ body wcm-modal {
   &-modal .modal-dialog {
     max-width: 500px;
   }
+  &.consent-verify-modal {
+    .modal-dialog {
+      max-width: 800px;
+      .modal-body {
+        @include media-breakpoint-up(lg) {
+          margin-left: 45px;
+        }
+      }
+    }
+  }
   &.web3modal-open {
     z-index: 100056;
   }
@@ -84,6 +94,14 @@ body wcm-modal {
   }
   .ms-10px {
     margin-left: 10px;
+  }
+  .mt-1px {
+    margin-top: 1px;
+  }
+  .w-lg-90 {
+    @include media-breakpoint-up(lg) {
+      width: 90%;
+    }
   }
   button {
     text-transform: none;
@@ -779,10 +797,20 @@ body {
     display: flex;
     align-items: center;
     margin: 10px 0;
-    &:last-child {
-      margin-bottom: 0;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    padding: 14px 10px;
+    @include media-breakpoint-down(lg) {
+      padding: 10px 5px;
     }
-    label {
+    &.active {
+      border: 1px solid $success;
+    }
+    &.disabled {
+      border-color: #e5e5e5;
+      color: #c0c0c0;
+    }
+    &:last-child {
       margin-bottom: 0;
     }
   }

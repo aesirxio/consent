@@ -221,12 +221,11 @@ const ConsentComponentCustomApp = (props: any) => {
   const [showCustomize, setShowCustomize] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
   const [consentTier4, setConsentTier4] = useState<any>({});
-  const [upgradeLayout, setUpgradeLayout] = useState<any>(
-    level === 3 || level === 4 ? true : false
+  const [toastLayout, setToastLayout] = useState<any>(
+    level === 3 || level === 4 ? 'decentralized' : ''
   );
   const [upgradeLevel, setUpgradeLevel] = useState<any>(level === 4 || level === 3 ? level : 0);
   const [proof, setProof] = useState(false);
-  const [showVerify, setShowVerify] = useState<boolean>(false);
 
   const consentContext = useContext(ConsentContext);
   const analyticsContext = useContext(AnalyticsContext);
@@ -412,7 +411,7 @@ const ConsentComponentCustomApp = (props: any) => {
           );
           postDisabledBlockDomains(endpoint);
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
-          setUpgradeLayout(false);
+          setToastLayout('');
         } else if (connector) {
           // Metamask
           if (level === 3) {
@@ -495,7 +494,7 @@ const ConsentComponentCustomApp = (props: any) => {
         setShow(false);
         setLoading('done');
         handleRevoke(true, level);
-        setUpgradeLayout(false);
+        setToastLayout('');
         setShowBackdrop(false);
         setShowExpandRevoke(false);
       }
@@ -564,7 +563,7 @@ const ConsentComponentCustomApp = (props: any) => {
         postDisabledBlockDomains(endpoint);
         setShow(false);
         handleRevoke(true, level);
-        setUpgradeLayout(false);
+        setToastLayout('');
         setLoading('done');
       } else if (response?.loginType === 'metamask') {
         // Metamask
@@ -623,7 +622,7 @@ const ConsentComponentCustomApp = (props: any) => {
           postDisabledBlockDomains(endpoint);
           setShow(false);
           handleRevoke(true, level);
-          setUpgradeLayout(false);
+          setToastLayout('');
           setLoading('done');
         }
       }
@@ -1216,7 +1215,7 @@ const ConsentComponentCustomApp = (props: any) => {
               <div className="bg-white">
                 {level ? (
                   <>
-                    {upgradeLayout ? (
+                    {toastLayout === 'decentralized' ? (
                       <>
                         <div className="bg-white rounded p-3 w-auto">
                           <>
@@ -1397,7 +1396,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                 id="back-button"
                                 variant="outline-success"
                                 onClick={() => {
-                                  setUpgradeLayout(false);
+                                  setToastLayout('');
                                   handleLevel(1);
                                 }}
                                 className="d-flex align-items-center justify-content-center fs-14 w-100 w-lg-30 me-3 mb-2 mb-lg-0 rounded-pill py-2"
@@ -1445,7 +1444,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                   }
                                   onClick={() => {
                                     if (window['ageCheck'] || window['countryCheck']) {
-                                      setShowVerify(true);
+                                      setToastLayout('verify-age-country');
                                     } else {
                                       handleAgree();
                                     }
@@ -1470,6 +1469,20 @@ const ConsentComponentCustomApp = (props: any) => {
                             </div>
                           </>
                         </div>
+                      </>
+                    ) : toastLayout === 'verify-age-country' ? (
+                      <>
+                        <ConsentVerify
+                          setToastLayout={setToastLayout}
+                          setLoading={setLoading}
+                          setActiveConnectorType={setActiveConnectorType}
+                          handleAgree={handleAgree}
+                          account={account}
+                          proof={proof}
+                          level={level}
+                          loading={loading}
+                          activeConnectorError={activeConnectorError}
+                        />
                       </>
                     ) : (
                       <>
@@ -1505,9 +1518,8 @@ const ConsentComponentCustomApp = (props: any) => {
                               handleChange={handleChange}
                               handleNotAllow={() => handleNotAllow(false)}
                               handleAgree={handleAgree}
-                              setUpgradeLayout={setUpgradeLayout}
+                              setToastLayout={setToastLayout}
                               setShowCustomize={setShowCustomize}
-                              setShowVerify={setShowVerify}
                               t={t}
                             />
                           </TermsComponent>
@@ -1562,20 +1574,6 @@ const ConsentComponentCustomApp = (props: any) => {
         pauseOnHover
         theme="light"
       />
-      {(window['ageCheck'] || window['countryCheck']) && (
-        <ConsentVerify
-          show={showVerify}
-          setShow={setShowVerify}
-          setLoading={setLoading}
-          setActiveConnectorType={setActiveConnectorType}
-          handleAgree={handleAgree}
-          account={account}
-          proof={proof}
-          level={level}
-          loading={loading}
-          activeConnectorError={activeConnectorError}
-        />
-      )}
     </div>
   );
 };
@@ -1591,9 +1589,8 @@ const ConsentAction = ({
   handleChange,
   handleNotAllow,
   handleAgree,
-  setUpgradeLayout,
+  setToastLayout,
   setShowCustomize,
-  setShowVerify,
   t,
 }: any) => {
   const blockJSDomains = window.aesirxBlockJSDomains ?? [];
@@ -1655,7 +1652,7 @@ const ConsentAction = ({
                   disabled={loadingCheckAccount}
                   onClick={() => {
                     if (window['ageCheck'] || window['countryCheck']) {
-                      setShowVerify(true);
+                      setToastLayout('verify-age-country');
                     } else {
                       handleAgree();
                     }
@@ -1684,7 +1681,7 @@ const ConsentAction = ({
                   id="decentralize-consent-button"
                   variant="outline-success"
                   onClick={() => {
-                    setUpgradeLayout(true);
+                    setToastLayout('decentralized');
                   }}
                   className="d-flex align-items-center justify-content-center fs-14 w-100 px-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3 text-nowrap"
                 >
