@@ -261,7 +261,7 @@ const ConsentVerify = ({
                 </p>
               </div>
             ) : (
-              <div className="p-2 p-lg-4">
+              <div className="consent-verify-modal-choose p-2 p-lg-4">
                 <div className="fw-semibold mb-1">{t('txt_choose_your_wallet')}</div>
                 <div className="fs-14 lh-sm fst-italic mb-1">{t('txt_select_wallet')}</div>
                 <div className="fs-14 lh-sm fst-italic mb-1">{t('txt_privacy_note')}</div>
@@ -342,7 +342,7 @@ const ConsentVerify = ({
                     <div>{t('txt_other_methods_coming_soon')}</div>
                   </label>
                 </Form>
-                <div className="my-3">
+                <div className="my-2 my-lg-3">
                   <span>{t('txt_dont_have_a_digital_wallet')}</span>
                   <a
                     href="https://docs.concordium.com/en/mainnet/docs/browser-wallet/setup-browser-wallet.html"
@@ -368,7 +368,7 @@ const ConsentVerify = ({
                 onClick={() => {
                   handleClose();
                 }}
-                className="d-flex align-items-center justify-content-center fs-14 px-5 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+                className="d-flex align-items-center justify-content-center fs-14 px-4 px-lg-5 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
               >
                 {(window as any)?.aesirx_analytics_translate?.txt_cancel ?? t('txt_cancel')}
               </Button>

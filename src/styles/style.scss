@@ -802,7 +802,13 @@ body {
     padding: 14px 10px;
     @include media-breakpoint-down(lg) {
       padding: 10px 5px;
+      font-size: 14px;
+      img {
+        width: 28px;
+        height: 28px;
+      }
     }
+
     &.active {
       border: 1px solid $success;
     }
@@ -812,6 +818,17 @@ body {
     }
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+  .fs-14 {
+    @include media-breakpoint-down(md) {
+      font-size: 12px;
+    }
+  }
+  .consent-verify-modal-choose {
+    @include media-breakpoint-down(md) {
+      max-height: 400px;
+      overflow: auto;
     }
   }
 }
