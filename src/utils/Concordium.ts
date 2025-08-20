@@ -36,7 +36,7 @@ const invokeSmartContract = async (
     }
     const returnValue = await deserializeReceiveReturnValue(
       ReturnValue.toBuffer(res.returnValue),
-      Buffer.from(schema, 'base64'),
+      window['aesirxBuffer'].from(schema, 'base64'),
       ContractName.fromString(name),
       EntrypointName.fromString(method),
       SchemaVersion.V2

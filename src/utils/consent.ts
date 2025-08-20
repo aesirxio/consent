@@ -218,10 +218,12 @@ const getNonce = async (
 const getSignedNonce = async (nonce: string, address: string, provider: any) => {
   const signature = await provider.signMessage(address, stringMessage(`${nonce}`));
 
-  return Buffer.from(
-    typeof signature === 'object' && signature !== null ? JSON.stringify(signature) : signature,
-    'utf-8'
-  ).toString('base64');
+  return window['aesirxBuffer']
+    .from(
+      typeof signature === 'object' && signature !== null ? JSON.stringify(signature) : signature,
+      'utf-8'
+    )
+    .toString('base64');
 };
 
 const revokeConsents = async (
