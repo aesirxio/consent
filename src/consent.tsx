@@ -12,7 +12,7 @@ import { AesirXI18nextProvider } from './utils/I18nextProvider';
 import { getConsentTemplate } from './utils/consent';
 import { AnalyticsContextProvider } from 'aesirx-analytics';
 
-window.Buffer = Buffer;
+window['aesirxBuffer'] = Buffer;
 declare global {
   interface Window {
     process: any;

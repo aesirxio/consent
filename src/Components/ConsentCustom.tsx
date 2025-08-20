@@ -244,10 +244,12 @@ const ConsentComponentCustomApp = (props: any) => {
       ? { signMessage: {} }
       : useSignMessage({
           async onSuccess(data: any, variables: any) {
-            const signature = Buffer.from(
-              typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
-              'utf-8'
-            ).toString('base64');
+            const signature = window['aesirxBuffer']
+              .from(
+                typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
+                'utf-8'
+              )
+              .toString('base64');
             const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
             if (variables?.message.indexOf('Revoke consent') > -1) {
               // Revoke Metamask
