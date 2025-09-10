@@ -59,6 +59,24 @@ const LoadingStatus = ({ loading }: any) => {
             </span>
           </Button>
         </div>
+      ) : loading === 'verifying_sign_proof' ? (
+        <div className="loading-status">
+          <Button
+            variant="dark"
+            disabled
+            className="d-flex align-items-center justify-content-center text-white w-100"
+          >
+            <span
+              className="spinner-border spinner-border-sm me-1"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span className="text">
+              {(window as any)?.aesirx_analytics_translate?.txt_verifying_sign_proof ??
+                t('txt_verifying_sign_proof')}
+            </span>
+          </Button>
+        </div>
       ) : loading === 'verifying_age_country' ? (
         <div className="loading-status">
           <Button
