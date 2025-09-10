@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
-import { BROWSER_WALLET } from '../Hooks/config';
+import { BROWSER_WALLET, WALLET_CONNECT } from '../Hooks/config';
 import concordium_wallet from '../Assets/concordium_wallet.png';
 import google_wallet from '../Assets/google_wallet.png';
 import other_wallet from '../Assets/other_wallet.png';
@@ -10,7 +10,7 @@ import check_circle from '../Assets/check_circle.svg';
 import { toast } from 'react-toastify';
 import { requestDigitalCreds } from '../utils/walletVerify';
 import { getStatement } from '../utils/Concordium';
-import { isAndroid, isChrome, isMobile } from 'react-device-detect';
+import { isAndroid, isChrome, isDesktop, isMobile } from 'react-device-detect';
 import { allCountries } from '../utils/countries';
 
 const ConsentVerify = ({
@@ -46,13 +46,15 @@ const ConsentVerify = ({
       }
     };
     if (window['aesirx1stparty']) {
-      if (window['concordium']) {
+      if (window['concordium'] || isMobile) {
         initProof();
-      } else if (loading === 'verifying_age_country') {
+      } else if (loading === 'verifying_age_country' || loading === 'verifying_sign_proof') {
         setLoading('done');
-        toast.error(t('txt_browser_wallet_extension_not_detected'), {
-          toastId: 'extension_not_detected',
-        });
+        if (!isMobile) {
+          toast.error(t('txt_browser_wallet_extension_not_detected'), {
+            toastId: 'extension_not_detected',
+          });
+        }
         handleClose();
       }
     }
@@ -302,7 +304,9 @@ const ConsentVerify = ({
                         alt="Concordium"
                       />
                     </div>
-                    <div>Concordium Wallet ID</div>
+                    <div>
+                      {isDesktop ? 'Concordium Browser Wallet' : 'CryptoX Wallet (Concordium ID)'}
+                    </div>
                   </label>
                   <label
                     className={`consent-verify-wallet ${wallet === 'google' ? 'active' : ''}`}
@@ -381,7 +385,11 @@ const ConsentVerify = ({
                     } else {
                       if (wallet === 'concordium') {
                         setLoading('verifying_age_country');
-                        setActiveConnectorType(BROWSER_WALLET);
+                        if (isMobile) {
+                          setActiveConnectorType(WALLET_CONNECT);
+                        } else {
+                          setActiveConnectorType(BROWSER_WALLET);
+                        }
                       } else if (wallet === 'google') {
                         if (isChrome) {
                           if (isMobile && !isAndroid) {

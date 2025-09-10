@@ -11,7 +11,6 @@ import {
 } from '@concordium/web-sdk';
 import { NFT_SMARTCONTRACT, NFT_SMARTCONTRACT_TESTNET } from './config';
 import axios from 'axios';
-import { detectConcordiumProvider } from '@concordium/browser-wallet-api-helpers';
 
 const invokeSmartContract = async (
   account: any,
@@ -76,31 +75,22 @@ const getWeb3ID = async (account: string, gRPCClient: ConcordiumGRPCClient, netw
   return false;
 };
 
-const handleProof = async (account: string, setLoading: any, setProof: any) => {
+const handleProof = async (account: string, setLoading: any, setProof: any, connection: any) => {
   setLoading && setLoading(true);
   try {
     const challenge = await getChallenge(account ?? '');
     const statement = await getStatement();
-    const provider: any = await detectConcordiumProvider();
-    const client = new ConcordiumGRPCClient(provider.grpcTransport);
-    const accountAddr = AccountAddress.fromBase58(account);
-    const accountInfo: any = await client.getAccountInfo(accountAddr);
-    const nationality: string =
-      accountInfo?.accountCredentials[0]?.value?.contents?.commitments?.cmmAttributes?.nationality;
-    const countryOfResidence: string =
-      accountInfo?.accountCredentials[0]?.value?.contents?.commitments?.cmmAttributes
-        ?.countryOfResidence;
-    if (!nationality) {
-      if (countryOfResidence) {
-        statement[0].attributeTag = 'countryOfResidence';
-      } else {
-        statement[0].attributeTag = 'idDocIssuer';
-      }
-    }
-    const proof = await provider.requestIdProof(account ?? '', statement, challenge);
-    const re = await verifyProof(challenge, proof);
-
-    if (re) {
+    const testStatement = [
+      {
+        statement: statement,
+        idQualifier: {
+          type: 'cred',
+          issuers: [0, 1, 3, 4],
+        },
+      },
+    ];
+    const presentation = await connection.requestVerifiablePresentation(challenge, testStatement);
+    if (presentation) {
       setProof(true);
       setLoading && setLoading(false);
     }
@@ -125,28 +115,6 @@ const getChallenge = async (walletAccount: string) => {
 const getStatement = async () => {
   try {
     return (await axios.get(`${window['aesirx1stparty']}/statement`)).data;
-  } catch (error: any) {
-    console.log('getChallenge', error);
-    throw error;
-  }
-};
-
-const verifyProof = async (challenge: any, proof: any) => {
-  try {
-    return (
-      await axios.post(
-        `${window['web3Endpoint']}/prove`,
-        {
-          challenge: challenge,
-          proof: proof,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-    ).data?.result;
   } catch (error: any) {
     console.log('getChallenge', error);
     throw error;

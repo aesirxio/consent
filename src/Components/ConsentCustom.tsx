@@ -335,8 +335,11 @@ const ConsentComponentCustomApp = (props: any) => {
         if (level === 4) {
           try {
             setLoadingCheckAccount(true);
-            if (account && !proof && isDesktop && (window['ageCheck'] || window['countryCheck'])) {
-              const response = await handleProof(account, null, setProof);
+            if (account && !proof && (window['ageCheck'] || window['countryCheck'])) {
+              if (isMobile) {
+                setLoading('verifying_sign_proof');
+              }
+              const response = await handleProof(account, null, setProof, connection);
               if (!response) {
                 setLoadingCheckAccount(false);
                 toast.error('Failed to verify age and country!');
@@ -432,8 +435,11 @@ const ConsentComponentCustomApp = (props: any) => {
           flag = false;
         }
       } else {
-        if (account && !proof && isDesktop && (window['ageCheck'] || window['countryCheck'])) {
-          const response = await handleProof(account, null, setProof);
+        if (account && !proof && (window['ageCheck'] || window['countryCheck'])) {
+          if (isMobile) {
+            setLoading('verifying_sign_proof');
+          }
+          const response = await handleProof(account, null, setProof, connection);
           if (!response) {
             setLoading('done');
             toast.error('Failed to verify age and country!');
@@ -537,8 +543,11 @@ const ConsentComponentCustomApp = (props: any) => {
         // Concordium
         sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
 
-        if (account && !proof && isDesktop && (window['ageCheck'] || window['countryCheck'])) {
-          const response = await handleProof(account, null, setProof);
+        if (account && !proof && (window['ageCheck'] || window['countryCheck'])) {
+          if (isMobile) {
+            setLoading('verifying_sign_proof');
+          }
+          const response = await handleProof(account, null, setProof, connection);
           if (!response) {
             return false;
           }
