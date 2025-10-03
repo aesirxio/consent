@@ -213,6 +213,11 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
           window['aesirx_analytics_deregistered_scripts_footer']
         );
         Object.keys(blockJSList).forEach((key) => {
+          const isPermanentBlocked = window['aesirxBlockJSDomains'].some(
+            (item: any) =>
+              blockJSList[key].src.includes(item.domain) && item.blocking_permanent === 'on'
+          );
+          if (isPermanentBlocked) return;
           const scriptNode = document.createElement('script');
           scriptNode.src =
             blockJSList[key].src + (blockJSList[key].ver ? `?ver=${blockJSList[key].ver}` : '');
