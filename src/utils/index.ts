@@ -23,6 +23,10 @@ const unBlockScripts = (disabledBlockDomains: any) => {
   window['configBlockJS']._backupNodes = window['configBlockJS']?._backupNodes.filter(
     ({ position, node, uniqueID }: any) => {
       try {
+        const isPermanentBlocked = window['aesirxBlockJSDomains'].some(
+          (item: any) => node.src.includes(item.domain) && item.blocking_permanent === 'on'
+        );
+        if (isPermanentBlocked) return false;
         if (node.nodeName.toLowerCase() === 'script') {
           const arrayDisabledBlockDomains = window['disabledBlockJSDomains']?.length
             ? window['disabledBlockJSDomains']
