@@ -211,7 +211,14 @@ const shouldBlockProvider = (formattedRE: string) => {
   );
   const params = new URLSearchParams(window.location.search);
   const consentParams = params.get('consent');
-  if (sessionStorage.getItem('aesirx-analytics-allow') || consentParams === 'yes') return false;
+  const isPermanentBlocked = window['aesirxBlockJSDomains'].some(
+    (item: any) => formattedRE.includes(item.domain) && item.blocking_permanent === 'on'
+  );
+  if (
+    (sessionStorage.getItem('aesirx-analytics-allow') || consentParams === 'yes') &&
+    !isPermanentBlocked
+  )
+    return false;
   return provider && true;
 };
 
