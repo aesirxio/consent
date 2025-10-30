@@ -11,6 +11,7 @@ interface ConsentNext {
   isLoggedApp?: boolean;
   isOptInReplaceAnalytics?: boolean;
   children?: ReactNode;
+  isHideConsentModal?: boolean;
 }
 
 const ConsentNext = ({
@@ -18,6 +19,7 @@ const ConsentNext = ({
   isLoggedApp,
   isOptInReplaceAnalytics = false,
   children,
+  isHideConsentModal,
 }: ConsentNext) => {
   const [layout, setLayout] = useState(
     process.env.NEXT_PUBLIC_CONSENT_LAYOUT ?? 'simple-consent-mode'
@@ -46,7 +48,7 @@ const ConsentNext = ({
     <>
       <ConsentContextProvider>
         {children}
-        {process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' && (
+        {process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' && !isHideConsentModal && (
           <>
             <ConsentComponentCustom
               endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL}

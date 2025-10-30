@@ -8,9 +8,14 @@ const ConsentComponentCustom = React.lazy(() => import('../Components/ConsentCus
 interface ConsentReact {
   children?: ReactNode;
   isOptInReplaceAnalytics?: boolean;
+  isHideConsentModal?: boolean;
 }
 
-const ConsentReact = ({ isOptInReplaceAnalytics = false, children }: ConsentReact) => {
+const ConsentReact = ({
+  isOptInReplaceAnalytics = false,
+  children,
+  isHideConsentModal,
+}: ConsentReact) => {
   const [layout, setLayout] = useState(
     process.env.REACT_APP_CONSENT_LAYOUT ?? 'simple-consent-mode'
   );
@@ -37,7 +42,7 @@ const ConsentReact = ({ isOptInReplaceAnalytics = false, children }: ConsentReac
   return (
     <ConsentContextProvider>
       {children}
-      {process.env.REACT_APP_DISABLE_ANALYTICS_CONSENT !== 'true' && (
+      {process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' && !isHideConsentModal && (
         <Suspense fallback={<></>}>
           <ConsentComponentCustom
             endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL}
