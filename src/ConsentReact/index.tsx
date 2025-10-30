@@ -11,7 +11,11 @@ interface ConsentReact {
   isHideConsentModal?: boolean;
 }
 
-const ConsentReact = ({ isOptInReplaceAnalytics = false, children, isHideConsentModal }: ConsentReact) => {
+const ConsentReact = ({
+  isOptInReplaceAnalytics = false,
+  children,
+  isHideConsentModal,
+}: ConsentReact) => {
   const [layout, setLayout] = useState(
     process.env.REACT_APP_CONSENT_LAYOUT ?? 'simple-consent-mode'
   );
