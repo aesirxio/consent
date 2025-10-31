@@ -96,6 +96,7 @@ const handleProof = async (account: string, setLoading: any, setProof: any, conn
     }
     return true;
   } catch (error) {
+    console.error('error', error);
     setProof(false);
     setLoading && setLoading(false);
     return false;
@@ -104,8 +105,8 @@ const handleProof = async (account: string, setLoading: any, setProof: any, conn
 
 const getChallenge = async (walletAccount: string) => {
   try {
-    return (await axios.get(`${window['web3Endpoint']}/challenge?account=${walletAccount}`)).data
-      ?.challenge;
+    const endpoint = window['web3Endpoint'] ?? 'https://web3id.backend.aesirx.io:8001';
+    return (await axios.get(`${endpoint}/challenge?account=${walletAccount}`)).data?.challenge;
   } catch (error: any) {
     console.log('getChallenge', error);
     throw error;
@@ -113,12 +114,64 @@ const getChallenge = async (walletAccount: string) => {
 };
 
 const getStatement = async () => {
-  try {
-    return (await axios.get(`${window['aesirx1stparty']}/statement`)).data;
-  } catch (error: any) {
-    console.log('getChallenge', error);
-    throw error;
+  const response = [];
+
+  const ageCheck = window['ageCheck'];
+  const countryCheck = window['countryCheck'];
+  const minimumAge = window['minimumAge'] ?? 0;
+  const maximumAge = window['maximumAge'] ?? 150;
+  const allowedCountries = window['allowedCountries'] ?? [];
+  const disallowedCountries = window['disallowedCountries'] ?? [];
+
+  // Country check
+  if (countryCheck) {
+    let countrySet = [];
+    let type = '';
+
+    if (allowedCountries.length > 0) {
+      countrySet = allowedCountries;
+      type = 'AttributeInSet';
+    } else if (disallowedCountries.length > 0) {
+      countrySet = disallowedCountries;
+      type = 'AttributeNotInSet';
+    }
+
+    if (countrySet.length > 0) {
+      response.push({
+        type: type,
+        attributeTag: 'nationality',
+        set: countrySet,
+      });
+    }
   }
+
+  // Age check
+  if (ageCheck) {
+    const today = new Date();
+
+    const lowerDateObj = new Date(today);
+    lowerDateObj.setFullYear(lowerDateObj.getFullYear() - maximumAge);
+    const lowerDate = formatDate(lowerDateObj);
+
+    const upperDateObj = new Date(today);
+    upperDateObj.setFullYear(upperDateObj.getFullYear() - minimumAge);
+    const upperDate = formatDate(upperDateObj);
+
+    response.push({
+      type: 'AttributeInRange',
+      attributeTag: 'dob',
+      lower: lowerDate,
+      upper: upperDate,
+    });
+  }
+  return response;
 };
+
+function formatDate(date: any) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}${m}${d}`;
+}
 
 export { invokeSmartContract, getWeb3ID, handleProof, getStatement };

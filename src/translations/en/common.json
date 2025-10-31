@@ -135,5 +135,6 @@
   "txt_issuing_country_is_not_allowed": "Issuing country is not allowed!",
   "txt_failed_to_verify_age_and_country": "Failed to verify age and country!",
   "txt_browser_wallet_extension_not_detected": "Browser wallet extension not detected",
-  "txt_verifying_sign_proof": "Verifying sign proof request, please return to your CryptoX Wallet app."
+  "txt_verifying_sign_proof": "Verifying sign proof request, please return to your CryptoX Wallet app.",
+  "txt_scripts": "Scripts"
 }

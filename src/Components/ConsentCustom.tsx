@@ -1011,6 +1011,7 @@ const ConsentComponentCustomApp = (props: any) => {
                       <ConsentHeader
                         languageSwitcher={languageSwitcher}
                         modeSwitcher={modeSwitcher}
+                        layout={layout}
                       />
                       <div
                         className="minimize-revoke"
@@ -1604,7 +1605,14 @@ const ConsentAction = ({
   setShowCustomize,
   t,
 }: any) => {
-  const blockJSDomains = window.aesirxBlockJSDomains ?? [];
+  const blockJSDomains = [
+    ...window?.aesirxBlockJSDomains,
+    ...window?.aesirxHoldBackJS.map((item) => ({
+      domain: null,
+      blocking_permanent: 'off',
+      ...item,
+    })),
+  ];
   const isCategory = blockJSDomains?.some((item: any) =>
     Object.prototype.hasOwnProperty.call(item, 'category')
   );
