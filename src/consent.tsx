@@ -20,6 +20,8 @@ declare global {
     funcAfterReject: any;
     configBlockJS: any;
     aesirxBlockJSDomains: any;
+    aesirxHoldBackJS: any;
+    disabledBlockJSDomains: any;
   }
 }
 window['aesirx-consent-enable'] = 'true';
@@ -41,6 +43,49 @@ const ConsentPopup = () => {
         window['aesirx1stparty'] ?? '',
         window.location.host
       );
+
+      if (data?.data?.gpc_support) {
+        window['disableGPCsupport'] = data?.data?.disable_gpc_support;
+      }
+      if (data?.data?.gpc_consent === 'opt-out') {
+        window['aesirxOptOutMode'] = 'true';
+      }
+      if (data?.data?.gpc_consent_donotsell === 'yes') {
+        window['aesirxOptOutDoNotSell'] = 'true';
+      }
+      if (data?.data?.age_check) {
+        window['ageCheck'] = data?.data?.age_check;
+      }
+      if (data?.data?.country_check) {
+        window['countryCheck'] = data?.data?.country_check;
+      }
+      if (data?.data?.maximum_age) {
+        window['minimumAge'] = data?.data?.minimum_age;
+      }
+      if (data?.data?.minimum_age) {
+        window['maximumAge'] = data?.data?.maximum_age;
+      }
+      if (data?.data?.allowed_countries?.length) {
+        window['allowedCountries'] = data?.data?.allowed_countries;
+      }
+      if (data?.data?.disallowed_countries?.length) {
+        window['disallowedCountries'] = data?.data?.disallowed_countries;
+      }
+
+      if (data?.data?.geo_handling === 'yes') {
+        const geoData = data?.data?.geo_rules?.length
+          ? data?.data?.geo_rules?.map((r: any) => {
+              return {
+                geo_rules_language: r?.language,
+                geo_rules_logic: r?.logic,
+                geo_rules_consent_mode: r?.consent_mode,
+                geo_rules_timezone: r?.timezone,
+                geo_rules_override: r?.override_field,
+              };
+            })
+          : [];
+        window['geoRules'] = geoData;
+      }
       setLayout(data?.data?.template ?? window['consentLayout']);
       setGtagId(data?.data?.gtag_id ?? window['analyticsGtagId']);
       setGtmId(data?.data?.gtm_id ?? window['analyticsGtmId']);
@@ -211,7 +256,7 @@ const shouldBlockProvider = (formattedRE: string) => {
   );
   const params = new URLSearchParams(window.location.search);
   const consentParams = params.get('consent');
-  const isPermanentBlocked = window['aesirxBlockJSDomains'].some(
+  const isPermanentBlocked = window['aesirxBlockJSDomains']?.some(
     (item: any) => formattedRE.includes(item.domain) && item.blocking_permanent === 'on'
   );
   if (

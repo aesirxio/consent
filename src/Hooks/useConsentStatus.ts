@@ -213,7 +213,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
           window['aesirx_analytics_deregistered_scripts_footer']
         );
         Object.keys(blockJSList).forEach((key) => {
-          const isPermanentBlocked = window['aesirxBlockJSDomains'].some(
+          const isPermanentBlocked = window?.aesirxBlockJSDomains?.some(
             (item: any) =>
               blockJSList[key].src.includes(item.domain) && item.blocking_permanent === 'on'
           );
@@ -224,6 +224,17 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
           scriptNode.type = 'text/javascript';
           document.body.appendChild(scriptNode);
         });
+        if (window.aesirxHoldBackJS?.length) {
+          const disabledCategories =
+            window.disabledBlockJSDomains?.map((item: any) => item.name) || [];
+          window.aesirxHoldBackJS.forEach((item: any) => {
+            if (!disabledCategories.includes(item.name)) {
+              if (typeof item.script === 'function') {
+                item.script();
+              }
+            }
+          });
+        }
       }
     }
   };

@@ -23,37 +23,45 @@ const unBlockScripts = (disabledBlockDomains: any) => {
   window['configBlockJS']._backupNodes = window['configBlockJS']?._backupNodes.filter(
     ({ position, node, uniqueID }: any) => {
       try {
-        const isPermanentBlocked = window['aesirxBlockJSDomains'].some(
+        const blockJSDomains = [
+          ...window?.aesirxBlockJSDomains,
+          ...window?.aesirxHoldBackJS.map((item) => ({
+            domain: null,
+            blocking_permanent: 'off',
+            ...item,
+          })),
+        ];
+        const isPermanentBlocked = blockJSDomains.some(
           (item: any) => node.src.includes(item.domain) && item.blocking_permanent === 'on'
         );
         if (isPermanentBlocked) return false;
-        if (node.nodeName.toLowerCase() === 'script') {
-          const arrayDisabledBlockDomains = window['disabledBlockJSDomains']?.length
-            ? window['disabledBlockJSDomains']
-            : disabledBlockDomains
-              ? JSON.parse(disabledBlockDomains)
-              : [];
-          const containsDomain = arrayDisabledBlockDomains?.length
-            ? arrayDisabledBlockDomains?.some((item: any) => {
-                const regex = new RegExp(item.domain.replace(/\//g, '\\/')); // Escape slashes in domain
-                return regex.test(node.src);
-              })
-            : false;
-          if (!containsDomain) {
+        const arrayDisabledBlockDomains = window['disabledBlockJSDomains']?.length
+          ? window['disabledBlockJSDomains']
+          : disabledBlockDomains
+            ? JSON.parse(disabledBlockDomains)
+            : [];
+        const containsDomain = arrayDisabledBlockDomains?.length
+          ? arrayDisabledBlockDomains?.some((item: any) => {
+              const regex = new RegExp(item.domain?.replace(/\//g, '\\/')); // Escape slashes in domain
+              return regex.test(node.src);
+            })
+          : false;
+        if (!containsDomain) {
+          if (node.nodeName.toLowerCase() === 'script') {
             const scriptNode = document.createElement('script');
             scriptNode.src = node.src;
             scriptNode.type = 'text/javascript';
             document[position].appendChild(scriptNode);
+          } else {
+            const frame = document.getElementById(uniqueID);
+            if (!frame) return false;
+            const iframe: any = document.createElement('iframe');
+            iframe.src = node.src;
+            iframe.width = frame.offsetWidth;
+            iframe.height = frame.offsetHeight;
+            frame.parentNode.insertBefore(iframe, frame);
+            frame.parentNode.removeChild(frame);
           }
-        } else {
-          const frame = document.getElementById(uniqueID);
-          if (!frame) return false;
-          const iframe: any = document.createElement('iframe');
-          iframe.src = node.src;
-          iframe.width = frame.offsetWidth;
-          iframe.height = frame.offsetHeight;
-          frame.parentNode.insertBefore(iframe, frame);
-          frame.parentNode.removeChild(frame);
         }
         return false;
       } catch (error) {

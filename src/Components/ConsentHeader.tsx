@@ -7,7 +7,7 @@ import Select, { StylesConfig } from 'react-select';
 import i18n from 'i18next';
 import { ConsentContext } from '../utils/ConsentContextProvider';
 
-const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher }: any) => {
+const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher, layout }: any) => {
   const { t } = useTranslation();
   const { listLanguages } = useI18nextContext();
   const currentLanguage = listLanguages.filter(
@@ -34,12 +34,12 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher }: any
     if (window['aesirxOptOutMode'] === 'true') {
       setMode(listMode?.find((r: any) => r.value === 'opt-out'));
     }
-    if ((window as any).geoRules) {
+    if (window['geoRules']) {
       if (userOverrideLanguage) {
         i18n.changeLanguage(userOverrideLanguage);
         (window as any).aesirx_analytics_translate = null;
       }
-      const matchedRule = matchGeoRule((window as any).geoRules);
+      const matchedRule = matchGeoRule(window['geoRules']);
       if (userOverrideMode) {
         setMode(listMode?.find((r: any) => r.value === userOverrideMode));
         if (userOverrideMode === 'opt-out') {
@@ -64,7 +64,7 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher }: any
 
       consentContext.forceUpdate('changed');
     }
-  }, []);
+  }, [layout]);
   return (
     <div
       className={`rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap py-2 py-lg-3 px-lg-4 header-consent-bg ${

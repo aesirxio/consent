@@ -28,6 +28,7 @@ const TermsComponent = ({
           isRejectedLayout={isRejectedLayout}
           languageSwitcher={languageSwitcher}
           modeSwitcher={modeSwitcher}
+          layout={layout}
         />
         <div className={`pb-1 pb-lg-3 ${isCustom ? 'pt-0' : 'p-3'} bg-white`}>
           <>

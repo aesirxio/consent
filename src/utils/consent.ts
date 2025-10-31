@@ -417,17 +417,27 @@ const getConsentTemplate = async (endpoint: any, domain: any) => {
 };
 
 const postDisabledBlockDomains = async (endpoint: any) => {
-  const domains = window.aesirxBlockJSDomains || [];
+  const blockJSDomains = [
+    ...window?.aesirxBlockJSDomains,
+    ...window?.aesirxHoldBackJS.map((item: any) => ({
+      domain: null,
+      blocking_permanent: 'off',
+      ...item,
+    })),
+  ];
   const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
-  const listCategory = domains?.reduce((acc: [string], { category }: { category: string }) => {
-    if (!acc.includes(category)) {
-      acc.push(category);
-    }
-    return acc;
-  }, []);
+  const listCategory = blockJSDomains?.reduce(
+    (acc: [string], { category }: { category: string }) => {
+      if (!acc.includes(category)) {
+        acc.push(category);
+      }
+      return acc;
+    },
+    []
+  );
 
   try {
-    window['aesirxBlockJSDomains'] &&
+    blockJSDomains &&
       (await axios.post(`${endpoint}/disabled-block-domains`, {
         disabled_block_domains: window['disabledBlockJSDomains'] ?? '',
         list_category: listCategory,

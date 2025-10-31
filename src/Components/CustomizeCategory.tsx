@@ -17,7 +17,14 @@ const CustomizeCategory = ({
 }: any) => {
   const { t } = useTranslation();
 
-  const blockJSDomains = window.aesirxBlockJSDomains ?? [];
+  const blockJSDomains = [
+    ...window?.aesirxBlockJSDomains,
+    ...window?.aesirxHoldBackJS.map((item) => ({
+      domain: null,
+      blocking_permanent: 'off',
+      ...item,
+    })),
+  ];
 
   const groupByCategory = blockJSDomains?.reduce((acc: any, item: any) => {
     if (!acc[item.category]) {
@@ -26,6 +33,7 @@ const CustomizeCategory = ({
     acc[item.category]?.push({
       domain: item.domain,
       name: item.name,
+      script: item.script,
     });
     return acc;
   }, {});
@@ -173,11 +181,14 @@ const CustomizeCategory = ({
                           >
                             <div>
                               {el?.name ? el?.name : el?.domain} -{' '}
-                              {el?.name
-                                ? ((window as any)?.aesirx_analytics_translate
-                                    ?.txt_third_party_plugins ?? t('txt_third_party_plugins'))
-                                : ((window as any)?.aesirx_analytics_translate
-                                    ?.txt_domain_path_based ?? t('txt_domain_path_based'))}
+                              {el?.name && typeof el?.script === 'function'
+                                ? ((window as any)?.aesirx_analytics_translate?.txt_scripts ??
+                                  t('txt_scripts'))
+                                : el?.domain
+                                  ? ((window as any)?.aesirx_analytics_translate
+                                      ?.txt_domain_path_based ?? t('txt_domain_path_based'))
+                                  : ((window as any)?.aesirx_analytics_translate
+                                      ?.txt_third_party_plugins ?? t('txt_third_party_plugins'))}
                             </div>
                             <div>
                               <Form.Check
