@@ -42,7 +42,7 @@ const unBlockScripts = (disabledBlockDomains: any) => {
             : [];
         const containsDomain = arrayDisabledBlockDomains?.length
           ? arrayDisabledBlockDomains?.some((item: any) => {
-              const regex = new RegExp(item.domain?.replace(/\//g, '\\/'));
+              const regex = new RegExp(escapeRegex(item.domain || ''));
               return regex.test(node.src);
             })
           : false;
