@@ -872,8 +872,13 @@ const ConsentComponentCustomApp = (props: any) => {
       sessionStorage.getItem('aesirx-analytics-revoke') &&
       sessionStorage.getItem('aesirx-analytics-revoke') !== '0'
     ) {
-      if (window.aesirxHoldBackJS?.length && disabledBlockDomains) {
-        const disabledCategories = disabledBlockDomains?.map((item: any) => item.name) || [];
+      if (window.aesirxHoldBackJS?.length && typeof disabledBlockDomains !== 'undefined') {
+        const arrayDisabledBlockDomains = disabledBlockDomains
+          ? Array.isArray(disabledBlockDomains)
+            ? disabledBlockDomains
+            : JSON.parse(disabledBlockDomains)
+          : [];
+        const disabledCategories = arrayDisabledBlockDomains?.map((item: any) => item.name) || [];
         window.aesirxHoldBackJS.forEach((item: any) => {
           if (!disabledCategories.includes(item.name)) {
             if (typeof item.script === 'function') {
