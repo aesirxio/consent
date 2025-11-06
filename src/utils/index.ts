@@ -24,12 +24,14 @@ const unBlockScripts = (disabledBlockDomains: any) => {
     ({ position, node, uniqueID }: any) => {
       try {
         const blockJSDomains = [
-          ...window?.aesirxBlockJSDomains,
-          ...window?.aesirxHoldBackJS.map((item) => ({
-            domain: null,
-            blocking_permanent: 'off',
-            ...item,
-          })),
+          ...(Array.isArray(window?.aesirxBlockJSDomains) ? window.aesirxBlockJSDomains : []),
+          ...(Array.isArray(window?.aesirxHoldBackJS)
+            ? window.aesirxHoldBackJS.map((item: any) => ({
+                domain: null,
+                blocking_permanent: 'off',
+                ...item,
+              }))
+            : []),
         ];
         const isPermanentBlocked = blockJSDomains.some(
           (item: any) => node.src.includes(item.domain) && item.blocking_permanent === 'on'
@@ -38,7 +40,9 @@ const unBlockScripts = (disabledBlockDomains: any) => {
         const arrayDisabledBlockDomains = window['disabledBlockJSDomains']?.length
           ? window['disabledBlockJSDomains']
           : disabledBlockDomains
-            ? JSON.parse(disabledBlockDomains)
+            ? Array.isArray(disabledBlockDomains)
+              ? disabledBlockDomains
+              : JSON.parse(disabledBlockDomains)
             : [];
         const containsDomain = arrayDisabledBlockDomains?.length
           ? arrayDisabledBlockDomains?.some((item: any) => {

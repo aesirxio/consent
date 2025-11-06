@@ -224,17 +224,17 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
           scriptNode.type = 'text/javascript';
           document.body.appendChild(scriptNode);
         });
-        if (window.aesirxHoldBackJS?.length) {
-          const disabledCategories =
-            window.disabledBlockJSDomains?.map((item: any) => item.name) || [];
-          window.aesirxHoldBackJS.forEach((item: any) => {
-            if (!disabledCategories.includes(item.name)) {
-              if (typeof item.script === 'function') {
-                item.script();
-              }
+      }
+      if (window.aesirxHoldBackJS?.length) {
+        const disabledCategories =
+          window.disabledBlockJSDomains?.map((item: any) => item.name) || [];
+        window.aesirxHoldBackJS.forEach((item: any) => {
+          if (!disabledCategories.includes(item.name)) {
+            if (typeof item.script === 'function') {
+              item.script();
             }
-          });
-        }
+          }
+        });
       }
     }
   };
