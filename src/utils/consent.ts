@@ -399,8 +399,9 @@ const verifySignature = async (
 
 const getConsentTemplate = async (endpoint: any, domain: any) => {
   try {
+    const uuid = sessionStorage.getItem('aesirx-analytics-uuid');
     const data = await axios.get(
-      `${endpoint}/datastream/template/${domain?.replace(/^(https?:\/\/)?(www\.)?/, '$1')}`,
+      `${endpoint}/datastream/template/${domain?.replace(/^(https?:\/\/)?(www\.)?/, '$1')}${uuid ? `?uuid=${uuid}` : ''}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -418,12 +419,14 @@ const getConsentTemplate = async (endpoint: any, domain: any) => {
 
 const postDisabledBlockDomains = async (endpoint: any) => {
   const blockJSDomains = [
-    ...window?.aesirxBlockJSDomains,
-    ...window?.aesirxHoldBackJS.map((item: any) => ({
-      domain: null,
-      blocking_permanent: 'off',
-      ...item,
-    })),
+    ...(Array.isArray(window?.aesirxBlockJSDomains) ? window.aesirxBlockJSDomains : []),
+    ...(Array.isArray(window?.aesirxHoldBackJS)
+      ? window.aesirxHoldBackJS.map((item: any) => ({
+          domain: null,
+          blocking_permanent: 'off',
+          ...item,
+        }))
+      : []),
   ];
   const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
   const listCategory = blockJSDomains?.reduce(
@@ -439,7 +442,7 @@ const postDisabledBlockDomains = async (endpoint: any) => {
   try {
     blockJSDomains &&
       (await axios.post(`${endpoint}/disabled-block-domains`, {
-        disabled_block_domains: window['disabledBlockJSDomains'] ?? '',
+        disabled_block_domains: window['disabledBlockJSDomains'] ?? [],
         list_category: listCategory,
         uuid: currentUuid,
       }));

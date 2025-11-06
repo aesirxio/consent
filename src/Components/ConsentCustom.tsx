@@ -867,7 +867,28 @@ const ConsentComponentCustomApp = (props: any) => {
     }
   }, [showExpandRevoke]);
 
-  console.log('level', uuid, level, web3ID, account, loading);
+  useEffect(() => {
+    if (
+      sessionStorage.getItem('aesirx-analytics-revoke') &&
+      sessionStorage.getItem('aesirx-analytics-revoke') !== '0'
+    ) {
+      if (window.aesirxHoldBackJS?.length && typeof disabledBlockDomains !== 'undefined') {
+        const arrayDisabledBlockDomains = disabledBlockDomains
+          ? Array.isArray(disabledBlockDomains)
+            ? disabledBlockDomains
+            : JSON.parse(disabledBlockDomains)
+          : [];
+        const disabledCategories = arrayDisabledBlockDomains?.map((item: any) => item.name) || [];
+        window.aesirxHoldBackJS.forEach((item: any) => {
+          if (!disabledCategories.includes(item.name)) {
+            if (typeof item.script === 'function') {
+              item.script();
+            }
+          }
+        });
+      }
+    }
+  }, [disabledBlockDomains]);
 
   const ConsentLevelUprade = ({ level, levelname, image, content, isUpgrade = false }: any) => {
     return (
@@ -1606,12 +1627,14 @@ const ConsentAction = ({
   t,
 }: any) => {
   const blockJSDomains = [
-    ...window?.aesirxBlockJSDomains,
-    ...window?.aesirxHoldBackJS.map((item) => ({
-      domain: null,
-      blocking_permanent: 'off',
-      ...item,
-    })),
+    ...(Array.isArray(window?.aesirxBlockJSDomains) ? window.aesirxBlockJSDomains : []),
+    ...(Array.isArray(window?.aesirxHoldBackJS)
+      ? window.aesirxHoldBackJS.map((item: any) => ({
+          domain: null,
+          blocking_permanent: 'off',
+          ...item,
+        }))
+      : []),
   ];
   const isCategory = blockJSDomains?.some((item: any) =>
     Object.prototype.hasOwnProperty.call(item, 'category')

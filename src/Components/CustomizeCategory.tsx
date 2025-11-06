@@ -18,12 +18,14 @@ const CustomizeCategory = ({
   const { t } = useTranslation();
 
   const blockJSDomains = [
-    ...window?.aesirxBlockJSDomains,
-    ...window?.aesirxHoldBackJS.map((item) => ({
-      domain: null,
-      blocking_permanent: 'off',
-      ...item,
-    })),
+    ...(Array.isArray(window?.aesirxBlockJSDomains) ? window.aesirxBlockJSDomains : []),
+    ...(Array.isArray(window?.aesirxHoldBackJS)
+      ? window.aesirxHoldBackJS.map((item: any) => ({
+          domain: null,
+          blocking_permanent: 'off',
+          ...item,
+        }))
+      : []),
   ];
 
   const groupByCategory = blockJSDomains?.reduce((acc: any, item: any) => {
@@ -73,12 +75,13 @@ const CustomizeCategory = ({
       const dataBlockDomains = window['disabledBlockJSDomains']?.length
         ? window['disabledBlockJSDomains']
         : disabledBlockDomains
-          ? JSON.parse(disabledBlockDomains)
+          ? Array.isArray(disabledBlockDomains)
+            ? disabledBlockDomains
+            : JSON.parse(disabledBlockDomains)
           : [];
       setDisabledItems(dataBlockDomains);
     }
   }, []);
-
   return (
     <Fragment>
       <ConsentHeader languageSwitcher={languageSwitcher} modeSwitcher={modeSwitcher} />
@@ -133,7 +136,9 @@ const CustomizeCategory = ({
                 }
                 const allCategoryItems = blockJSDomains?.filter((item) => item.category === key);
                 const isCategoryChecked = !allCategoryItems?.every((item) =>
-                  disabledItems?.some((disabled) => disabled.domain === item.domain)
+                  disabledItems?.some((disabled) =>
+                    disabled.domain ? disabled.domain === item.domain : disabled.name === item.name
+                  )
                 );
                 return (
                   <Accordion.Item eventKey={index?.toString()} key={index}>
@@ -170,8 +175,8 @@ const CustomizeCategory = ({
                     <p className="mb-0 fs-14 subtitle-mobile d-lg-none">{subTitle}</p>
                     <Accordion.Body>
                       {groupByCategory[key]?.map((el: any, index: number) => {
-                        const isDomainChecked = !disabledItems.some(
-                          (item) => item.domain === el.domain
+                        const isDomainChecked = !disabledItems.some((item) =>
+                          el.domain ? item.domain === el.domain : item.name === el.name
                         );
                         return (
                           <label
