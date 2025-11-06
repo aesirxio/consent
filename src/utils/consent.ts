@@ -439,16 +439,18 @@ const postDisabledBlockDomains = async (endpoint: any) => {
     []
   );
 
-  try {
-    blockJSDomains &&
-      (await axios.post(`${endpoint}/disabled-block-domains`, {
-        disabled_block_domains: window['disabledBlockJSDomains'] ?? [],
-        list_category: listCategory,
-        uuid: currentUuid,
-      }));
-  } catch (error) {
-    console.log('error', error);
-  }
+  setTimeout(async () => {
+    try {
+      blockJSDomains &&
+        (await axios.post(`${endpoint}/disabled-block-domains`, {
+          disabled_block_domains: window['disabledBlockJSDomains'] ?? [],
+          list_category: listCategory,
+          uuid: currentUuid,
+        }));
+    } catch (error) {
+      console.log('error', error);
+    }
+  }, 500);
 };
 
 export {

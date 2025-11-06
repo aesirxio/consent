@@ -301,7 +301,7 @@ const ConsentComponentCustomApp = (props: any) => {
                 gtagId,
                 gtmId
               );
-              postDisabledBlockDomains(endpoint);
+              await postDisabledBlockDomains(endpoint);
               sessionStorage.setItem('aesirx-analytics-uuid', uuid);
               sessionStorage.setItem('aesirx-analytics-allow', '1');
               sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
@@ -414,7 +414,7 @@ const ConsentComponentCustomApp = (props: any) => {
             gtagId,
             gtmId
           );
-          postDisabledBlockDomains(endpoint);
+          await postDisabledBlockDomains(endpoint);
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
           setToastLayout('');
         } else if (connector) {
@@ -492,7 +492,7 @@ const ConsentComponentCustomApp = (props: any) => {
             );
           }
         });
-        postDisabledBlockDomains(endpoint);
+        await postDisabledBlockDomains(endpoint);
       }
 
       if (flag && (account || level < 3)) {
@@ -571,7 +571,7 @@ const ConsentComponentCustomApp = (props: any) => {
           gtagId,
           gtmId
         );
-        postDisabledBlockDomains(endpoint);
+        await postDisabledBlockDomains(endpoint);
         setShow(false);
         handleRevoke(true, level);
         setToastLayout('');
@@ -630,7 +630,7 @@ const ConsentComponentCustomApp = (props: any) => {
             gtagId,
             gtmId
           );
-          postDisabledBlockDomains(endpoint);
+          await postDisabledBlockDomains(endpoint);
           setShow(false);
           handleRevoke(true, level);
           setToastLayout('');
