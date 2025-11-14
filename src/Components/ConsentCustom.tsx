@@ -29,9 +29,7 @@ import wallet_consent from '../Assets/wallet_consent.png';
 import wallet_shield_consent from '../Assets/wallet_shield_consent.png';
 
 import ContentLoader from 'react-content-loader';
-const SSOButton: any = React.lazy(() =>
-  import('aesirx-sso').then((module) => ({ default: module.SSOButton }))
-);
+import { SSOButton } from 'aesirx-sso';
 import {
   MAINNET,
   WithWalletConnector,
@@ -1187,8 +1185,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                   <Suspense fallback={<div>Loading...</div>}>
                                     <SSOButton
                                       className="d-none revokeLogin"
-                                      text={<>Login Revoke</>}
-                                      ssoState={'noscopes'}
+                                      text={'Login Revoke'}
                                       onGetData={onGetData}
                                     />
                                   </Suspense>
