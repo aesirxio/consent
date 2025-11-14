@@ -3442,10 +3442,10 @@ aesirx-lib@^2.1.2:
     react-secure-storage "^1.3.2"
     ws "^8.18.0"
 
-aesirx-sso@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/aesirx-sso/-/aesirx-sso-1.5.1.tgz#c61bd7d684f2c413ca7ba1854ccd1dbc86528e30"
-  integrity sha512-tifW6CBODvNsW51uhcZUskxRfQdNCtNGKGfCGO3DU+/C1snsibmXq6kJdJHfs8VJdyr2iw+7ga6vbLKYGIzucw==
+aesirx-sso@^1.6.4:
+  version "1.6.4"
+  resolved "https://registry.yarnpkg.com/aesirx-sso/-/aesirx-sso-1.6.4.tgz#52bb5c07307376f5d3d4e5bf3a8e2540240a911b"
+  integrity sha512-zDqzqPgUYRncoAqOsvSG1PLdKhqDruP+QJCaSUoS6YGJlk8UphwhHZ4ZXYFY3gQeGKjQAkZ8R8B3CZlsBF2ajw==
   dependencies:
     "@concordium/browser-wallet-api-helpers" "3.0.1"
     "@concordium/react-components" "0.6.1"
