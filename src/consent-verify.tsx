@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { createRoot } from 'react-dom/client';
 import ConsentContextProvider from './utils/ConsentContextProvider';
-import ConsentComponentCustom from './Components/ConsentCustom';
+import ConsentComponentCustomVerify from './Components/ConsentCustomVerify';
 import OptinConsent from './Components/OptInConsent';
 import { Buffer } from 'buffer';
 import { appLanguages } from './translations';
@@ -100,7 +100,7 @@ const ConsentPopup = () => {
   }, []);
   return (
     <ConsentContextProvider>
-      <ConsentComponentCustom
+      <ConsentComponentCustomVerify
         endpoint={window['aesirx1stparty'] ?? ''}
         networkEnv={window['concordiumNetwork'] ?? ''}
         aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
