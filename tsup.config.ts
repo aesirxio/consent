@@ -27,7 +27,7 @@ export default defineConfig([
     },
   },
   {
-    entry: ['src/consent.tsx'],
+    entry: ['src/consent.tsx', 'src/consent-verify.tsx', 'src/consent-simple.tsx'],
     minify: true,
     format: ['iife'],
     platform: 'browser',
