@@ -12,7 +12,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { appLanguages } from '../translations';
 import { AesirXI18nextProvider } from './I18nextProvider';
 
 interface Props {
@@ -52,7 +51,7 @@ const ConsentContextProvider: React.FC<Props> = ({ children }) => {
         forceUpdate: forceUpdate,
       }}
     >
-      <AesirXI18nextProvider appLanguages={appLanguages}>{children}</AesirXI18nextProvider>
+      <AesirXI18nextProvider>{children}</AesirXI18nextProvider>
     </ConsentContext.Provider>
   );
 };

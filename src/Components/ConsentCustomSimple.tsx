@@ -9,7 +9,6 @@ import {
 } from '../utils/consent';
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import '../styles/style.scss';
 import { TermsComponent } from './Terms';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -24,8 +23,8 @@ import { useTranslation } from 'react-i18next';
 import { trackEvent, AnalyticsContext, startTracker } from 'aesirx-analytics';
 import ConsentHeader from './ConsentHeader';
 import { CustomizeCategory } from './CustomizeCategory';
-import { useWeb3Modal } from '@web3modal/react';
 import useConsentStatusSimple from '../Hooks/useConsentStatusSimple';
+import '../styles/style.scss';
 declare global {
   interface Window {
     dataLayer: any;
@@ -80,10 +79,9 @@ const ConsentCustomSimple = ({
 const ConsentComponentCustomWrapper = (props: any) => {
   const [uuid, level, show, setShow, web3ID, setWeb3ID, handleLevel, showRevoke, handleRevoke] =
     useConsentStatusSimple(props?.endpoint, props?.layout, props);
-  const { isOpen } = useWeb3Modal();
 
   return (
-    <div className={`aesirxconsent ${isOpen ? 'web3modal-open' : ''}`}>
+    <div className={`aesirxconsent`}>
       <ConsentComponentCustomApp
         {...props}
         endpoint={props?.endpoint}

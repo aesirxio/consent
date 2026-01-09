@@ -31,7 +31,7 @@ export default defineConfig([
     minify: true,
     format: ['iife'],
     platform: 'browser',
-    esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'style' })],
+    esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'css', cssImports: true })],
     esbuildOptions(options) {
       if (env === 'production') {
         options.drop = ['console'];

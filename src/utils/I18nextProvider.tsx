@@ -35,6 +35,7 @@ import common_hi from '../translations/hi/common.json';
 import common_zh from '../translations/zh/common.json';
 import common_sr from '../translations/sr/common.json';
 import common_tl from '../translations/tl/common.json';
+import { appLanguages } from '../translations';
 
 const defaultLanguages: any = {
   en: {
@@ -179,13 +180,7 @@ const I18NextContext = createContext<IContext>({
   listLanguages: [],
 });
 
-const AesirXI18nextProvider = ({
-  children,
-  appLanguages,
-}: {
-  children: React.ReactNode;
-  appLanguages: any;
-}) => {
+const AesirXI18nextProvider = ({ children }: { children: React.ReactNode }) => {
   const listLanguages: any = [];
 
   if (!i18n.isInitialized) {

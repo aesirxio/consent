@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 import { createRoot } from 'react-dom/client';
-import ConsentContextProvider from './utils/ConsentContextProvider';
 import ConsentComponentCustomSimple from './Components/ConsentCustomSimple';
 import OptinConsent from './Components/OptInConsent';
 import { Buffer } from 'buffer';
-import { appLanguages } from './translations';
-import { AesirXI18nextProvider } from './utils/I18nextProvider';
 import { getConsentTemplate } from './utils/consent';
 import { AnalyticsContextProvider } from 'aesirx-analytics';
 import { blockScripts } from './utils';
+import ConsentContextProviderIsolate from './utils/ConsentContextProviderIsolate';
 
 window['aesirxBuffer'] = Buffer;
 declare global {
@@ -99,7 +97,7 @@ const ConsentPopup = () => {
     init();
   }, []);
   return (
-    <ConsentContextProvider>
+    <ConsentContextProviderIsolate>
       <ConsentComponentCustomSimple
         endpoint={window['aesirx1stparty'] ?? ''}
         networkEnv={window['concordiumNetwork'] ?? ''}
@@ -115,7 +113,7 @@ const ConsentPopup = () => {
         customRejectText={customRejectText}
         disabledBlockDomains={disabledBlockDomains}
       />
-    </ConsentContextProvider>
+    </ConsentContextProviderIsolate>
   );
 };
 let rootElement: any = {};
@@ -152,11 +150,7 @@ const AesirConsent = () => {
             ) : (
               <></>
             )}
-            {window['optInConsentData'] && (
-              <AesirXI18nextProvider appLanguages={appLanguages}>
-                <OptinConsent />
-              </AesirXI18nextProvider>
-            )}
+            {window['optInConsentData'] && <OptinConsent />}
           </>
         );
       }
