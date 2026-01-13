@@ -4,6 +4,32 @@ import inlineImage from 'esbuild-plugin-inline-image';
 
 const env = process.env.NODE_ENV;
 
+const externalLibs = [
+  'react',
+  'react-dom',
+  'axios',
+  'aesirx-analytics',
+  'bowser',
+  'i18next',
+  'i18next-browser-languagedetector',
+  'murmurhash-js/murmurhash3_gc',
+  'react-bootstrap',
+  'react-select',
+  'react-toastify',
+  'react-content-loader',
+  'buffer',
+  '@concordium/react-components',
+  '@concordium/web-sdk',
+  '@concordium/browser-wallet-api-helpers',
+
+  'query-string',
+  'aesirx-sso',
+  'react-device-detect',
+  'wagmi',
+  '@web3modal/ethereum',
+  '@web3modal/react',
+  'ethers',
+];
 export default defineConfig([
   {
     entry: ['src/index.ts'],
@@ -14,7 +40,7 @@ export default defineConfig([
     loader: {
       '.js': 'jsx',
     },
-    esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'style' })],
+    esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'style', quietDeps: true })],
     esbuildOptions(options) {
       if (env === 'production') {
         options.drop = ['console'];
@@ -27,20 +53,78 @@ export default defineConfig([
     },
   },
   {
-    entry: ['src/consent.tsx', 'src/consent-verify.tsx', 'src/consent-simple.tsx'],
-    minify: true,
+    entry: ['src/consent-loader.ts'],
     format: ['iife'],
+    minify: true,
+    sourcemap: false,
+    globalName: 'AesirxConsent',
+    outDir: 'dist',
+    clean: true,
+  },
+  {
+    entry: ['src/consent-simple.tsx'],
+    format: ['esm'],
+    bundle: true,
+    splitting: true,
+    treeshake: true,
+    minify: true,
+    sourcemap: false,
     platform: 'browser',
-    esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'css', cssImports: true })],
+    outDir: 'dist/consent-simple-chunks',
+    external: [],
+    noExternal: externalLibs,
+    esbuildPlugins: [
+      inlineImage({ limit: -1 }),
+      sassPlugin({ type: 'css', cssImports: true, quietDeps: true }),
+    ],
     esbuildOptions(options) {
       if (env === 'production') {
         options.drop = ['console'];
       }
     },
-    outExtension() {
-      return {
-        js: `.js`,
-      };
+  },
+  {
+    entry: ['src/consent-verify.tsx'],
+    format: ['esm'],
+    bundle: true,
+    splitting: true,
+    treeshake: true,
+    minify: true,
+    sourcemap: false,
+    platform: 'browser',
+    outDir: 'dist/consent-verify-chunks',
+    external: [],
+    noExternal: externalLibs,
+    esbuildPlugins: [
+      inlineImage({ limit: -1 }),
+      sassPlugin({ type: 'css', cssImports: true, quietDeps: true }),
+    ],
+    esbuildOptions(options) {
+      if (env === 'production') {
+        options.drop = ['console'];
+      }
+    },
+  },
+  {
+    entry: ['src/consent.tsx'],
+    format: ['esm'],
+    bundle: true,
+    splitting: true,
+    treeshake: true,
+    minify: true,
+    sourcemap: false,
+    platform: 'browser',
+    outDir: 'dist/consent-chunks',
+    external: [],
+    noExternal: externalLibs,
+    esbuildPlugins: [
+      inlineImage({ limit: -1 }),
+      sassPlugin({ type: 'css', cssImports: true, quietDeps: true }),
+    ],
+    esbuildOptions(options) {
+      if (env === 'production') {
+        options.drop = ['console'];
+      }
     },
   },
 ]);

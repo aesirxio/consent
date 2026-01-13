@@ -28,7 +28,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: |
-            dist/consent.js,
-            dist/consent-verify.js,
-            dist/consent-simple.js
+            dist/consent-loader.global.js,
+            dist/consent-chunks/*,
+            dist/consent-verify-chunks/*,
+            dist/consent-simple-chunks/*
           generateReleaseNotes: true

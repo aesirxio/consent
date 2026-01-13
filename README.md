@@ -10,22 +10,24 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 
 #### Usage in SSR site:
 
-1. Download analytics.js from [https://github.com/aesirxio/consent/releases/latest](https://github.com/aesirxio/consent/releases/latest)
-1. copy `consent.js` to your project
-1. Add script to `<head>`:
+1. Download consent-loader.global.js and consent-simple-chunks from [https://github.com/aesirxio/consent/releases/latest](https://github.com/aesirxio/consent/releases/latest)
+2. copy `consent-loader.global.js` and `consent-simple-chunks` to your project
+3. Add script to `<head>`:
 
 ```
 <script>
   window.aesirx1stparty = "https://example.com"
-  window.aesirxClientID="[REPLACE THIS WITH THE PROVIDED CLIENT_ID]"
-  window.aesirxClientSecret="[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]"
 </script>
-<script async defer src="YOUR_PROJECT_PATH/consent.js"></script>
+<script async defer src="YOUR_PROJECT_PATH/consent-loader.global.js"></script>
+<script id="aesirx-consent-loader-js-before">
+  window.aesirxConsentConfig = {
+    uiEntry: "YOUR_PROJECT_PATH/consent-simple-chunks/consent-simple.js"
+  };
+</script>
+<script async defer src="YOUR_PROJECT_PATH/consent-loader.global.js"></script>
 ```
 
 1. (`https://example.com` is the link to your 1st party server which must be installed)
-2. `CLIENT_ID` replace this with the provided `CLIENT_ID` from https://dapp.shield.aesirx.io/
-3. `CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` fromhttps://dapp.shield.aesirx.io/
 
 ##### Disable Consent:
 ```

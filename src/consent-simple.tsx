@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import ConsentComponentCustomSimple from './Components/ConsentCustomSimple';
-import OptinConsent from './Components/OptInConsent';
 import { Buffer } from 'buffer';
 import { getConsentTemplate } from './utils/consent';
-import { AnalyticsContextProvider } from 'aesirx-analytics';
 import { blockScripts } from './utils';
 import ConsentContextProviderIsolate from './utils/ConsentContextProviderIsolate';
+
+const ConsentComponentCustomSimple = lazy(() => import('./Components/ConsentCustomSimple'));
+
+const OptinConsent = lazy(() => import('./Components/OptInConsent'));
+
+const AnalyticsProvider = lazy(() =>
+  import('aesirx-analytics').then((m) => ({
+    default: m.AnalyticsContextProvider,
+  }))
+);
 
 window['aesirxBuffer'] = Buffer;
 declare global {
@@ -98,21 +104,23 @@ const ConsentPopup = () => {
   }, []);
   return (
     <ConsentContextProviderIsolate>
-      <ConsentComponentCustomSimple
-        endpoint={window['aesirx1stparty'] ?? ''}
-        networkEnv={window['concordiumNetwork'] ?? ''}
-        aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
-        languageSwitcher={window['languageSwitcher'] ?? ''}
-        modeSwitcher={window['modeSwitcher'] ?? ''}
-        gtagId={gtagId}
-        gtmId={gtmId}
-        layout={layout}
-        customConsentText={customConsentText}
-        customCookieText={customCookieText}
-        customDetailText={customDetailText}
-        customRejectText={customRejectText}
-        disabledBlockDomains={disabledBlockDomains}
-      />
+      <Suspense fallback={null}>
+        <ConsentComponentCustomSimple
+          endpoint={window['aesirx1stparty'] ?? ''}
+          networkEnv={window['concordiumNetwork'] ?? ''}
+          aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
+          languageSwitcher={window['languageSwitcher'] ?? ''}
+          modeSwitcher={window['modeSwitcher'] ?? ''}
+          gtagId={gtagId}
+          gtmId={gtmId}
+          layout={layout}
+          customConsentText={customConsentText}
+          customCookieText={customCookieText}
+          customDetailText={customDetailText}
+          customRejectText={customRejectText}
+          disabledBlockDomains={disabledBlockDomains}
+        />
+      </Suspense>
     </ConsentContextProviderIsolate>
   );
 };
@@ -140,17 +148,21 @@ const AesirConsent = () => {
             {!isOptInReplaceAnalytics ? (
               <>
                 {window['aesirx-analytics-enable'] === 'true' ? (
-                  <AnalyticsContextProvider>
+                  <AnalyticsProvider>
                     <ConsentPopup />
-                  </AnalyticsContextProvider>
+                  </AnalyticsProvider>
                 ) : (
                   <ConsentPopup />
-                )}{' '}
+                )}
               </>
             ) : (
               <></>
             )}
-            {window['optInConsentData'] && <OptinConsent />}
+            {window['optInConsentData'] && (
+              <Suspense fallback={null}>
+                <OptinConsent />
+              </Suspense>
+            )}
           </>
         );
       }
