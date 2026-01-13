@@ -10,8 +10,8 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 
 #### Usage in SSR site:
 
-1. Download consent-loader.global.js and consent-simple-chunks from [https://github.com/aesirxio/consent/releases/latest](https://github.com/aesirxio/consent/releases/latest)
-2. copy `consent-loader.global.js` and `consent-simple-chunks` to your project
+1. Download consent-loader.global.js and consent-simple-chunks.zip from [https://github.com/aesirxio/consent/releases/latest](https://github.com/aesirxio/consent/releases/latest)
+2. copy `consent-loader.global.js` and `consent-simple-chunks.zip` to your project then unzip it.
 3. Add script to `<head>`:
 
 ```

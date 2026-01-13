@@ -23,13 +23,19 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           strategy: upgrade
           ignore-scripts: false
+      - name: Package release artifacts
+        run: |
+          cd dist
+          zip -r consent-chunks.zip consent-chunks
+          zip -r consent-verify-chunks.zip consent-verify-chunks
+          zip -r consent-simple-chunks.zip consent-simple-chunks
 
       - name: Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: |
-            dist/consent-loader.global.js,
-            dist/consent-chunks/*,
-            dist/consent-verify-chunks/*,
-            dist/consent-simple-chunks/*
+            dist/consent-loader.global.js
+            dist/consent-chunks.zip
+            dist/consent-verify-chunks.zip
+            dist/consent-simple-chunks.zip
           generateReleaseNotes: true
