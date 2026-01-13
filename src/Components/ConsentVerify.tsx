@@ -51,9 +51,14 @@ const ConsentVerify = ({
       } else if (loading === 'verifying_age_country' || loading === 'verifying_sign_proof') {
         setLoading('done');
         if (!isMobile) {
-          toast.error(t('txt_browser_wallet_extension_not_detected'), {
-            toastId: 'extension_not_detected',
-          });
+          toast.error(
+            (window as any)?.aesirx_analytics_translate
+              ?.txt_browser_wallet_extension_not_detected ??
+              t('txt_browser_wallet_extension_not_detected'),
+            {
+              toastId: 'extension_not_detected',
+            }
+          );
         }
         handleClose();
       }
@@ -83,7 +88,10 @@ const ConsentVerify = ({
       ]);
 
       if (!data?.response_data || !statement) {
-        toast.error(t('txt_failed_to_verify_age_and_country'));
+        toast.error(
+          (window as any)?.aesirx_analytics_translate?.txt_failed_to_verify_age_and_country ??
+            t('txt_failed_to_verify_age_and_country')
+        );
         handleClose();
         return;
       }
@@ -103,7 +111,11 @@ const ConsentVerify = ({
       if (dob && birthDate) {
         const birthDateInt = parseInt(birthDate.replace(/-/g, ''), 10);
         if (birthDateInt < lower || birthDateInt > upper) {
-          toast.error(t('txt_your_age_does_not_fall_within_the_permitted_range'));
+          toast.error(
+            (window as any)?.aesirx_analytics_translate
+              ?.txt_your_age_does_not_fall_within_the_permitted_range ??
+              t('txt_your_age_does_not_fall_within_the_permitted_range')
+          );
           handleClose();
           return;
         }
@@ -119,7 +131,10 @@ const ConsentVerify = ({
           (disallowCountries?.length > 0 && !disallowCountries.includes(issuingCountry));
 
         if (!isAllowed) {
-          toast.error(t('txt_issuing_country_is_not_allowed'));
+          toast.error(
+            (window as any)?.aesirx_analytics_translate?.txt_issuing_country_is_not_allowed ??
+              t('txt_issuing_country_is_not_allowed')
+          );
           handleClose();
           return;
         }
@@ -150,11 +165,15 @@ const ConsentVerify = ({
             <h3 className="fs-3 fw-semibold text-primary ms-3 my-0">
               {step === 1
                 ? window['ageCheck'] && window['countryCheck']
-                  ? t('txt_age_country_verification')
+                  ? ((window as any)?.aesirx_analytics_translate?.txt_age_country_verification ??
+                    t('txt_age_country_verification'))
                   : window['ageCheck']
-                    ? t('txt_age_verification')
-                    : t('txt_country_verification')
-                : t('txt_choose_a_verification_method')}
+                    ? ((window as any)?.aesirx_analytics_translate?.txt_age_verification ??
+                      t('txt_age_verification'))
+                    : ((window as any)?.aesirx_analytics_translate?.txt_country_verification ??
+                      t('txt_country_verification'))
+                : ((window as any)?.aesirx_analytics_translate?.txt_choose_a_verification_method ??
+                  t('txt_choose_a_verification_method'))}
             </h3>
           </div>
         </div>
@@ -166,8 +185,12 @@ const ConsentVerify = ({
               </span>
               <div className="ms-10px">
                 <div>
-                  {t('txt_you_must_be_at_least')} {window['minimumAge'] ?? 18}{' '}
-                  {t('txt_years_old_to_access_this_content')}
+                  {(window as any)?.aesirx_analytics_translate?.txt_you_must_be_at_least ??
+                    t('txt_you_must_be_at_least')}{' '}
+                  {window['minimumAge'] ?? 18}{' '}
+                  {(window as any)?.aesirx_analytics_translate
+                    ?.txt_years_old_to_access_this_content ??
+                    t('txt_years_old_to_access_this_content')}
                 </div>
               </div>
             </div>
@@ -178,8 +201,11 @@ const ConsentVerify = ({
                 </span>
                 <div className="ms-10px">
                   <div>
-                    {t('txt_access_is_limited_to_users_under')} {window['maximumAge']}{' '}
-                    {t('txt_years')}
+                    {(window as any)?.aesirx_analytics_translate
+                      ?.txt_access_is_limited_to_users_under ??
+                      t('txt_access_is_limited_to_users_under')}{' '}
+                    {window['maximumAge']}{' '}
+                    {(window as any)?.aesirx_analytics_translate?.txt_years ?? t('txt_years')}
                   </div>
                 </div>
               </div>
@@ -193,7 +219,9 @@ const ConsentVerify = ({
                 </span>
                 <div className="ms-10px">
                   <div>
-                    {t('txt_to_access_this_content_you_must_be_from')}{' '}
+                    {(window as any)?.aesirx_analytics_translate
+                      ?.txt_to_access_this_content_you_must_be_from ??
+                      t('txt_to_access_this_content_you_must_be_from')}{' '}
                     {window['allowedCountries']?.map((code: any) => allCountries[code]).join(', ')}.
                   </div>
                 </div>
@@ -208,7 +236,9 @@ const ConsentVerify = ({
                 </span>
                 <div className="ms-10px">
                   <div>
-                    {t('txt_access_is_excluded_to_users_from')}{' '}
+                    {(window as any)?.aesirx_analytics_translate
+                      ?.txt_access_is_excluded_to_users_from ??
+                      t('txt_access_is_excluded_to_users_from')}{' '}
                     {window['disallowedCountries']
                       ?.map((code: any) => allCountries[code])
                       .join(', ')}
@@ -225,13 +255,18 @@ const ConsentVerify = ({
               </span>
               <div className="ms-10px">
                 <div>
-                  {t('txt_to_comply_with_the_law_we_need_to_verify_your')}{' '}
+                  {(window as any)?.aesirx_analytics_translate
+                    ?.txt_to_comply_with_the_law_we_need_to_verify_your ??
+                    t('txt_to_comply_with_the_law_we_need_to_verify_your')}{' '}
                   {window['ageCheck'] && window['countryCheck']
-                    ? t('txt_age_country')
+                    ? ((window as any)?.aesirx_analytics_translate?.txt_age_country ??
+                      t('txt_age_country'))
                     : window['ageCheck']
-                      ? t('txt_age')
-                      : t('txt_country')}{' '}
-                  {t('txt_before_granting_you_access')}
+                      ? ((window as any)?.aesirx_analytics_translate?.txt_age ?? t('txt_age'))
+                      : ((window as any)?.aesirx_analytics_translate?.txt_country ??
+                        t('txt_country'))}{' '}
+                  {(window as any)?.aesirx_analytics_translate?.txt_before_granting_you_access ??
+                    t('txt_before_granting_you_access')}
                 </div>
               </div>
             </div>
@@ -240,7 +275,10 @@ const ConsentVerify = ({
                 <img src={check_circle} width={'14px'} height={'15px'} alt="Check Icon" />
               </span>
               <div className="ms-10px">
-                <div>{t('txt_verification_is_done')}</div>
+                <div>
+                  {(window as any)?.aesirx_analytics_translate?.txt_verification_is_done ??
+                    t('txt_verification_is_done')}
+                </div>
               </div>
             </div>
           </div>
@@ -259,26 +297,43 @@ const ConsentVerify = ({
                   </div>
                 )}
                 <p className="text-sm text-gray-500 text-center max-w-sm mt-4">
-                  {isMobile ? t('txt_please_accept_the_request') : t('txt_scan_this_qr')}
+                  {isMobile
+                    ? ((window as any)?.aesirx_analytics_translate?.txt_please_accept_the_request ??
+                      t('txt_please_accept_the_request'))
+                    : ((window as any)?.aesirx_analytics_translate?.txt_scan_this_qr ??
+                      t('txt_scan_this_qr'))}
                 </p>
               </div>
             ) : (
               <div className="consent-verify-modal-choose p-2 p-lg-4">
-                <div className="fw-semibold mb-1">{t('txt_choose_your_wallet')}</div>
-                <div className="fs-14 lh-sm fst-italic mb-1">{t('txt_select_wallet')}</div>
-                <div className="fs-14 lh-sm fst-italic mb-1">{t('txt_privacy_note')}</div>
+                <div className="fw-semibold mb-1">
+                  {(window as any)?.aesirx_analytics_translate?.txt_choose_your_wallet ??
+                    t('txt_choose_your_wallet')}
+                </div>
+                <div className="fs-14 lh-sm fst-italic mb-1">
+                  {(window as any)?.aesirx_analytics_translate?.txt_select_wallet ??
+                    t('txt_select_wallet')}
+                </div>
+                <div className="fs-14 lh-sm fst-italic mb-1">
+                  {(window as any)?.aesirx_analytics_translate?.txt_privacy_note ??
+                    t('txt_privacy_note')}
+                </div>
                 <ul className="ms-2 mb-3 w-lg-90">
                   <li className="fs-14 lh-sm fst-italic ms-2">
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: t('txt_privacy_note_1'),
+                        __html:
+                          (window as any)?.aesirx_analytics_translate?.txt_privacy_note_1 ??
+                          t('txt_privacy_note_1'),
                       }}
                     />
                   </li>
                   <li className="fs-14 lh-sm fst-italic ms-2">
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: t('txt_privacy_note_2'),
+                        __html:
+                          (window as any)?.aesirx_analytics_translate?.txt_privacy_note_2 ??
+                          t('txt_privacy_note_2'),
                       }}
                     />
                   </li>
@@ -343,21 +398,31 @@ const ConsentVerify = ({
                         alt="Other Wallet"
                       />
                     </div>
-                    <div>{t('txt_other_methods_coming_soon')}</div>
+                    <div>
+                      {(window as any)?.aesirx_analytics_translate?.txt_other_methods_coming_soon ??
+                        t('txt_other_methods_coming_soon')}
+                    </div>
                   </label>
                 </Form>
                 <div className="my-2 my-lg-3">
-                  <span>{t('txt_dont_have_a_digital_wallet')}</span>
+                  <span>
+                    {(window as any)?.aesirx_analytics_translate?.txt_dont_have_a_digital_wallet ??
+                      t('txt_dont_have_a_digital_wallet')}
+                  </span>
                   <a
                     href="https://docs.concordium.com/en/mainnet/docs/browser-wallet/setup-browser-wallet.html"
                     target="_blank"
                     rel="noreferrer"
                     className="text-success fw-semibold ms-1 text-decoration-none"
                   >
-                    {t('txt_create_concordium_id')}
+                    {(window as any)?.aesirx_analytics_translate?.txt_create_concordium_id ??
+                      t('txt_create_concordium_id')}
                   </a>
                 </div>
-                <div className="fs-14 lh-sm fst-italic">{t('txt_register_with_your_passport')}</div>
+                <div className="fs-14 lh-sm fst-italic">
+                  {(window as any)?.aesirx_analytics_translate?.txt_register_with_your_passport ??
+                    t('txt_register_with_your_passport')}
+                </div>
               </div>
             )}
           </>
@@ -394,14 +459,22 @@ const ConsentVerify = ({
                         if (isChrome) {
                           if (isMobile && !isAndroid) {
                             handleClose();
-                            toast.error(t('txt_this_feature_is_only_available_in_android_device'));
+                            toast.error(
+                              (window as any)?.aesirx_analytics_translate
+                                ?.txt_this_feature_is_only_available_in_android_device ??
+                                t('txt_this_feature_is_only_available_in_android_device')
+                            );
                             return;
                           }
                           setShowQR(true);
                           generateQR();
                         } else {
                           handleClose();
-                          toast.error(t('txt_this_feature_is_only_available_in_google_chrome'));
+                          toast.error(
+                            (window as any)?.aesirx_analytics_translate
+                              ?.txt_this_feature_is_only_available_in_google_chrome ??
+                              t('txt_this_feature_is_only_available_in_google_chrome')
+                          );
                         }
                       }
                     }
@@ -418,7 +491,11 @@ const ConsentVerify = ({
                   ) : (
                     <></>
                   )}
-                  {step === 1 ? t('txt_continue_to_verification') : t('txt_save_wallet')}
+                  {step === 1
+                    ? ((window as any)?.aesirx_analytics_translate?.txt_continue_to_verification ??
+                      t('txt_continue_to_verification'))
+                    : ((window as any)?.aesirx_analytics_translate?.txt_save_wallet ??
+                      t('txt_save_wallet'))}
                 </Button>
               ) : (
                 <></>

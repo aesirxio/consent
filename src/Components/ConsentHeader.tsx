@@ -93,7 +93,7 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher, layou
             }}
             isClearable={false}
             isSearchable={false}
-            placeholder={t('txt_select')}
+            placeholder={(window as any)?.aesirx_analytics_translate?.txt_select ?? t('txt_select')}
             options={listLanguages}
             className="shadow-none"
             onChange={(data: any) => {
@@ -119,7 +119,7 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher, layou
             }}
             isClearable={false}
             isSearchable={false}
-            placeholder={t('txt_select')}
+            placeholder={(window as any)?.aesirx_analytics_translate?.txt_select ?? t('txt_select')}
             options={listMode}
             className="shadow-none"
             onChange={(data: any) => {
