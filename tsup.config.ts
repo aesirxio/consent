@@ -1,8 +1,67 @@
 import { defineConfig } from 'tsup';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import inlineImage from 'esbuild-plugin-inline-image';
+import type { Options } from 'tsup';
 
 const env = process.env.NODE_ENV;
+const languages = [
+  'ar',
+  'en',
+  'dk',
+  'vi',
+  'th',
+  'es',
+  'fr',
+  'nl',
+  'cs',
+  'de',
+  'el',
+  'fi',
+  'he',
+  'hu',
+  'id',
+  'it',
+  'ja',
+  'ko',
+  'ms',
+  'no',
+  'pl',
+  'pt',
+  'ro',
+  'se',
+  'tr',
+  'bg',
+  'sk',
+  'ua',
+  'hr',
+  'hi',
+  'zh',
+  'sr',
+  'tl',
+];
+const translationBuilds = languages.map(
+  (lang) =>
+    ({
+      entry: {
+        [lang]: `src/translations/${lang}/common.json`,
+      },
+      format: ['iife'],
+      platform: 'browser',
+      bundle: false,
+      splitting: false,
+      treeshake: false,
+      minify: false,
+      sourcemap: false,
+      globalName: 'aesirx_analytics_translate',
+      outDir: 'dist/translations',
+      loader: {
+        '.json': 'json',
+      },
+      outExtension() {
+        return { js: '.js' };
+      },
+    }) satisfies Options
+);
 
 const externalLibs = [
   'react',
@@ -21,7 +80,6 @@ const externalLibs = [
   '@concordium/react-components',
   '@concordium/web-sdk',
   '@concordium/browser-wallet-api-helpers',
-
   'query-string',
   'aesirx-sso',
   'react-device-detect',
@@ -127,4 +185,5 @@ export default defineConfig([
       }
     },
   },
+  ...translationBuilds,
 ]);

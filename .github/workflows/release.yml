@@ -29,6 +29,7 @@ jobs:
           zip -r consent-chunks.zip consent-chunks
           zip -r consent-verify-chunks.zip consent-verify-chunks
           zip -r consent-simple-chunks.zip consent-simple-chunks
+          zip -r translations.zip translations
 
       - name: Release
         uses: ncipollo/release-action@v1
@@ -38,4 +39,5 @@ jobs:
             dist/consent-chunks.zip
             dist/consent-verify-chunks.zip
             dist/consent-simple-chunks.zip
+            dist/translations.zip
           generateReleaseNotes: true
