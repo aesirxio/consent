@@ -10,21 +10,21 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 
 #### Usage in SSR site:
 
-1. Download consent-loader.global.js and consent-simple-chunks.zip from [https://github.com/aesirxio/consent/releases/latest](https://github.com/aesirxio/consent/releases/latest)
-2. copy `consent-loader.global.js` and `consent-simple-chunks.zip` to your project then unzip it.
+1. Download `consent-loader.global.js`, `consent-simple-chunks.zip`, `translations.zip` from [https://github.com/aesirxio/consent/releases/latest](https://github.com/aesirxio/consent/releases/latest)
+2. copy `consent-loader.global.js`, `consent-simple-chunks.zip`, `translations.zip` to your project then unzip it.
 3. Add script to `<head>`:
 
 ```
 <script>
   window.aesirx1stparty = "https://example.com"
 </script>
+<script src="YOUR_PROJECT_PATH/translations/en.js"></script>
 <script async defer src="YOUR_PROJECT_PATH/consent-loader.global.js"></script>
 <script id="aesirx-consent-loader-js-before">
   window.aesirxConsentConfig = {
     uiEntry: "YOUR_PROJECT_PATH/consent-simple-chunks/consent-simple.js"
   };
 </script>
-<script async defer src="YOUR_PROJECT_PATH/consent-loader.global.js"></script>
 ```
 
 1. (`https://example.com` is the link to your 1st party server which must be installed)
