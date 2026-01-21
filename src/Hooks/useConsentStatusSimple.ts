@@ -61,7 +61,7 @@ const useConsentStatusSimple = (endpoint?: string, layout?: string, props?: any)
         if (consentList?.length === 0) {
           if (isConsentParams) {
             setShow(false);
-            handleRevoke(true, '0');
+            handleRevoke(true, '0', true);
           } else {
             setShow(true);
           }
@@ -121,10 +121,10 @@ const useConsentStatusSimple = (endpoint?: string, layout?: string, props?: any)
     [level, layout]
   );
 
-  const handleRevoke = (status: boolean, level: string) => {
+  const handleRevoke = (status: boolean, level: string, isConsentParams = false) => {
     sessionStorage.setItem('aesirx-analytics-revoke', level ? level : '0');
     setShowRevoke(status);
-    if (level && level !== '0') {
+    if ((level && level !== '0') || isConsentParams) {
       window.funcAfterConsent && window.funcAfterConsent();
       window.configBlockJS && unBlockScripts((props as any)?.disabledBlockDomains);
       if (
