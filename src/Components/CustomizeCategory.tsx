@@ -60,14 +60,25 @@ const CustomizeCategory = ({
     });
   };
   const handleCheckCustomize = (category: string, el: any) => {
-    setDisabledItems((prev) => {
-      const isDisabled = prev.some((item) => item.domain === el.domain);
-      if (isDisabled) {
-        return prev.filter((item) => item.domain !== el.domain);
-      } else {
-        return [...prev, el];
-      }
-    });
+    if (el?.domain) {
+      setDisabledItems((prev) => {
+        const isDisabled = prev.some((item) => item.domain === el.domain);
+        if (isDisabled) {
+          return prev.filter((item) => item.domain !== el.domain);
+        } else {
+          return [...prev, el];
+        }
+      });
+    } else {
+      setDisabledItems((prev) => {
+        const isDisabled = prev.some((item) => item.name === el.name);
+        if (isDisabled) {
+          return prev.filter((item) => item.name !== el.name);
+        } else {
+          return [...prev, el];
+        }
+      });
+    }
   };
 
   useEffect(() => {
@@ -178,6 +189,7 @@ const CustomizeCategory = ({
                         const isDomainChecked = !disabledItems.some((item) =>
                           el.domain ? item.domain === el.domain : item.name === el.name
                         );
+                        console.log('el', el);
                         return (
                           <label
                             className="fs-12 d-flex align-items-center justify-content-between mb-0"
