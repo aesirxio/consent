@@ -119,7 +119,11 @@ const agreeConsents = async (
     throw error;
   }
 };
-
+declare global {
+  interface Window {
+    dataLayer: any;
+  }
+}
 declare const dataLayer: any[];
 const consentModeGrant = async (isGtag: any, id: any) => {
   async function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -173,6 +177,48 @@ const loadGtmScript = async (gtmId: any) => {
   const firstScript = document.getElementsByTagName('script')[0];
   firstScript.parentNode.insertBefore(gtmScript, firstScript);
 };
+
+const loadConsentDefault = async (gtagId: any, gtmId: any) => {
+  window.dataLayer = window.dataLayer || [];
+  function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    p0: string, // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    p1: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    p2?: any
+  ) {
+    // eslint-disable-next-line prefer-rest-params
+    dataLayer.push(arguments);
+  }
+  if (
+    sessionStorage.getItem('consentGranted') === 'true' &&
+    ((gtmId &&
+      !document.querySelector(
+        `script[src="https://www.googletagmanager.com/gtm.js?id=${gtmId}"]`
+      )) ||
+      (gtagId &&
+        !document.querySelector(
+          `script[src="https://www.googletagmanager.com/gtag/js?id=${gtagId}"]`
+        )))
+  ) {
+    gtagId && (await loadGtagScript(gtagId));
+    gtmId && (await loadGtmScript(gtmId));
+    if (gtagId) {
+      gtag('js', new Date());
+      gtag('config', `${gtagId}`);
+    }
+    if (gtmId) {
+      dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    }
+  }
+  if (sessionStorage.getItem('consentGranted') === 'true') {
+    gtag('consent', 'update', {
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
+      ad_storage: 'granted',
+      analytics_storage: 'granted',
+    });
+  }
+};
+
 const getConsents = async (endpoint: string, uuid: string) => {
   try {
     const response = (await axios.get(`${endpoint}/visitor/v1/${uuid}?time=${Date.now()}`))?.data
@@ -466,6 +512,7 @@ export {
   verifySignature,
   loadGtagScript,
   loadGtmScript,
+  loadConsentDefault,
   getConsentTemplate,
   postDisabledBlockDomains,
 };

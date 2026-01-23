@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { ConsentContext } from '../utils/ConsentContextProvider';
 import { AnalyticsContext } from 'aesirx-analytics';
-import { getConsents } from '../utils/consent';
+import { getConsents, loadConsentDefault } from '../utils/consent';
 import { toast } from 'react-toastify';
 import {
   MAINNET,
@@ -90,6 +90,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: any) => {
         } else {
           if (gtagId || gtmId) {
             sessionStorage.setItem('consentGranted', 'true');
+            loadConsentDefault(gtagId, gtmId);
           }
           if (level > 1) {
             sessionStorage.setItem('aesirx-analytics-allow', '1');

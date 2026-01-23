@@ -419,6 +419,9 @@ body wcm-modal {
     & > div {
       width: calc(100% - 24px);
     }
+    & > p {
+      margin-top: 0;
+    }
   }
 
   .consent_level {

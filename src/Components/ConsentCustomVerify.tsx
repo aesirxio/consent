@@ -6,8 +6,7 @@ import {
   getNonce,
   getSignature,
   getWalletNonce,
-  loadGtagScript,
-  loadGtmScript,
+  loadConsentDefault,
   postDisabledBlockDomains,
   revokeConsents,
   verifySignature,
@@ -54,12 +53,6 @@ import { CustomizeCategory } from './CustomizeCategory';
 import { useWeb3Modal } from '@web3modal/react';
 import { ConsentVerify } from './ConsentVerify';
 import { isSixMonthsApart } from '../utils';
-declare global {
-  interface Window {
-    dataLayer: any;
-  }
-}
-declare const dataLayer: any[];
 
 const ConsentCustomVerify = ({
   endpoint,
@@ -872,46 +865,6 @@ const ConsentComponentCustomApp = (props: any) => {
         </div>
       </div>
     );
-  };
-  const loadConsentDefault = async (gtagId: any, gtmId: any) => {
-    window.dataLayer = window.dataLayer || [];
-    function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      p0: string, // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      p1: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      p2?: any
-    ) {
-      // eslint-disable-next-line prefer-rest-params
-      dataLayer.push(arguments);
-    }
-    if (
-      sessionStorage.getItem('consentGranted') === 'true' &&
-      ((gtmId &&
-        !document.querySelector(
-          `script[src="https://www.googletagmanager.com/gtm.js?id=${gtmId}"]`
-        )) ||
-        (gtagId &&
-          !document.querySelector(
-            `script[src="https://www.googletagmanager.com/gtag/js?id=${gtagId}"]`
-          )))
-    ) {
-      gtagId && (await loadGtagScript(gtagId));
-      gtmId && (await loadGtmScript(gtmId));
-      if (gtagId) {
-        gtag('js', new Date());
-        gtag('config', `${gtagId}`);
-      }
-      if (gtmId) {
-        dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-      }
-    }
-    if (sessionStorage.getItem('consentGranted') === 'true') {
-      gtag('consent', 'update', {
-        ad_user_data: 'granted',
-        ad_personalization: 'granted',
-        ad_storage: 'granted',
-        analytics_storage: 'granted',
-      });
-    }
   };
   const paymentRevoke = sessionStorage.getItem('aesirx-analytics-opt-payment');
   const optInRevokes = Object.keys(sessionStorage)
