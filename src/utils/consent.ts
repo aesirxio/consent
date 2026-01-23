@@ -14,7 +14,8 @@ const agreeConsents = async (
   jwt?: string,
   network = 'concordium',
   gtagId?: string,
-  gtmId?: string
+  gtmId?: string,
+  consentVersion?: string
 ) => {
   const url = `${endpoint}/consent/v1/level${level}/${uuid}`;
   const urlV2 = `${endpoint}/consent/v2/level${level}/${uuid}`;
@@ -61,6 +62,7 @@ const agreeConsents = async (
     device: device?.includes('iPhone') ? 'mobile' : device?.includes('iPad') ? 'tablet' : device,
     timezone: userTimeZone,
     ...(userOverrideLanguage ? { override_language: userOverrideLanguage } : {}),
+    ...(consentVersion ? { consent_version: consentVersion } : {}),
   };
   try {
     switch (level) {

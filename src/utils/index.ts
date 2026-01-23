@@ -33,7 +33,7 @@ const unBlockScripts = (disabledBlockDomains: any) => {
               }))
             : []),
         ];
-        const isPermanentBlocked = blockJSDomains.some(
+        const isPermanentBlocked = blockJSDomains?.some(
           (item: any) => node.src.includes(item.domain) && item.blocking_permanent === 'on'
         );
         if (isPermanentBlocked) return false;
@@ -184,6 +184,16 @@ const blockScripts = (mutations: any) => {
     }
   }
 };
+
+const isSixMonthsApart = (datetime, expiration) => {
+  const start = new Date(datetime.replace(' ', 'T'));
+  const end = new Date(expiration.replace(' ', 'T'));
+
+  const sixMonthsLater = new Date(start);
+  sixMonthsLater.setMonth(sixMonthsLater.getMonth() + 6);
+
+  return sixMonthsLater.getTime() === end.getTime();
+};
 export {
   cleanHostName,
   getYoutubeID,
@@ -194,4 +204,5 @@ export {
   addPlaceholder,
   shouldBlockProvider,
   blockScripts,
+  isSixMonthsApart,
 };

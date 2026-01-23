@@ -41,6 +41,7 @@ const ConsentPopup = () => {
   const [disabledBlockDomains, setDisabledBlockDomains] = useState(
     window['disabledBlockJSDomains']
   );
+  const [consentVersion, setConsentVersion] = useState(window['analyticsConsentVersion']);
   useEffect(() => {
     const init = async () => {
       const data: any = await getConsentTemplate(
@@ -100,6 +101,7 @@ const ConsentPopup = () => {
       setDisabledBlockDomains(
         data?.data?.disabled_block_domains ?? window['disabledBlockJSDomains']
       );
+      setConsentVersion(data?.data?.consent_version ?? window['analyticsConsentVersion']);
     };
     init();
   }, []);
@@ -120,6 +122,7 @@ const ConsentPopup = () => {
           customDetailText={customDetailText}
           customRejectText={customRejectText}
           disabledBlockDomains={disabledBlockDomains}
+          consentVersion={consentVersion}
         />
       </Suspense>
     </ConsentContextProviderIsolate>

@@ -15,6 +15,7 @@ const useConsentStatusSimple = (endpoint?: string, layout?: string, props?: any)
   const isUsingAnalytics = analyticsContext?.setUUID ? true : false;
   const params = new URLSearchParams(window.location.search);
   const isConsentParams = params.get('consent') === 'yes';
+  const { gtagId, gtmId } = props;
 
   const observerModal = () => {
     const callback = (mutationList: any) => {
@@ -67,6 +68,9 @@ const useConsentStatusSimple = (endpoint?: string, layout?: string, props?: any)
           }
           sessionStorage.removeItem('aesirx-analytics-allow');
         } else {
+          if (gtagId || gtmId) {
+            sessionStorage.setItem('consentGranted', 'true');
+          }
           if (level > 1) {
             sessionStorage.setItem('aesirx-analytics-allow', '1');
             handleRevoke(true, '1');

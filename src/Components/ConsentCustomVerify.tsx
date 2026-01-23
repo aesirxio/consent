@@ -53,6 +53,7 @@ import ConsentHeader from './ConsentHeader';
 import { CustomizeCategory } from './CustomizeCategory';
 import { useWeb3Modal } from '@web3modal/react';
 import { ConsentVerify } from './ConsentVerify';
+import { isSixMonthsApart } from '../utils';
 declare global {
   interface Window {
     dataLayer: any;
@@ -75,6 +76,7 @@ const ConsentCustomVerify = ({
   customDetailText,
   customRejectText,
   disabledBlockDomains,
+  consentVersion,
   languageSwitcher,
   modeSwitcher,
 }: any) => {
@@ -98,6 +100,7 @@ const ConsentCustomVerify = ({
                 customDetailText={customDetailText}
                 customRejectText={customRejectText}
                 disabledBlockDomains={disabledBlockDomains}
+                consentVersion={consentVersion}
                 languageSwitcher={languageSwitcher}
                 modeSwitcher={modeSwitcher}
               />
@@ -143,6 +146,7 @@ const ConsentComponentCustomWrapper = (props: any) => {
           customDetailText={props?.customDetailText}
           customRejectText={props?.customRejectText}
           disabledBlockDomains={props?.disabledBlockDomains}
+          consentVersion={props?.consentVersion}
           languageSwitcher={props?.languageSwitcher}
           modeSwitcher={props?.modeSwitcher}
           uuid={uuid}
@@ -175,6 +179,7 @@ const ConsentComponentCustomApp = (props: any) => {
     customDetailText,
     customRejectText,
     disabledBlockDomains,
+    consentVersion,
     languageSwitcher,
     modeSwitcher,
     activeConnectorType,
@@ -253,7 +258,8 @@ const ConsentComponentCustomApp = (props: any) => {
               const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
               const consentList = await getConsents(endpoint, uuid);
               consentList.forEach(async (consent: any) => {
-                !consent?.expiration &&
+                (!consent?.expiration ||
+                  isSixMonthsApart(consent?.datetime, consent?.expiration)) &&
                   (await revokeConsents(
                     endpoint,
                     levelRevoke,
@@ -296,7 +302,8 @@ const ConsentComponentCustomApp = (props: any) => {
                 jwt,
                 'metamask',
                 gtagId,
-                gtmId
+                gtmId,
+                consentVersion
               );
               await postDisabledBlockDomains(endpoint);
               sessionStorage.setItem('aesirx-analytics-uuid', uuid);
@@ -409,7 +416,8 @@ const ConsentComponentCustomApp = (props: any) => {
             jwt,
             'concordium',
             gtagId,
-            gtmId
+            gtmId,
+            consentVersion
           );
           await postDisabledBlockDomains(endpoint);
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
@@ -463,7 +471,8 @@ const ConsentComponentCustomApp = (props: any) => {
               null,
               null,
               gtagId,
-              gtmId
+              gtmId,
+              consentVersion
             );
           } else if (
             !!existConsent?.consent_uuid &&
@@ -485,7 +494,8 @@ const ConsentComponentCustomApp = (props: any) => {
               null,
               null,
               gtagId,
-              gtmId
+              gtmId,
+              consentVersion
             );
           }
         });
@@ -566,7 +576,8 @@ const ConsentComponentCustomApp = (props: any) => {
           response?.jwt,
           'concordium',
           gtagId,
-          gtmId
+          gtmId,
+          consentVersion
         );
         await postDisabledBlockDomains(endpoint);
         setShow(false);
@@ -628,7 +639,7 @@ const ConsentComponentCustomApp = (props: any) => {
             setLoading('saving');
             const consentList = await getConsents(endpoint, uuid);
             consentList.forEach(async (consent: any) => {
-              !consent?.expiration &&
+              (!consent?.expiration || isSixMonthsApart(consent?.datetime, consent?.expiration)) &&
                 (await revokeConsents(
                   endpoint,
                   levelRevoke,
@@ -664,7 +675,7 @@ const ConsentComponentCustomApp = (props: any) => {
             setLoading('saving');
             const consentList = await getConsents(endpoint, uuid);
             consentList.forEach(async (consent: any) => {
-              !consent?.expiration &&
+              (!consent?.expiration || isSixMonthsApart(consent?.datetime, consent?.expiration)) &&
                 (await revokeConsents(
                   endpoint,
                   levelRevoke,

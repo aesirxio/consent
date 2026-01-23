@@ -36,6 +36,7 @@ const CustomizeCategory = ({
       domain: item.domain,
       name: item.name,
       script: item.script,
+      category: item.category,
     });
     return acc;
   }, {});
@@ -51,7 +52,7 @@ const CustomizeCategory = ({
 
   const handleToggle = (category: string) => {
     setDisabledItems((prev) => {
-      const isDisabled = prev.some((item) => item.category === category);
+      const isDisabled = prev?.some((item) => item.category === category);
       if (isDisabled) {
         return prev.filter((item) => item.category !== category);
       } else {
@@ -62,7 +63,7 @@ const CustomizeCategory = ({
   const handleCheckCustomize = (category: string, el: any) => {
     if (el?.domain) {
       setDisabledItems((prev) => {
-        const isDisabled = prev.some((item) => item.domain === el.domain);
+        const isDisabled = prev?.some((item) => item.domain === el.domain);
         if (isDisabled) {
           return prev.filter((item) => item.domain !== el.domain);
         } else {
@@ -71,7 +72,7 @@ const CustomizeCategory = ({
       });
     } else {
       setDisabledItems((prev) => {
-        const isDisabled = prev.some((item) => item.name === el.name);
+        const isDisabled = prev?.some((item) => item.name === el.name);
         if (isDisabled) {
           return prev.filter((item) => item.name !== el.name);
         } else {
@@ -91,6 +92,11 @@ const CustomizeCategory = ({
             : JSON.parse(disabledBlockDomains)
           : [];
       setDisabledItems(dataBlockDomains);
+    } else {
+      const blockJSDomainsWithoutEssential = blockJSDomains.filter(
+        (item: any) => item.category !== 'essential'
+      );
+      setDisabledItems(blockJSDomainsWithoutEssential);
     }
   }, []);
   return (
@@ -186,10 +192,9 @@ const CustomizeCategory = ({
                     <p className="mb-0 fs-14 subtitle-mobile d-lg-none">{subTitle}</p>
                     <Accordion.Body>
                       {groupByCategory[key]?.map((el: any, index: number) => {
-                        const isDomainChecked = !disabledItems.some((item) =>
+                        const isDomainChecked = !disabledItems?.some((item) =>
                           el.domain ? item.domain === el.domain : item.name === el.name
                         );
-                        console.log('el', el);
                         return (
                           <label
                             className="fs-12 d-flex align-items-center justify-content-between mb-0"

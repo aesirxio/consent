@@ -25,6 +25,7 @@ import ConsentHeader from './ConsentHeader';
 import { CustomizeCategory } from './CustomizeCategory';
 import useConsentStatusSimple from '../Hooks/useConsentStatusSimple';
 import '../styles/style.scss';
+import { isSixMonthsApart } from '../utils';
 declare global {
   interface Window {
     dataLayer: any;
@@ -46,6 +47,7 @@ const ConsentCustomSimple = ({
   customDetailText,
   customRejectText,
   disabledBlockDomains,
+  consentVersion,
   languageSwitcher,
   modeSwitcher,
 }: any) => {
@@ -66,6 +68,7 @@ const ConsentCustomSimple = ({
             customDetailText={customDetailText}
             customRejectText={customRejectText}
             disabledBlockDomains={disabledBlockDomains}
+            consentVersion={consentVersion}
             languageSwitcher={languageSwitcher}
             modeSwitcher={modeSwitcher}
           />
@@ -96,6 +99,7 @@ const ConsentComponentCustomWrapper = (props: any) => {
         customDetailText={props?.customDetailText}
         customRejectText={props?.customRejectText}
         disabledBlockDomains={props?.disabledBlockDomains}
+        consentVersion={props?.consentVersion}
         languageSwitcher={props?.languageSwitcher}
         modeSwitcher={props?.modeSwitcher}
         uuid={uuid}
@@ -122,6 +126,7 @@ const ConsentComponentCustomApp = (props: any) => {
     customDetailText,
     customRejectText,
     disabledBlockDomains,
+    consentVersion,
     languageSwitcher,
     modeSwitcher,
     uuid,
@@ -178,7 +183,8 @@ const ConsentComponentCustomApp = (props: any) => {
               null,
               null,
               gtagId,
-              gtmId
+              gtmId,
+              consentVersion
             );
           } else if (
             !!existConsent?.consent_uuid &&
@@ -200,7 +206,8 @@ const ConsentComponentCustomApp = (props: any) => {
               null,
               null,
               gtagId,
-              gtmId
+              gtmId,
+              consentVersion
             );
           }
         });
@@ -250,7 +257,7 @@ const ConsentComponentCustomApp = (props: any) => {
             setLoading('saving');
             const consentList = await getConsents(endpoint, uuid);
             consentList.forEach(async (consent: any) => {
-              !consent?.expiration &&
+              (!consent?.expiration || isSixMonthsApart(consent?.datetime, consent?.expiration)) &&
                 (await revokeConsents(
                   endpoint,
                   levelRevoke,

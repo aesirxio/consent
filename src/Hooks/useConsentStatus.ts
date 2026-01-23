@@ -7,7 +7,6 @@ import {
   MAINNET,
   useConnection,
   useConnect,
-  WalletConnectionProps,
   useGrpcClient,
   TESTNET,
 } from '@concordium/react-components';
@@ -16,7 +15,7 @@ import { isDesktop } from 'react-device-detect';
 import { BlockHash } from '@concordium/web-sdk';
 import { unBlockScripts } from '../utils';
 
-const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConnectionProps) => {
+const useConsentStatus = (endpoint?: string, layout?: string, props?: any) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
   const [level, setLevel] = useState<any>(1);
@@ -25,8 +24,15 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const consentContext = useContext(ConsentContext);
   const analyticsContext = useContext(AnalyticsContext);
   const isUsingAnalytics = analyticsContext?.setUUID ? true : false;
-  const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
-    props;
+  const {
+    activeConnector,
+    network,
+    connectedAccounts,
+    genesisHashes,
+    setActiveConnectorType,
+    gtagId,
+    gtmId,
+  } = props;
 
   const params = new URLSearchParams(window.location.search);
   const isConsentParams = params.get('consent') === 'yes';
@@ -82,6 +88,9 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
           }
           sessionStorage.removeItem('aesirx-analytics-allow');
         } else {
+          if (gtagId || gtmId) {
+            sessionStorage.setItem('consentGranted', 'true');
+          }
           if (level > 1) {
             sessionStorage.setItem('aesirx-analytics-allow', '1');
             handleRevoke(true, '1');
