@@ -35,6 +35,7 @@ const CustomizeCategory = ({
     acc[item.category]?.push({
       domain: item.domain,
       name: item.name,
+      description: item.description,
       script: item.script,
       category: item.category,
     });
@@ -203,14 +204,16 @@ const CustomizeCategory = ({
                           >
                             <div>
                               {el?.name ? el?.name : el?.domain} -{' '}
-                              {el?.name && typeof el?.script === 'function'
-                                ? ((window as any)?.aesirx_analytics_translate?.txt_scripts ??
-                                  t('txt_scripts'))
-                                : el?.domain
-                                  ? ((window as any)?.aesirx_analytics_translate
-                                      ?.txt_domain_path_based ?? t('txt_domain_path_based'))
-                                  : ((window as any)?.aesirx_analytics_translate
-                                      ?.txt_third_party_plugins ?? t('txt_third_party_plugins'))}
+                              {el?.description
+                                ? el?.description
+                                : el?.name && typeof el?.script === 'function'
+                                  ? ((window as any)?.aesirx_analytics_translate?.txt_scripts ??
+                                    t('txt_scripts'))
+                                  : el?.domain
+                                    ? ((window as any)?.aesirx_analytics_translate
+                                        ?.txt_domain_path_based ?? t('txt_domain_path_based'))
+                                    : ((window as any)?.aesirx_analytics_translate
+                                        ?.txt_third_party_plugins ?? t('txt_third_party_plugins'))}
                             </div>
                             <div>
                               <Form.Check
