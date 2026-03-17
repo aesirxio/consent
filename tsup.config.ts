@@ -117,7 +117,6 @@ export default defineConfig([
     sourcemap: false,
     globalName: 'AesirxConsent',
     outDir: 'dist',
-    clean: true,
   },
   {
     entry: ['src/consent-simple.tsx'],
