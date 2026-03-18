@@ -501,12 +501,23 @@ const postDisabledBlockDomains = async (endpoint: any) => {
   }, 500);
 };
 
+const rejectConsents = async (endpoint: string, uuid: string) => {
+  const url = `${endpoint}/consent/v1/reject/${uuid}`;
+  sessionStorage.setItem('consentGranted', 'false');
+  await axios.post(`${url}`, null, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
 export {
   agreeConsents,
   getConsents,
   getSignature,
   getNonce,
   revokeConsents,
+  rejectConsents,
   getMember,
   getWalletNonce,
   verifySignature,

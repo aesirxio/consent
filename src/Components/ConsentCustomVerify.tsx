@@ -8,6 +8,7 @@ import {
   getWalletNonce,
   loadConsentDefault,
   postDisabledBlockDomains,
+  rejectConsents,
   revokeConsents,
   verifySignature,
 } from '../utils/consent';
@@ -607,6 +608,7 @@ const ConsentComponentCustomApp = (props: any) => {
     });
     sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     window.funcAfterReject && window.funcAfterReject();
+    rejectConsents(endpoint, uuid);
   };
   const handleRevokeBtn = async () => {
     const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');

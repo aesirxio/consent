@@ -4,6 +4,7 @@ import {
   getConsents,
   loadConsentDefault,
   postDisabledBlockDomains,
+  rejectConsents,
   revokeConsents,
 } from '../utils/consent';
 import React, { useContext, useEffect, useState } from 'react';
@@ -234,6 +235,7 @@ const ConsentComponentCustomApp = (props: any) => {
     });
     sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     window.funcAfterReject && window.funcAfterReject();
+    rejectConsents(endpoint, uuid);
   };
   const handleRevokeBtn = async () => {
     const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
