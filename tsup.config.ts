@@ -91,7 +91,6 @@ const externalLibs = [
 export default defineConfig([
   {
     entry: ['src/index.ts'],
-    clean: true,
     dts: true,
     format: ['esm'],
     platform: 'browser',
@@ -117,7 +116,6 @@ export default defineConfig([
     sourcemap: false,
     globalName: 'AesirxConsent',
     outDir: 'dist',
-    clean: true,
   },
   {
     entry: ['src/consent-simple.tsx'],

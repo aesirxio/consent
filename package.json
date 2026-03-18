@@ -1,6 +1,6 @@
 {
   "name": "aesirx-consent",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "license": "GPL-3.0-only",
   "author": "AesirX",
   "repository": "https://github.com/aesirxio/consent",
@@ -37,6 +37,7 @@
   },
   "scripts": {
     "dev": "NODE_ENV=development tsup --watch",
+    "prebuild": "rm -rf dist",
     "build": "tsup",
     "lint": "eslint --fix \"src/**/\"",
     "lint:check": "eslint \"src/**/\"",
