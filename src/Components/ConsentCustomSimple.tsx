@@ -234,8 +234,8 @@ const ConsentComponentCustomApp = (props: any) => {
       event_type: 'reject-consent',
     });
     sessionStorage.setItem('aesirx-analytics-rejected', 'true');
-    await rejectConsents(endpoint, uuid);
     window.funcAfterReject && window.funcAfterReject();
+    rejectConsents(endpoint, uuid);
   };
   const handleRevokeBtn = async () => {
     const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
