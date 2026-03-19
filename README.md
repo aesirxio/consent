@@ -25,6 +25,8 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
     uiEntry: "YOUR_PROJECT_PATH/consent-simple-chunks/consent-simple.js"
   };
 </script>
+
+<link rel="stylesheet" id="aesirx-consent-css" href="YOUR_PROJECT_PATH/consent-simple-chunks/consent-simple.css" media="all">
 ```
 
 1. (`https://example.com` is the link to your 1st party server which must be installed)
