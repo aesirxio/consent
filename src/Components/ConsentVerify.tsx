@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
+import { QRCodeSVG } from 'qrcode.react';
 import { BROWSER_WALLET, WALLET_CONNECT } from '../Hooks/config';
+import { useConcordiumIDApp } from '../Hooks/useConcordiumIDApp';
 import concordium_wallet from '../Assets/concordium_wallet.png';
 import google_wallet from '../Assets/google_wallet.png';
 import other_wallet from '../Assets/other_wallet.png';
@@ -25,15 +27,26 @@ const ConsentVerify = ({
   activeConnectorError,
 }: any) => {
   const { t } = useTranslation();
+  const [wallet, setWallet] = useState('concordium_id_app');
+  const [loadingQR, setLoadingQR] = useState(false);
+  const [showQR, setShowQR] = useState(false);
+  const [step, setStep] = useState(1);
+  const {
+    state: idAppState,
+    wcUri,
+    deepLinkUri,
+    isMobile: idAppIsMobile,
+    error: idAppError,
+    startVerification: startIDAppVerification,
+    reset: resetIDApp,
+    resendVPR: resendIDAppVPR,
+  } = useConcordiumIDApp(handleAgree);
   const handleClose = () => {
     level === 3 || level === 4 ? setToastLayout('decentralized') : setToastLayout('');
     setShowQR(false);
     setStep(1);
+    resetIDApp();
   };
-  const [wallet, setWallet] = useState('concordium');
-  const [loadingQR, setLoadingQR] = useState(false);
-  const [showQR, setShowQR] = useState(false);
-  const [step, setStep] = useState(1);
 
   useEffect(() => {
     const initProof = async () => {
@@ -285,25 +298,169 @@ const ConsentVerify = ({
         ) : (
           <>
             {showQR ? (
-              <div className="p-2 p-lg-4">
-                {loadingQR && (
-                  <div>
-                    <span
-                      className="spinner-border spinner-border-sm d-block mx-auto"
-                      role="status"
-                      aria-hidden="true"
-                      style={{ width: '40px', height: '40px' }}
-                    ></span>
-                  </div>
-                )}
-                <p className="text-sm text-gray-500 text-center max-w-sm mt-4">
-                  {isMobile
-                    ? ((window as any)?.aesirx_analytics_translate?.txt_please_accept_the_request ??
-                      t('txt_please_accept_the_request'))
-                    : ((window as any)?.aesirx_analytics_translate?.txt_scan_this_qr ??
-                      t('txt_scan_this_qr'))}
-                </p>
-              </div>
+              wallet === 'concordium_id_app' ? (
+                <div className="p-2 p-lg-4 text-center">
+                  {(() => {
+                    const stateMessages: Partial<
+                      Record<typeof idAppState, { desktop: string; mobile: string }>
+                    > = {
+                      connecting: {
+                        desktop: 'Scan the QR code with your Concordium ID app',
+                        mobile: 'Opening Concordium ID app...',
+                      },
+                      awaiting_proof: {
+                        desktop: 'Waiting for proof from Concordium ID app...',
+                        mobile:
+                          'Complete the verification in your Concordium ID app, then return here',
+                      },
+                      verifying: {
+                        desktop: 'Verifying your proof...',
+                        mobile: 'Verifying your proof...',
+                      },
+                    };
+                    const isLoading = idAppState === 'awaiting_proof' || idAppState === 'verifying';
+                    const topMessage =
+                      stateMessages[idAppState]?.[idAppIsMobile ? 'mobile' : 'desktop'];
+                    return (
+                      <>
+                        {topMessage && <p className="mb-3 text-sm text-secondary">{topMessage}</p>}
+
+                        {idAppState === 'connecting' && !wcUri && (
+                          <div className="d-flex flex-column align-items-center justify-content-center flex-wrap py-4">
+                            <span
+                              className="spinner-border text-success"
+                              role="status"
+                              aria-hidden="true"
+                              style={{ width: '40px', height: '40px' }}
+                            ></span>
+                            <p className="mt-3 small text-secondary mb-0 w-100">
+                              Initializing WalletConnect...
+                            </p>
+                          </div>
+                        )}
+
+                        {idAppState === 'connecting' && wcUri && (
+                          <div className="d-flex flex-column align-items-center justify-content-center flex-wrap">
+                            {!idAppIsMobile && (
+                              <div className="bg-white p-2 rounded w-100 d-flex justify-content-center">
+                                <QRCodeSVG value={wcUri} size={240} level="M" />
+                              </div>
+                            )}
+                            {idAppIsMobile && deepLinkUri && (
+                              <div className="py-3 text-center">
+                                <p className="mb-3 small text-secondary">
+                                  Tap the button to open your Concordium ID app
+                                </p>
+                                <a
+                                  href={deepLinkUri}
+                                  rel="noopener noreferrer"
+                                  className="btn btn-success rounded-pill px-4 py-2 fw-semibold"
+                                >
+                                  Open Concordium ID app
+                                </a>
+                                <p className="mt-3 small text-secondary mb-0 w-100">
+                                  Make sure you have the Concordium ID app installed
+                                </p>
+                              </div>
+                            )}
+                            {!idAppIsMobile && deepLinkUri && (
+                              <a
+                                href={deepLinkUri}
+                                className="btn btn-outline-success rounded-pill mt-3"
+                              >
+                                Open Concordium ID app
+                              </a>
+                            )}
+                          </div>
+                        )}
+
+                        {isLoading && (
+                          <div className="d-flex flex-column align-items-center justify-content-center flex-wrap py-4">
+                            <span
+                              className="spinner-border text-success"
+                              role="status"
+                              aria-hidden="true"
+                              style={{ width: '40px', height: '40px' }}
+                            ></span>
+                            <p className="mt-3 small text-secondary mb-0 w-100">
+                              {idAppState === 'awaiting_proof'
+                                ? 'Please approve the proof request in your Concordium ID app'
+                                : 'Processing...'}
+                            </p>
+                            {idAppState === 'awaiting_proof' && idAppIsMobile && (
+                              <div className="mt-4 text-center">
+                                <p className="mb-2 text-secondary" style={{ fontSize: '12px' }}>
+                                  Not seeing the request in your ID app?
+                                </p>
+                                <button
+                                  type="button"
+                                  onClick={() => resendIDAppVPR()}
+                                  className="btn btn-outline-success rounded-pill btn-sm"
+                                >
+                                  Resend Request
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {idAppState === 'verified' && (
+                          <div className="py-4 text-center">
+                            <p className="fw-semibold text-success mb-1">Verification Complete</p>
+                            <p className="small text-secondary mb-0">
+                              Verified using a zero-knowledge proof. No personal data was shared.
+                            </p>
+                          </div>
+                        )}
+
+                        {idAppState === 'failed' && (
+                          <div className="py-3 text-center">
+                            <p className="fw-semibold text-danger mb-1">Verification Failed</p>
+                            <p className="small text-secondary mb-3">
+                              {idAppError || 'Something went wrong. Please try again.'}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                resetIDApp();
+                                startIDAppVerification();
+                              }}
+                              className="btn btn-success rounded-pill px-4"
+                            >
+                              Try Again
+                            </button>
+                          </div>
+                        )}
+
+                        <p className="mt-4 mb-0 text-secondary" style={{ fontSize: '12px' }}>
+                          This uses zero-knowledge proofs. Your date of birth and personal data are
+                          never revealed.
+                        </p>
+                      </>
+                    );
+                  })()}
+                </div>
+              ) : (
+                <div className="p-2 p-lg-4">
+                  {loadingQR && (
+                    <div>
+                      <span
+                        className="spinner-border spinner-border-sm d-block mx-auto"
+                        role="status"
+                        aria-hidden="true"
+                        style={{ width: '40px', height: '40px' }}
+                      ></span>
+                    </div>
+                  )}
+                  <p className="text-sm text-gray-500 text-center max-w-sm mt-4">
+                    {isMobile
+                      ? ((window as any)?.aesirx_analytics_translate
+                          ?.txt_please_accept_the_request ?? t('txt_please_accept_the_request'))
+                      : ((window as any)?.aesirx_analytics_translate?.txt_scan_this_qr ??
+                        t('txt_scan_this_qr'))}
+                  </p>
+                </div>
+              )
             ) : (
               <div className="consent-verify-modal-choose p-2 p-lg-4">
                 <div className="fw-semibold mb-1">
@@ -362,6 +519,28 @@ const ConsentVerify = ({
                     <div>
                       {isDesktop ? 'Concordium Browser Wallet' : 'CryptoX Wallet (Concordium ID)'}
                     </div>
+                  </label>
+                  <label
+                    className={`consent-verify-wallet ${wallet === 'concordium_id_app' ? 'active' : ''}`}
+                    htmlFor="concordium-id-app"
+                  >
+                    <Form.Check
+                      type="radio"
+                      id="concordium-id-app"
+                      value={'concordium_id_app'}
+                      checked={wallet === 'concordium_id_app'}
+                      onChange={(e) => setWallet(e.target.value)}
+                    />
+                    <div className="mx-2">
+                      <img
+                        width="36px"
+                        height="36px"
+                        src={concordium_wallet}
+                        className="align-text-bottom"
+                        alt="Concordium ID"
+                      />
+                    </div>
+                    <div>Concordium ID</div>
                   </label>
                   <label
                     className={`consent-verify-wallet ${wallet === 'google' ? 'active' : ''}`}
@@ -455,6 +634,9 @@ const ConsentVerify = ({
                         } else {
                           setActiveConnectorType(BROWSER_WALLET);
                         }
+                      } else if (wallet === 'concordium_id_app') {
+                        setShowQR(true);
+                        startIDAppVerification();
                       } else if (wallet === 'google') {
                         if (isChrome) {
                           if (isMobile && !isAndroid) {
