@@ -27,7 +27,7 @@ const ConsentVerify = ({
   activeConnectorError,
 }: any) => {
   const { t } = useTranslation();
-  const [wallet, setWallet] = useState('concordium_id_app');
+  const [wallet, setWallet] = useState('concordium');
   const [loadingQR, setLoadingQR] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const [step, setStep] = useState(1);
