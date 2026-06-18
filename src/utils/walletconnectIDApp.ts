@@ -89,10 +89,7 @@ export const createPairing = async (client: SignClient) => {
   return { uri, approval };
 };
 
-const waitForRelayConnection = async (
-  client: SignClient,
-  maxWaitMs: number = 5000
-): Promise<boolean> => {
+const waitForRelayConnection = async (client: SignClient, maxWaitMs = 5000): Promise<boolean> => {
   const startTime = Date.now();
   while (Date.now() - startTime < maxWaitMs) {
     try {
