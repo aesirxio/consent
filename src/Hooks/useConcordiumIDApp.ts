@@ -34,8 +34,7 @@ const VERIFIER_URL = 'https://verify.aesirx.io';
 
 const getVerifierUrl = (): string => {
   const override = (window as any)?.aesirxVerifierUrl;
-  const url =
-    typeof override === 'string' && override.length > 0 ? override : VERIFIER_URL;
+  const url = typeof override === 'string' && override.length > 0 ? override : VERIFIER_URL;
   return url.replace(/\/$/, '');
 };
 
