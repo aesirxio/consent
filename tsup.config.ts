@@ -87,6 +87,8 @@ const externalLibs = [
   '@web3modal/ethereum',
   '@web3modal/react',
   'ethers',
+  '@walletconnect/sign-client',
+  'qrcode.react',
 ];
 export default defineConfig([
   {

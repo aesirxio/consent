@@ -119,7 +119,7 @@ const getStatement = async () => {
   const ageCheck = window['ageCheck'];
   const countryCheck = window['countryCheck'];
   const minimumAge = window['minimumAge'] ?? 0;
-  const maximumAge = window['maximumAge'] ?? 150;
+  const maximumAge = window['maximumAge'] ?? 0;
   const allowedCountries = window['allowedCountries'] ?? [];
   const disallowedCountries = window['disallowedCountries'] ?? [];
 
@@ -149,9 +149,12 @@ const getStatement = async () => {
   if (ageCheck) {
     const today = new Date();
 
-    const lowerDateObj = new Date(today);
-    lowerDateObj.setFullYear(lowerDateObj.getFullYear() - maximumAge);
-    const lowerDate = formatDate(lowerDateObj);
+    let lowerDate = '19000101';
+    if (maximumAge > 0) {
+      const lowerDateObj = new Date(today);
+      lowerDateObj.setFullYear(lowerDateObj.getFullYear() - maximumAge);
+      lowerDate = formatDate(lowerDateObj);
+    }
 
     const upperDateObj = new Date(today);
     upperDateObj.setFullYear(upperDateObj.getFullYear() - minimumAge);
