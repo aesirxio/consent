@@ -194,6 +194,46 @@ const isSixMonthsApart = (datetime, expiration) => {
 
   return sixMonthsLater.getTime() === end.getTime();
 };
+
+// Builds the global configBlockJS, attaches the MutationObserver for nodes added
+// later, and sweeps iframes/scripts already present in the static HTML (the
+// observer only reports nodes inserted after it starts).
+const initBlockScripts = () => {
+  window['configBlockJS'] = {
+    _providersToBlock: (window['aesirxBlockJSDomains']?.length
+      ? window['aesirxBlockJSDomains']
+      : []
+    )
+      .filter((el: any) => el)
+      .map((item: any) => ({ re: item?.domain, categories: [item?.category] })),
+    categories: [],
+    _shortCodes: [
+      {
+        key: 'video_placeholder',
+        content:
+          '<div class="video-placeholder-normal" data-aesirx-tag="video-placeholder" id="[UNIQUEID]"><p class="video-placeholder-text-normal" data-aesirx-tag="placeholder-title">Please accept consent to access this content</p></div>',
+        tag: '',
+        status: true,
+        attributes: [],
+      },
+    ],
+    _backupNodes: [],
+  };
+
+  const observer = new MutationObserver(blockScripts);
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+
+  const blockExistingNodes = () => {
+    const existingNodes = document.querySelectorAll('iframe[src]');
+    if (existingNodes.length) blockScripts([{ addedNodes: existingNodes }]);
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', blockExistingNodes);
+  } else {
+    blockExistingNodes();
+  }
+};
+
 export {
   cleanHostName,
   getYoutubeID,
@@ -205,4 +245,5 @@ export {
   shouldBlockProvider,
   blockScripts,
   isSixMonthsApart,
+  initBlockScripts,
 };
