@@ -3,7 +3,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Buffer } from 'buffer';
 import { getConsentTemplate } from './utils/consent';
-import { blockScripts } from './utils';
+import { initBlockScripts } from './utils';
 import ConsentContextProviderIsolate from './utils/ConsentContextProviderIsolate';
 
 const ConsentComponentCustom = lazy(() => import('./Components/ConsentCustom'));
@@ -177,41 +177,4 @@ const AesirConsent = () => {
 
 AesirConsent();
 
-interface ConfigBlockJS {
-  _providersToBlock: any[];
-  categories: any[];
-  _shortCodes: any[];
-  _backupNodes: any[];
-}
-const configBlockJS: ConfigBlockJS = {
-  _providersToBlock: [
-    ...(window.aesirxBlockJSDomains?.length
-      ? [
-          ...window.aesirxBlockJSDomains
-            ?.filter((el: string) => el)
-            ?.map((item: any) => {
-              return { re: item?.domain, categories: [item?.category] };
-            }),
-        ]
-      : []),
-  ],
-  categories: [],
-  _shortCodes: [
-    {
-      key: 'video_placeholder',
-      content:
-        '<div class="video-placeholder-normal" data-aesirx-tag="video-placeholder" id="[UNIQUEID]"><p class="video-placeholder-text-normal" data-aesirx-tag="placeholder-title">Please accept consent to access this content</p></div>',
-      tag: '',
-      status: true,
-      attributes: [],
-    },
-  ],
-  _backupNodes: [],
-};
-window.configBlockJS = configBlockJS;
-
-const _nodeListObserver = new MutationObserver(blockScripts);
-_nodeListObserver.observe(document.documentElement, {
-  childList: true,
-  subtree: true,
-});
+initBlockScripts();
