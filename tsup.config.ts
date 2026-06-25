@@ -102,7 +102,7 @@ export default defineConfig([
     esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'style', quietDeps: true })],
     esbuildOptions(options) {
       if (env === 'production') {
-        // options.drop = ['console'];
+        options.drop = ['console'];
       }
     },
     outExtension() {
@@ -137,7 +137,7 @@ export default defineConfig([
     ],
     esbuildOptions(options) {
       if (env === 'production') {
-        // options.drop = ['console'];
+        options.drop = ['console'];
       }
     },
   },
@@ -159,7 +159,7 @@ export default defineConfig([
     ],
     esbuildOptions(options) {
       if (env === 'production') {
-        // options.drop = ['console'];
+        options.drop = ['console'];
       }
     },
   },
@@ -181,7 +181,7 @@ export default defineConfig([
     ],
     esbuildOptions(options) {
       if (env === 'production') {
-        // options.drop = ['console'];
+        options.drop = ['console'];
       }
     },
   },
