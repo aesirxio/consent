@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { Buffer } from 'buffer';
 import { getConsentTemplate } from './utils/consent';
 import { initBlockScripts } from './utils';
+import { initLanguage } from './utils/languages';
 import ConsentContextProviderIsolate from './utils/ConsentContextProviderIsolate';
 
 const ConsentComponentCustomVerify = lazy(() => import('./Components/ConsentCustomVerify'));
@@ -139,6 +140,7 @@ const AesirConsent = () => {
             console.log('GPC signal registered in IAB USP API:', result);
           });
       }
+      await initLanguage();
       const container = document.body?.appendChild(document.createElement('DIV'));
       rootElement = createRoot(container);
       const isOptInReplaceAnalytics = window['optInConsentData']
