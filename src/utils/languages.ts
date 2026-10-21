@@ -39,6 +39,8 @@ export const languageOptions = [
 
 // Language codes whose built file in dist/translations has a different name.
 const translationFiles = { da: 'dk', uk: 'ua' };
+// Standard codes that map to a different code in languageOptions.
+const languageAliases = { sv: 'se', nb: 'no', nn: 'no', vn: 'vi', dk: 'da', ua: 'uk' };
 const TRANSLATION_SCRIPT_ID = 'aesirx-consent-translation';
 
 const findTranslationScript = (): HTMLScriptElement | null =>
@@ -94,4 +96,28 @@ export const changeLanguage = (lang: string): Promise<void> => {
     };
     document.head.appendChild(script);
   });
+};
+
+// Maps e.g. "vi-VN" or "sv" to a code in languageOptions, or null if unsupported.
+const resolveLanguage = (lang?: string): string | null => {
+  if (!lang) return null;
+  const normalized = lang.toLowerCase();
+  const primary = normalized.split(/[-_]/)[0];
+  const match = [normalized, primary]
+    .map((code) => languageAliases[code] ?? code)
+    .find((code) => languageOptions.some((option) => option.value === code));
+  return match ?? null;
+};
+
+// Script bundles only: load the translations for <html lang> when the page included a
+// different one, as AesirXI18nextProvider does with i18next in the React/Next wrappers.
+export const initLanguage = async () => {
+  if (i18n.isInitialized) return;
+  const lang = resolveLanguage(document.documentElement.lang);
+  if (!lang || lang === getCurrentLanguage()) return;
+  try {
+    await changeLanguage(lang);
+  } catch (error) {
+    console.error(error);
+  }
 };
