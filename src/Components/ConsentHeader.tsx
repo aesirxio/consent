@@ -2,16 +2,15 @@ import React, { useContext, useEffect } from 'react';
 import bg from '../Assets/bg.png';
 import privacy from '../Assets/privacy.svg';
 import { useTranslation } from 'react-i18next';
-import { useI18nextContext } from '../utils/I18nextProvider';
 import Select, { StylesConfig } from 'react-select';
-import i18n from 'i18next';
 import { ConsentContext } from '../utils/ConsentContextProvider';
+import { changeLanguage, getCurrentLanguage, languageOptions } from '../utils/languages';
 
 const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher, layout }: any) => {
   const { t } = useTranslation();
-  const { listLanguages } = useI18nextContext();
-  const currentLanguage = listLanguages.filter(
-    (lang: any) => lang.value == i18n.language || i18n.language?.includes(lang.value)
+  const language = getCurrentLanguage();
+  const currentLanguage = languageOptions.filter(
+    (lang: any) => lang.value == language || language?.includes(lang.value)
   );
   const consentContext = useContext(ConsentContext);
   const customStyles: StylesConfig = {
@@ -35,9 +34,10 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher, layou
       setMode(listMode?.find((r: any) => r.value === 'opt-out'));
     }
     if (window['geoRules']) {
-      if (userOverrideLanguage) {
-        i18n.changeLanguage(userOverrideLanguage);
-        (window as any).aesirx_analytics_translate = null;
+      if (userOverrideLanguage && userOverrideLanguage !== getCurrentLanguage()) {
+        changeLanguage(userOverrideLanguage)
+          .then(() => consentContext.forceUpdate('Language changed'))
+          .catch((error) => console.error(error));
       }
       const matchedRule = matchGeoRule(window['geoRules']);
       if (userOverrideMode) {
@@ -69,7 +69,7 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher, layou
     <div
       className={`rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap py-2 py-lg-3 px-lg-4 header-consent-bg ${
         !modeSwitcher && isRejectedLayout ? 'd-none' : 'd-flex'
-      } ${i18n.language}`}
+      } ${language}`}
       style={{
         borderBottom: '1px solid #DEDEDE',
       }}
@@ -85,7 +85,7 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher, layou
               ...customStyles,
               control: (base) => ({
                 ...base,
-                minWidth: '105px',
+                minWidth: '110px',
               }),
             }}
             components={{
@@ -94,13 +94,13 @@ const ConsentHeader = ({ isRejectedLayout, languageSwitcher, modeSwitcher, layou
             isClearable={false}
             isSearchable={false}
             placeholder={(window as any)?.aesirx_analytics_translate?.txt_select ?? t('txt_select')}
-            options={listLanguages}
+            options={languageOptions}
             className="shadow-none"
             onChange={(data: any) => {
-              i18n.changeLanguage(data.value);
-              consentContext.forceUpdate('Language changed');
               localStorage.setItem('user_override_language', data.value);
-              (window as any).aesirx_analytics_translate = null;
+              changeLanguage(data.value)
+                .then(() => consentContext.forceUpdate('Language changed'))
+                .catch((error) => console.error(error));
             }}
             defaultValue={
               currentLanguage?.length ? currentLanguage : [{ label: 'English', value: 'en' }]
